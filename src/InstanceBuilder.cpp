@@ -39,14 +39,17 @@ VulkanInstance InstanceBuilder::build() {
     return vk;
 }
 
-void InstanceBuilder::setAppName(const std::string& str) {
+InstanceBuilder& InstanceBuilder::setAppName(const std::string& str) {
 	appName = str;
+    return *this;
 }
 
-void InstanceBuilder::setAppVersion(int major, int minor, int patch) {
+InstanceBuilder& InstanceBuilder::setAppVersion(int major, int minor, int patch) {
 	appVersion = VK_MAKE_VERSION(major, minor, patch);
+    return *this;
 }
 
-void InstanceBuilder::setExtensions(const std::vector<std::string>& Extensions) {
+InstanceBuilder& InstanceBuilder::setExtensions(const std::vector<std::string>& Extensions) {
     extensions = Extensions;
+    return *this;
 }

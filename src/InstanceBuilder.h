@@ -8,9 +8,9 @@
 class VULKAN_WRAPPER_API InstanceBuilder {
 public:
 	VulkanInstance build();
-	void setAppName(const std::string& str);
-	void setAppVersion(int major, int minor, int patch);
-	void setExtensions(const std::vector<std::string>& extensions);
+	InstanceBuilder& setAppName(const std::string& str);
+	InstanceBuilder& setAppVersion(int major, int minor, int patch);
+	InstanceBuilder& setExtensions(const std::vector<std::string>& extensions);
 private:
 	uint32_t appVersion = VK_MAKE_VERSION(1,0,0);
 	std::string appName = "application";
