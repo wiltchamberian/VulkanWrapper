@@ -3,8 +3,13 @@
 
 #include "export.h"
 #include "vulkan/vulkan.h"
-#include "LogicalDevice.h"
+#include "Surface.h"
+#include "Common.h"
 #include <optional>
+
+class LogicalDevice;
+
+
 
 class VULKAN_WRAPPER_API PhysicalDevice {
 public:
@@ -13,6 +18,7 @@ public:
 	}
 	LogicalDevice createLogicalDevice(VkQueueFlags flags);
 	bool isDeviceSuitable(VkQueueFlags flags);
+	SwapChainSupportDetails querySwapChainSupport(Surface surface);
 	VkPhysicalDevice dev = VK_NULL_HANDLE;
 	QueueFamilyIndices indices_;
 

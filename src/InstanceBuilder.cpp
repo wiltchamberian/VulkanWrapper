@@ -35,6 +35,8 @@ VulkanInstance InstanceBuilder::build() {
     if (suc != VK_SUCCESS) {
         throw std::runtime_error("failed to create instance!");
     }
+
+    return vk;
 }
 
 void InstanceBuilder::setAppName(const std::string& str) {

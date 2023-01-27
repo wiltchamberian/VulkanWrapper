@@ -155,12 +155,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\Common.h" />
     <ClInclude Include="..\src\export.h" />
     <ClInclude Include="..\src\Instance.h" />
     <ClInclude Include="..\src\InstanceBuilder.h" />
     <ClInclude Include="..\src\LogicalDevice.h" />
     <ClInclude Include="..\src\PhysicalDevice.h" />
+    <ClInclude Include="..\src\Surface.h" />
     <ClInclude Include="..\src\SwapChain.h" />
+    <ClInclude Include="..\src\VulkanImage.h" />
     <ClInclude Include="..\src\Wrapper.h" />
     <ClInclude Include="framework.h" />
   </ItemGroup>
@@ -170,8 +173,14 @@
     <ClCompile Include="..\src\LogicalDevice.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\PhysicalDevice.cpp" />
+    <ClCompile Include="..\src\Surface.cpp" />
     <ClCompile Include="..\src\SwapChain.cpp" />
+    <ClCompile Include="..\src\VulkanImage.cpp" />
     <ClCompile Include="..\src\Wrapper.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\src\SwapChainBuilder.cpp" />
+    <Text Include="..\src\SwapChainBuilder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

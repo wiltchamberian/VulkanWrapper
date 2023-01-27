@@ -1,8 +1,16 @@
 #pragma once
+#include "export.h"
 #include "vulkan/vulkan.h"
+#include "VulkanImage.h"
+#include "LogicalDevice.h"
+#include <vector>
 
-class SwapChain {
+class VULKAN_WRAPPER_API SwapChain {
 public:
-
+	std::vector<VkImage> getImages();
+	
+	LogicalDevice dev;
 	VkSwapchainKHR chain;
+
+
 };

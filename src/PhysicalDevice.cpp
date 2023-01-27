@@ -1,10 +1,36 @@
 #include "PhysicalDevice.h"
 #include <vector>
 #include <stdexcept>
+#include "LogicalDevice.h"
+#include "Common.h"
 
 bool PhysicalDevice::isDeviceSuitable(VkQueueFlags flags) {
     auto indices = findFamilyQueues(flags);
     return indices.isComplete(flags);
+}
+
+SwapChainSupportDetails PhysicalDevice::querySwapChainSupport(Surface surface) {
+    SwapChainSupportDetails details;
+
+    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(dev, surface.surface, &details.capabilities);
+
+    uint32_t formatCount;
+    vkGetPhysicalDeviceSurfaceFormatsKHR(dev, surface.surface, &formatCount, nullptr);
+
+    if (formatCount != 0) {
+        details.formats.resize(formatCount);
+        vkGetPhysicalDeviceSurfaceFormatsKHR(dev, surface.surface, &formatCount, details.formats.data());
+    }
+
+    uint32_t presentModeCount;
+    vkGetPhysicalDeviceSurfacePresentModesKHR(dev, surface.surface, &presentModeCount, nullptr);
+
+    if (presentModeCount != 0) {
+        details.presentModes.resize(presentModeCount);
+        vkGetPhysicalDeviceSurfacePresentModesKHR(dev, surface.surface, &presentModeCount, details.presentModes.data());
+    }
+
+    return details;
 }
 
 QueueFamilyIndices PhysicalDevice::findFamilyQueues(VkQueueFlags flags) {
