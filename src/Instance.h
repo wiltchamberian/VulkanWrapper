@@ -11,5 +11,4 @@ public:
 	PhysicalDevice selectPhysicalDevice(VkQueueFlags flags);
 	VkInstance vk = VK_NULL_HANDLE;
 private:
-	bool isDeviceSuitable(PhysicalDevice& dev, VkQueueFlags flags);
 };
