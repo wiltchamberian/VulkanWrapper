@@ -179,6 +179,8 @@
     <ClCompile Include="..\src\Wrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="..\src\DebugMessenger.cpp" />
+    <Text Include="..\src\DebugMessenger.h" />
     <Text Include="..\src\SwapChainBuilder.cpp" />
     <Text Include="..\src\SwapChainBuilder.h" />
   </ItemGroup>

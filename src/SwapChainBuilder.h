@@ -13,14 +13,16 @@ public:
 
     SwapChain build();
 
-    SwapChainSupportDetails querySwapChainSupport();
+    SwapChainSupportDetails& querySwapChainSupport();
     SwapChainBuilder& setLogicalDevice(LogicalDevice dev);
 	SwapChainBuilder& setSurface(const Surface& surface);
     SwapChainBuilder& setSurfaceFormat(VkSurfaceFormatKHR);
     SwapChainBuilder& setSurfaceFormatCheck(VkSurfaceFormatKHR);
     SwapChainBuilder& setCreateFlags(VkSwapchainCreateFlagsKHR flgs);
     SwapChainBuilder& setMinImageCount(uint32_t imageCount);
+    SwapChainBuilder& setDefaultMinImageCount();
     SwapChainBuilder& setExtent2D(VkExtent2D extent);
+    SwapChainBuilder& setDefaultExtent2D();
     SwapChainBuilder& setImageArrayLayers(uint32_t layers);
     SwapChainBuilder& setImageUsageFlags(VkImageUsageFlags flags);
     SwapChainBuilder& setSharingMode(VkSharingMode mode);
@@ -38,7 +40,7 @@ private:
     LogicalDevice                    logicalDev;
     VkSwapchainCreateFlagsKHR        createflags;
 	Surface                          surface;
-    uint32_t                         minImageCount;
+    std::optional<uint32_t>          minImageCount;
     std::optional<VkSurfaceFormatKHR>surfaceFormat;
     VkExtent2D                       imageExtent;
     uint32_t                         imageArrayLayers;

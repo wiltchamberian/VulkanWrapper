@@ -13,6 +13,12 @@ public:
 	bool isValid() const {
 		return dev != VK_NULL_HANDLE;
 	}
+	VkDevice& value() {
+		return dev;
+	}
+	PhysicalDevice& physical_device() {
+		return phy_dev;
+	}
 public:
 	VkDevice dev = VK_NULL_HANDLE;
 	PhysicalDevice phy_dev;

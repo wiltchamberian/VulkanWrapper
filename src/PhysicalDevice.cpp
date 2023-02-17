@@ -12,9 +12,9 @@ bool PhysicalDevice::isDeviceSuitable(VkQueueFlags flags) {
 SwapChainSupportDetails PhysicalDevice::querySwapChainSupport(Surface surface) {
     SwapChainSupportDetails details;
 
-    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(dev, surface.value(), &details.capabilities);
+    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(dev, surface.value(), &details.capabilities.value());
 
-    uint32_t formatCount;
+    uint32_t formatCount = 0;
     vkGetPhysicalDeviceSurfaceFormatsKHR(dev, surface.value(), &formatCount, nullptr);
 
     if (formatCount != 0) {
