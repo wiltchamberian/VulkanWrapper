@@ -10,7 +10,11 @@
 
 class VULKAN_WRAPPER_API LogicalDevice {
 public:
-	VkDevice dev;
+	bool isValid() const {
+		return dev != VK_NULL_HANDLE;
+	}
+public:
+	VkDevice dev = VK_NULL_HANDLE;
 	PhysicalDevice phy_dev;
 	QueueFamilyIndices indices_;
 };

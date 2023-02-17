@@ -18,7 +18,7 @@ PhysicalDevice VulkanInstance::selectPhysicalDevice(VkQueueFlags flags) {
 
     bool bingo = false;
     for (const auto& device : devices) {
-        dev.dev = device;
+        dev.value() = device;
         if (dev.isDeviceSuitable(flags)) {
             bingo = true;
             break;
@@ -26,7 +26,7 @@ PhysicalDevice VulkanInstance::selectPhysicalDevice(VkQueueFlags flags) {
     }
 
     if (bingo == false) {
-        dev.dev = VK_NULL_HANDLE;
+        dev.value() = VK_NULL_HANDLE;
         throw std::runtime_error("failed to find a suitable GPU!");
     }
 

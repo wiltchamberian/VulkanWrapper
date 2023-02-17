@@ -9,8 +9,6 @@
 
 class LogicalDevice;
 
-
-
 class VULKAN_WRAPPER_API PhysicalDevice {
 public:
 	bool isValid() {
@@ -19,10 +17,12 @@ public:
 	LogicalDevice createLogicalDevice(VkQueueFlags flags);
 	bool isDeviceSuitable(VkQueueFlags flags);
 	SwapChainSupportDetails querySwapChainSupport(Surface surface);
+	VkPhysicalDevice& value() {
+		return dev;
+	}
+private:
 	VkPhysicalDevice dev = VK_NULL_HANDLE;
 	QueueFamilyIndices indices_;
-
-private:
 	QueueFamilyIndices findFamilyQueues(VkQueueFlags flags);
 };
 

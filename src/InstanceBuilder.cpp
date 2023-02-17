@@ -27,7 +27,7 @@ VulkanInstance InstanceBuilder::build() {
     createInfo.ppEnabledExtensionNames = ext;
     createInfo.enabledLayerCount = 0;
 
-    VkResult suc = vkCreateInstance(&createInfo, nullptr, &vk.vk);
+    VkResult suc = vkCreateInstance(&createInfo, nullptr, &(vk.value()));
     for (int i = 0;i < extensions.size();++i) {
         delete[] ext[i];
     }

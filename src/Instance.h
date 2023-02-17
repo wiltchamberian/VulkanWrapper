@@ -5,10 +5,14 @@
 
 class VULKAN_WRAPPER_API VulkanInstance {
 public:
-	bool isempty() {
-		return vk == VK_NULL_HANDLE;
+	bool isValid() {
+		return vk != VK_NULL_HANDLE;
+	}
+	VkInstance& value() {
+		return vk;
 	}
 	PhysicalDevice selectPhysicalDevice(VkQueueFlags flags);
-	VkInstance vk = VK_NULL_HANDLE;
+	
 private:
+	VkInstance vk = VK_NULL_HANDLE;
 };

@@ -5,15 +5,21 @@
 #include "SwapChain.h"
 #include "LogicalDevice.h"
 
+
 class VULKAN_WRAPPER_API SwapChainBuilder {
 public:
+    SwapChainBuilder() {}
+    SwapChainBuilder(const LogicalDevice& dev, const Surface& surface);
+
     SwapChain build();
+
+    SwapChainSupportDetails querySwapChainSupport();
     SwapChainBuilder& setLogicalDevice(LogicalDevice dev);
 	SwapChainBuilder& setSurface(const Surface& surface);
-	SwapChainBuilder& setFormat(VkFormat format);
+    SwapChainBuilder& setSurfaceFormat(VkSurfaceFormatKHR);
+    SwapChainBuilder& setSurfaceFormatCheck(VkSurfaceFormatKHR);
     SwapChainBuilder& setCreateFlags(VkSwapchainCreateFlagsKHR flgs);
     SwapChainBuilder& setMinImageCount(uint32_t imageCount);
-    SwapChainBuilder& setColorSpace(VkColorSpaceKHR space);
     SwapChainBuilder& setExtent2D(VkExtent2D extent);
     SwapChainBuilder& setImageArrayLayers(uint32_t layers);
     SwapChainBuilder& setImageUsageFlags(VkImageUsageFlags flags);
@@ -22,15 +28,18 @@ public:
     SwapChainBuilder& setSurfaceTransform(VkSurfaceTransformFlagBitsKHR bits);
     SwapChainBuilder& setCompositeAlpha(VkCompositeAlphaFlagBitsKHR flags);
     SwapChainBuilder& setPresentMode(VkPresentModeKHR presentMode);
+    SwapChainBuilder& setPresentModeCheck(VkPresentModeKHR presentMode);
     SwapChainBuilder& setClipped(VkBool32 clip);
     SwapChainBuilder& setOldSwapChain(SwapChain old);
 private:
+    void queryPhysicalDeviceSurfaceCapabilities();
+    void queryPhysicalDeviceSurfaceFormats();
+    void queryPhysicalDeviceSurfacePresentModes();
     LogicalDevice                    logicalDev;
     VkSwapchainCreateFlagsKHR        createflags;
 	Surface                          surface;
     uint32_t                         minImageCount;
-    VkFormat                         imageFormat;
-    VkColorSpaceKHR                  imageColorSpace;
+    std::optional<VkSurfaceFormatKHR>surfaceFormat;
     VkExtent2D                       imageExtent;
     uint32_t                         imageArrayLayers;
     VkImageUsageFlags                imageUsage;
@@ -38,9 +47,11 @@ private:
     std::vector<uint32_t>            queueFamilyIndices;
     VkSurfaceTransformFlagBitsKHR    preTransform;
     VkCompositeAlphaFlagBitsKHR      compositeAlpha;
-    VkPresentModeKHR                 presentMode;
+    std::optional<VkPresentModeKHR>  presentMode;
     VkBool32                         clipped;
     SwapChain                        oldSwapchain;
+
+    SwapChainSupportDetails          details;
 };
 
 #endif

@@ -12,22 +12,22 @@ bool PhysicalDevice::isDeviceSuitable(VkQueueFlags flags) {
 SwapChainSupportDetails PhysicalDevice::querySwapChainSupport(Surface surface) {
     SwapChainSupportDetails details;
 
-    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(dev, surface.surface, &details.capabilities);
+    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(dev, surface.value(), &details.capabilities);
 
     uint32_t formatCount;
-    vkGetPhysicalDeviceSurfaceFormatsKHR(dev, surface.surface, &formatCount, nullptr);
+    vkGetPhysicalDeviceSurfaceFormatsKHR(dev, surface.value(), &formatCount, nullptr);
 
     if (formatCount != 0) {
         details.formats.resize(formatCount);
-        vkGetPhysicalDeviceSurfaceFormatsKHR(dev, surface.surface, &formatCount, details.formats.data());
+        vkGetPhysicalDeviceSurfaceFormatsKHR(dev, surface.value(), &formatCount, details.formats.data());
     }
 
     uint32_t presentModeCount;
-    vkGetPhysicalDeviceSurfacePresentModesKHR(dev, surface.surface, &presentModeCount, nullptr);
+    vkGetPhysicalDeviceSurfacePresentModesKHR(dev, surface.value(), &presentModeCount, nullptr);
 
     if (presentModeCount != 0) {
         details.presentModes.resize(presentModeCount);
-        vkGetPhysicalDeviceSurfacePresentModesKHR(dev, surface.surface, &presentModeCount, details.presentModes.data());
+        vkGetPhysicalDeviceSurfacePresentModesKHR(dev, surface.value(), &presentModeCount, details.presentModes.data());
     }
 
     return details;
