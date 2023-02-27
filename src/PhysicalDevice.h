@@ -23,7 +23,7 @@ public:
 private:
 	VkPhysicalDevice dev = VK_NULL_HANDLE;
 	QueueFamilyIndices indices_;
-	QueueFamilyIndices findFamilyQueues(VkQueueFlags flags);
+	QueueFamilyIndices findQueueFamilies(VkQueueFlags flags);
 };
 
 #endif

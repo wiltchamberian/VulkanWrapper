@@ -5,7 +5,7 @@
 #include "Common.h"
 
 bool PhysicalDevice::isDeviceSuitable(VkQueueFlags flags) {
-    auto indices = findFamilyQueues(flags);
+    auto indices = findQueueFamilies(flags);
     return indices.isComplete(flags);
 }
 
@@ -33,7 +33,7 @@ SwapChainSupportDetails PhysicalDevice::querySwapChainSupport(Surface surface) {
     return details;
 }
 
-QueueFamilyIndices PhysicalDevice::findFamilyQueues(VkQueueFlags flags) {
+QueueFamilyIndices PhysicalDevice::findQueueFamilies(VkQueueFlags flags) {
     QueueFamilyIndices indices;
 
     uint32_t queueFamilyCount = 0;
@@ -82,7 +82,7 @@ QueueFamilyIndices PhysicalDevice::findFamilyQueues(VkQueueFlags flags) {
 
 LogicalDevice PhysicalDevice::createLogicalDevice(VkQueueFlags flags) {
 
-    QueueFamilyIndices indices = findFamilyQueues(flags);
+    QueueFamilyIndices indices = findQueueFamilies(flags);
 
     VkDeviceQueueCreateInfo queueCreateInfo{};
     queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
