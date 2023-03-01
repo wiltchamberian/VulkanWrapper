@@ -1,6 +1,7 @@
 #ifndef __SWAP_CHAIN_BUILDER_H
 #define __SWAP_CHAIN_BUILDER_H
 
+#include <optional>
 #include "Surface.h"
 #include "SwapChain.h"
 #include "LogicalDevice.h"

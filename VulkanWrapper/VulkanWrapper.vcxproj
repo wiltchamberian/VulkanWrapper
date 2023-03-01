@@ -163,6 +163,7 @@
     <ClInclude Include="..\src\PhysicalDevice.h" />
     <ClInclude Include="..\src\Surface.h" />
     <ClInclude Include="..\src\SwapChain.h" />
+    <ClInclude Include="..\src\Tools.h" />
     <ClInclude Include="..\src\VulkanImage.h" />
     <ClInclude Include="..\src\Wrapper.h" />
     <ClInclude Include="framework.h" />
@@ -175,6 +176,7 @@
     <ClCompile Include="..\src\PhysicalDevice.cpp" />
     <ClCompile Include="..\src\Surface.cpp" />
     <ClCompile Include="..\src\SwapChain.cpp" />
+    <ClCompile Include="..\src\Tools.cpp" />
     <ClCompile Include="..\src\VulkanImage.cpp" />
     <ClCompile Include="..\src\Wrapper.cpp" />
   </ItemGroup>

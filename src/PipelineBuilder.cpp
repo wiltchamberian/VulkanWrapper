@@ -1,24 +1,7 @@
-#include "PipelineBuilder.h"
 #include <stdexcept>
 #include <fstream>
-
-static std::vector<char> readFile(const std::string& filename) {
-    std::ifstream file(filename, std::ios::ate | std::ios::binary);
-
-    if (!file.is_open()) {
-        throw std::runtime_error("failed to open file!");
-    }
-
-    size_t fileSize = (size_t)file.tellg();
-    std::vector<char> buffer(fileSize);
-
-    file.seekg(0);
-    file.read(buffer.data(), fileSize);
-
-    file.close();
-
-    return buffer;
-}
+#include "PipelineBuilder.h"
+#include "Tools.h"
 
 VkShaderModule PipelineBuilder::createShaderModule(const std::vector<char>& code) {
     VkShaderModuleCreateInfo createInfo{};
@@ -37,8 +20,8 @@ VkShaderModule PipelineBuilder::createShaderModule(const std::vector<char>& code
 Pipeline PipelineBuilder::build() {
     Pipeline pipeline;
 
-    auto vertShaderCode = readFile("shaders/vert.spv");
-    auto fragShaderCode = readFile("shaders/frag.spv");
+    auto vertShaderCode = help::readFile(vertexPath.c_str());
+    auto fragShaderCode = help::readFile(fragmentPath.c_str());
 
     VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
     VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);
@@ -143,4 +126,124 @@ Pipeline PipelineBuilder::build() {
     vkDestroyShaderModule(dev.dev, fragShaderModule, nullptr);
     vkDestroyShaderModule(dev.dev, vertShaderModule, nullptr);
 
+}
+
+void PipelineBuilder::setVertexShaderPath(const std::string& path) {
+    vertexPath = path;
+}
+
+void PipelineBuilder::setFragmentShaderPath(const std::string& path) {
+    fragmentPath = path;
+}
+
+void PipelineBuilder::setGeometryShaderPath(const std::string& path) {
+    geometryPath = path;
+}
+
+void PipelineBuilder::setComputeShaderPath(const std::string& path) {
+    computePath = path;
+}
+
+void PipelineBuilder::setVertexInputBindingDescriptions(const std::vector<VkVertexInputBindingDescription>& vec) {
+    vertexInputBindingDescriptions = vec;
+}
+
+void PipelineBuilder::setVertexInputAttributeDescriptions(const std::vector<VkVertexInputAttributeDescription>& vec) {
+    vertexInputAttributeDescriptions = vec;
+}
+
+void PipelineBuilder::setPrimitiveTopology(VkPrimitiveTopology topo) {
+    topology = topo;
+}
+
+void PipelineBuilder::setAssemblyStateCreateFlags(VkPipelineInputAssemblyStateCreateFlags flags) {
+    assemblyStateCreateFlags = flags;
+}
+
+void PipelineBuilder::setPrimitiveRestartEnable(VkBool32 enable) {
+    primitiveRestartEnable = enable;
+}
+
+void PipelineBuilder::setViewportStateCreateFlags(VkPipelineViewportStateCreateFlags flags) {
+    viewportStateCreateFlags = flags;
+}
+
+void PipelineBuilder::setViewports(const std::vector<VkViewport>& vps) {
+    viewports = vps;
+}
+
+void PipelineBuilder::setScissors(const std::vector<VkRect2D>& vec) {
+    scissors = vec;
+}
+
+void PipelineBuilder::setRasterizationStateCreateFlags(VkPipelineRasterizationStateCreateFlags flags) {
+    rasterizationStateCreateInfoFlags = flags;
+}
+
+void PipelineBuilder::setDepthClampEnable(VkBool32 enable) {
+    depthClampEnable = enable;
+}
+
+void PipelineBuilder::setRasterizerDiscardEnable(VkBool32 enable) {
+    rasterizerDiscardEnable = enable;
+}
+
+void PipelineBuilder::setPolygonMode(VkPolygonMode mode) {
+    polygonMode = mode;
+}
+
+void PipelineBuilder::setCullMode(VkCullModeFlags flags) {
+    cullModeFlags = flags;
+}
+
+void PipelineBuilder::setFrontFace(VkFrontFace face) {
+    frontFace = face;
+}
+
+void PipelineBuilder::setDepthBiasEnable(VkBool32 enable) {
+    depthBiasEnable = enable;
+}
+
+void PipelineBuilder::setDepthBiasConstantFactor(float factor) {
+    depthBiasConstantFactor = factor;
+}
+
+void PipelineBuilder::setDepthBiasClamp(float clamp) {
+    depthBiasClamp = clamp;
+}
+
+void PipelineBuilder::setDepthBiasSlopeFactor(float slopFactor) {
+    depthBiasSlopeFactor = slopFactor;
+}
+
+void PipelineBuilder::setLineWidth(float width) {
+    lineWidth = width;
+}
+
+void PipelineBuilder::setMultisampleStateCreateFlags(VkPipelineMultisampleStateCreateFlags flags) {
+    multiSampleStateCreateFlags = flags;
+}
+
+void PipelineBuilder::setSampleCountFlagBits(VkSampleCountFlagBits bits) {
+    rasterizationSamples = bits;
+}
+
+void PipelineBuilder::setSampleShadingEnable(VkBool32 enable) {
+    sampleShadingEnable = enable;
+}
+
+void PipelineBuilder::setMinSampleShading(float shading) {
+    minSampleShading = shading;
+}
+
+void PipelineBuilder::setSampleMASK(const VkSampleMask* pMask) {
+    pSampleMask = pMask;
+}
+
+void PipelineBuilder::setAlphaToCoverageEnable(VkBool32 enable) {
+    alphaToCoverageEnable = enable;
+}
+
+void PipelineBuilder::setAlphaToOneEnable(VkBool32 enable) {
+    alphaToOneEnable = enable;
 }
