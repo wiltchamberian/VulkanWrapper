@@ -156,24 +156,36 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Common.h" />
+    <ClInclude Include="..\src\DescriptorSetLayout.h" />
+    <ClInclude Include="..\src\DescriptorSetLayoutBuilder.h" />
     <ClInclude Include="..\src\export.h" />
     <ClInclude Include="..\src\Instance.h" />
     <ClInclude Include="..\src\InstanceBuilder.h" />
     <ClInclude Include="..\src\LogicalDevice.h" />
     <ClInclude Include="..\src\PhysicalDevice.h" />
+    <ClInclude Include="..\src\PipelineLayout.h" />
+    <ClInclude Include="..\src\PipelineLayoutBuilder.h" />
+    <ClInclude Include="..\src\Sampler.h" />
     <ClInclude Include="..\src\Surface.h" />
     <ClInclude Include="..\src\SwapChain.h" />
     <ClInclude Include="..\src\Tools.h" />
+    <ClInclude Include="..\src\SamplerBuilder.h" />
     <ClInclude Include="..\src\VulkanImage.h" />
     <ClInclude Include="..\src\Wrapper.h" />
     <ClInclude Include="framework.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\DescriptorSetLayout.cpp" />
+    <ClCompile Include="..\src\DescriptorSetLayoutBuilder.cpp" />
     <ClCompile Include="..\src\Instance.cpp" />
     <ClCompile Include="..\src\InstanceBuilder.cpp" />
     <ClCompile Include="..\src\LogicalDevice.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\PhysicalDevice.cpp" />
+    <ClCompile Include="..\src\PipelineLayout.cpp" />
+    <ClCompile Include="..\src\PipelineLayoutBuilder.cpp" />
+    <ClCompile Include="..\src\Sampler.cpp" />
+    <ClCompile Include="..\src\SamplerBuilder.cpp" />
     <ClCompile Include="..\src\Surface.cpp" />
     <ClCompile Include="..\src\SwapChain.cpp" />
     <ClCompile Include="..\src\Tools.cpp" />

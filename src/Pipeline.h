@@ -4,8 +4,6 @@
 
 class VULKAN_WRAPPER_API Pipeline {
 public:
-	
-
 	VkPipeline pipeline;
 };
 

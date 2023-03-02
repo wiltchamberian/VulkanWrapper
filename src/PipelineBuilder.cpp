@@ -247,3 +247,43 @@ void PipelineBuilder::setAlphaToCoverageEnable(VkBool32 enable) {
 void PipelineBuilder::setAlphaToOneEnable(VkBool32 enable) {
     alphaToOneEnable = enable;
 }
+
+void PipelineBuilder::setBlendEnable(VkBool32 enable) {
+    colorBlendAttachmentState.blendEnable = enable;
+}
+
+void PipelineBuilder::setSrcColorBlendFactor(VkBlendFactor factor) {
+    colorBlendAttachmentState.srcColorBlendFactor = factor;
+}
+
+void PipelineBuilder::setDstColorBlendFactor(VkBlendFactor factor) {
+    colorBlendAttachmentState.dstColorBlendFactor = factor;
+}
+
+void PipelineBuilder::setColorBlendOp(VkBlendOp op) {
+    colorBlendAttachmentState.colorBlendOp = op;
+}
+
+void PipelineBuilder::setSrcAlphaBlendFactor(VkBlendFactor factor) {
+    colorBlendAttachmentState.srcAlphaBlendFactor = factor;
+}
+
+void PipelineBuilder::setDstAlphaBlendFactor(VkBlendFactor factor) {
+    colorBlendAttachmentState.dstAlphaBlendFactor = factor;
+}
+
+void PipelineBuilder::setAlphaBlendOp(VkBlendOp op) {
+    colorBlendAttachmentState.alphaBlendOp = op;
+}
+
+void PipelineBuilder::setColorComponentFlags(VkColorComponentFlags colorWriteMask) {
+    colorBlendAttachmentState.colorWriteMask = colorWriteMask;
+}
+
+void PipelineBuilder::setPipelineDynamicStateCreateFlags(VkPipelineDynamicStateCreateFlags flags) {
+    dynamicStateCreateFlags = flags;
+}
+
+void PipelineBuilder::setDynamicStates(const std::vector<VkDynamicState>& vec) {
+    dynamicStates = vec;
+}

@@ -49,6 +49,20 @@ public:
 	void setSampleMASK(const VkSampleMask* pSampleMask);
 	void setAlphaToCoverageEnable(VkBool32 enable);
 	void setAlphaToOneEnable(VkBool32 enable);
+
+	//VkPipelineColorBlendAttachmentState
+	void setBlendEnable(VkBool32 enable);
+	void setSrcColorBlendFactor(VkBlendFactor factor);
+	void setDstColorBlendFactor(VkBlendFactor factor);
+	void setColorBlendOp(VkBlendOp op);
+	void setSrcAlphaBlendFactor(VkBlendFactor factor);
+	void setDstAlphaBlendFactor(VkBlendFactor factor);
+	void setAlphaBlendOp(VkBlendOp op);
+	void setColorComponentFlags(VkColorComponentFlags colorWriteMask);
+
+	//VkPipelineDynamicStateCreateInfo
+	void setPipelineDynamicStateCreateFlags(VkPipelineDynamicStateCreateFlags flags);
+	void setDynamicStates(const std::vector<VkDynamicState>& dynamicStates);
 private:
 	VkPipelineLayout layout;
 	LogicalDevice dev;
@@ -91,4 +105,10 @@ private:
 	const VkSampleMask*					     pSampleMask;
 	VkBool32                                 alphaToCoverageEnable;
 	VkBool32                                 alphaToOneEnable;
+
+	VkPipelineColorBlendAttachmentState      colorBlendAttachmentState;
+
+	//VkPipelineDynamicStateCreateInfo
+	VkPipelineDynamicStateCreateFlags		 dynamicStateCreateFlags;
+	std::vector<VkDynamicState>				 dynamicStates;
 };
