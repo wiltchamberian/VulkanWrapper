@@ -103,20 +103,8 @@ Pipeline PipelineBuilder::build() {
 
 }
 
-void PipelineBuilder::setVertexShaderPath(const std::string& path) {
-    vertexPath = path;
-}
-
-void PipelineBuilder::setFragmentShaderPath(const std::string& path) {
-    fragmentPath = path;
-}
-
-void PipelineBuilder::setGeometryShaderPath(const std::string& path) {
-    geometryPath = path;
-}
-
-void PipelineBuilder::setComputeShaderPath(const std::string& path) {
-    computePath = path;
+void PipelineBuilder::setShaders(const std::vector<Shader>& vec) {
+    shaders = vec;
 }
 
 void PipelineBuilder::setVertexInputBindingDescriptions(const std::vector<VkVertexInputBindingDescription>& vec) {

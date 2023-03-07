@@ -165,6 +165,7 @@
     <ClInclude Include="..\src\PhysicalDevice.h" />
     <ClInclude Include="..\src\PipelineLayout.h" />
     <ClInclude Include="..\src\PipelineLayoutBuilder.h" />
+    <ClInclude Include="..\src\RenderPassBuilder.h" />
     <ClInclude Include="..\src\Sampler.h" />
     <ClInclude Include="..\src\Shader.h" />
     <ClInclude Include="..\src\ShaderStageBuilder.h" />
@@ -186,6 +187,7 @@
     <ClCompile Include="..\src\PhysicalDevice.cpp" />
     <ClCompile Include="..\src\PipelineLayout.cpp" />
     <ClCompile Include="..\src\PipelineLayoutBuilder.cpp" />
+    <ClCompile Include="..\src\RenderPassBuilder.cpp" />
     <ClCompile Include="..\src\Sampler.cpp" />
     <ClCompile Include="..\src\SamplerBuilder.cpp" />
     <ClCompile Include="..\src\Shader.cpp" />

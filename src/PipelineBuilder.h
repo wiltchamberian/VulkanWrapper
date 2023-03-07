@@ -12,10 +12,7 @@ public:
 	
 	Pipeline build();
 
-	void setVertexShaderPath(const std::string& code);
-	void setFragmentShaderPath(const std::string& code);
-	void setGeometryShaderPath (const std::string& code);
-	void setComputeShaderPath(const std::string& code);
+	void setShaders(const std::vector<Shader>& shaders);
 
 	//VkPipelineVertexInputStateCreateInfo
 	void setVertexInputBindingDescriptions(const std::vector<VkVertexInputBindingDescription>& vec);
@@ -78,11 +75,6 @@ private:
 	PipelineLayout pipelineLayout;
 	LogicalDevice dev;
 	RenderPass renderPass;
-
-	std::string vertexPath;
-	std::string fragmentPath;
-	std::string geometryPath;
-	std::string computePath;
 
 	//VkPipelineShaderStageCreateInfo
 	std::vector<Shader> shaders;
