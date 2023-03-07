@@ -3,6 +3,9 @@
 
 class PipelineLayout {
 public:
+	VkPipelineLayout& value() {
+		return pipelineLayout;
+	}
 private:
-	
+	VkPipelineLayout pipelineLayout;
 };

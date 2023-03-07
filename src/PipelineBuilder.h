@@ -1,13 +1,15 @@
 #pragma once
 
 #include "Pipeline.h"
+#include "PipelineLayout.h"
 #include "LogicalDevice.h"
 #include "RenderPass.h"
+#include "Shader.h"
 #include <string>
 
 class VULKAN_WRAPPER_API PipelineBuilder {
 public:
-	VkShaderModule createShaderModule(const std::vector<char>& code);
+	
 	Pipeline build();
 
 	void setVertexShaderPath(const std::string& code);
@@ -15,6 +17,7 @@ public:
 	void setGeometryShaderPath (const std::string& code);
 	void setComputeShaderPath(const std::string& code);
 
+	//VkPipelineVertexInputStateCreateInfo
 	void setVertexInputBindingDescriptions(const std::vector<VkVertexInputBindingDescription>& vec);
 	void setVertexInputAttributeDescriptions(const std::vector<VkVertexInputAttributeDescription>& vec);
 
@@ -28,7 +31,7 @@ public:
 	void setViewports(const std::vector<VkViewport>& viewports);
 	void setScissors(const std::vector<VkRect2D>& scirros);
 
-	//
+	//VkPipelineRasterizationStateCreateInfo
 	void setRasterizationStateCreateFlags(VkPipelineRasterizationStateCreateFlags flags);
 	void setDepthClampEnable(VkBool32 enable);
 	void setRasterizerDiscardEnable(VkBool32 enalbe);
@@ -50,21 +53,29 @@ public:
 	void setAlphaToCoverageEnable(VkBool32 enable);
 	void setAlphaToOneEnable(VkBool32 enable);
 
-	//VkPipelineColorBlendAttachmentState
-	void setBlendEnable(VkBool32 enable);
-	void setSrcColorBlendFactor(VkBlendFactor factor);
-	void setDstColorBlendFactor(VkBlendFactor factor);
-	void setColorBlendOp(VkBlendOp op);
-	void setSrcAlphaBlendFactor(VkBlendFactor factor);
-	void setDstAlphaBlendFactor(VkBlendFactor factor);
-	void setAlphaBlendOp(VkBlendOp op);
-	void setColorComponentFlags(VkColorComponentFlags colorWriteMask);
+	//VkPipelineColorBlendCreateInfo
+	void setColorBlendAttachments(const std::vector<VkPipelineColorBlendAttachmentState>& vec);
+	void setColorBlendStateCreateFlags(VkPipelineColorBlendStateCreateFlags flags);
+	void setColorBlendLogicOpEnable(VkBool32 enalbe);
+	void setColorBlendLogicOp(VkLogicOp op);
+	void setColorBlendConstants(float d[4]);
+	//void setBlendEnable(VkBool32 enable);
+	//void setSrcColorBlendFactor(VkBlendFactor factor);
+	//void setDstColorBlendFactor(VkBlendFactor factor);
+	//void setColorBlendOp(VkBlendOp op);
+	//void setSrcAlphaBlendFactor(VkBlendFactor factor);
+	//void setDstAlphaBlendFactor(VkBlendFactor factor);
+	//void setAlphaBlendOp(VkBlendOp op);
+	//void setColorComponentFlags(VkColorComponentFlags colorWriteMask);
 
 	//VkPipelineDynamicStateCreateInfo
 	void setPipelineDynamicStateCreateFlags(VkPipelineDynamicStateCreateFlags flags);
 	void setDynamicStates(const std::vector<VkDynamicState>& dynamicStates);
+
+	//VkPipelineLayout
+	void setPipelineLayout(const PipelineLayout& pipelineLayout);
 private:
-	VkPipelineLayout layout;
+	PipelineLayout pipelineLayout;
 	LogicalDevice dev;
 	RenderPass renderPass;
 
@@ -73,13 +84,19 @@ private:
 	std::string geometryPath;
 	std::string computePath;
 
+	//VkPipelineShaderStageCreateInfo
+	std::vector<Shader> shaders;
+
+	//VkPipelineVertexInputStateCreateInfo
 	std::vector<VkVertexInputBindingDescription> vertexInputBindingDescriptions;
 	std::vector<VkVertexInputAttributeDescription> vertexInputAttributeDescriptions;
 
+	//VkPipelineInputAssemblyStateCreateInfo
 	VkPipelineInputAssemblyStateCreateFlags assemblyStateCreateFlags;
 	VkPrimitiveTopology topology;
 	VkBool32  primitiveRestartEnable;
 
+	//VkPipelineViewportStateCreateInfo
 	VkPipelineViewportStateCreateFlags    viewportStateCreateFlags;
 	std::vector<VkViewport>				  viewports;
 	std::vector<VkRect2D>				  scissors;
@@ -106,7 +123,11 @@ private:
 	VkBool32                                 alphaToCoverageEnable;
 	VkBool32                                 alphaToOneEnable;
 
-	VkPipelineColorBlendAttachmentState      colorBlendAttachmentState;
+	std::vector<VkPipelineColorBlendAttachmentState>    colorBlendAttachmentStates;
+	VkPipelineColorBlendStateCreateFlags				colorBlendStateCreateflags;
+	VkBool32											colorBlendLogicOpEnable;
+	VkLogicOp											colorBlendlogicOp;
+	float                                               colorBlendConstants[4];
 
 	//VkPipelineDynamicStateCreateInfo
 	VkPipelineDynamicStateCreateFlags		 dynamicStateCreateFlags;

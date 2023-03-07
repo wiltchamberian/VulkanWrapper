@@ -17,7 +17,7 @@ DescriptorSetLayout DescriptorSetLayoutBuilder::build() {
 }
 
 void DescriptorSetLayoutBuilder::setDevice(LogicalDevice d) {
-
+	dev = d;
 }
 
 void DescriptorSetLayoutBuilder::setDescriptorSetLayoutCreateFlags(VkDescriptorSetLayoutCreateFlags f) {

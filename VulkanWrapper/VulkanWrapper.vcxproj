@@ -166,6 +166,8 @@
     <ClInclude Include="..\src\PipelineLayout.h" />
     <ClInclude Include="..\src\PipelineLayoutBuilder.h" />
     <ClInclude Include="..\src\Sampler.h" />
+    <ClInclude Include="..\src\Shader.h" />
+    <ClInclude Include="..\src\ShaderStageBuilder.h" />
     <ClInclude Include="..\src\Surface.h" />
     <ClInclude Include="..\src\SwapChain.h" />
     <ClInclude Include="..\src\Tools.h" />
@@ -186,6 +188,8 @@
     <ClCompile Include="..\src\PipelineLayoutBuilder.cpp" />
     <ClCompile Include="..\src\Sampler.cpp" />
     <ClCompile Include="..\src\SamplerBuilder.cpp" />
+    <ClCompile Include="..\src\Shader.cpp" />
+    <ClCompile Include="..\src\ShaderStageBuilder.cpp" />
     <ClCompile Include="..\src\Surface.cpp" />
     <ClCompile Include="..\src\SwapChain.cpp" />
     <ClCompile Include="..\src\Tools.cpp" />
