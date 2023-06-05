@@ -11,70 +11,87 @@ Sampler SamplerBuilder::build() {
 	return sampler;
 }
 
-void SamplerBuilder::setDevice(LogicalDevice d) {
+SamplerBuilder& SamplerBuilder::setDevice(LogicalDevice d) {
 	dev = d;
+	return *this;
 }
 
-void SamplerBuilder::setSamplerCreateFlags(VkSamplerCreateFlags flags) {
+SamplerBuilder& SamplerBuilder::setSamplerCreateFlags(VkSamplerCreateFlags flags) {
 	ci.flags = flags;
+	return *this;
 }
 
-void SamplerBuilder::setMagFilter(VkFilter filter) {
+SamplerBuilder& SamplerBuilder::setMagFilter(VkFilter filter) {
 	ci.magFilter = filter;
+	return *this;
 }
 
-void SamplerBuilder::setMinFilter(VkFilter filter) {
+SamplerBuilder& SamplerBuilder::setMinFilter(VkFilter filter) {
 	ci.minFilter = filter;
+	return *this;
 }
 
-void SamplerBuilder::setMipmapMode(VkSamplerMipmapMode mode) {
+SamplerBuilder& SamplerBuilder::setMipmapMode(VkSamplerMipmapMode mode) {
 	ci.mipmapMode = mode;
+	return *this;
 }
 
-void SamplerBuilder::setAddressModeU(VkSamplerAddressMode mode) {
+SamplerBuilder& SamplerBuilder::setAddressModeU(VkSamplerAddressMode mode) {
 	ci.addressModeU = mode;
+	return *this;
 }
 
-void SamplerBuilder::setAddressModeV(VkSamplerAddressMode mode) {
+SamplerBuilder& SamplerBuilder::setAddressModeV(VkSamplerAddressMode mode) {
 	ci.addressModeV = mode;
+	return *this;
 }
 
-void SamplerBuilder::setAddressModeW(VkSamplerAddressMode mode) {
+SamplerBuilder& SamplerBuilder::setAddressModeW(VkSamplerAddressMode mode) {
 	ci.addressModeW = mode;
+	return *this;
 }
 
-void SamplerBuilder::setMipLodBias(float bias) {
+SamplerBuilder& SamplerBuilder::setMipLodBias(float bias) {
 	ci.mipLodBias = bias;
+	return *this;
 }
 
-void SamplerBuilder::setAnisotropyEnable(VkBool32 enable) {
+SamplerBuilder& SamplerBuilder::setAnisotropyEnable(VkBool32 enable) {
 	ci.anisotropyEnable = enable;
+	return *this;
 }
 
-void SamplerBuilder::setMaxAnisotropy(float anisotropy) {
+SamplerBuilder& SamplerBuilder::setMaxAnisotropy(float anisotropy) {
 	ci.maxAnisotropy = anisotropy;
+	return *this;
 }
 
-void SamplerBuilder::setCompareEnable(VkBool32 compareEnable) {
+SamplerBuilder& SamplerBuilder::setCompareEnable(VkBool32 compareEnable) {
 	ci.compareEnable = compareEnable;
+	return *this;
 }
 
-void SamplerBuilder::setCompareOp(VkCompareOp op) {
+SamplerBuilder& SamplerBuilder::setCompareOp(VkCompareOp op) {
 	ci.compareOp = op;
+	return *this;
 }
 
-void SamplerBuilder::setMinLod(float lod) {
+SamplerBuilder& SamplerBuilder::setMinLod(float lod) {
 	ci.minLod = lod;
+	return *this;
 }
 
-void SamplerBuilder::setMaxLod(float lod) {
+SamplerBuilder& SamplerBuilder::setMaxLod(float lod) {
 	ci.maxLod = lod;
+	return *this;
 }
 
-void SamplerBuilder::setBorderColor(VkBorderColor color) {
+SamplerBuilder& SamplerBuilder::setBorderColor(VkBorderColor color) {
 	ci.borderColor = color;
+	return *this;
 }
 
-void SamplerBuilder::setUnNormalizedCoordinates(VkBool32 enable) {
+SamplerBuilder& SamplerBuilder::setUnNormalizedCoordinates(VkBool32 enable) {
 	ci.unnormalizedCoordinates = enable;
+	return *this;
 }

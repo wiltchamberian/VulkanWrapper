@@ -16,14 +16,17 @@ DescriptorSetLayout DescriptorSetLayoutBuilder::build() {
 	return layout;
 }
 
-void DescriptorSetLayoutBuilder::setDevice(LogicalDevice d) {
+DescriptorSetLayoutBuilder& DescriptorSetLayoutBuilder::setDevice(LogicalDevice d) {
 	dev = d;
+	return *this;
 }
 
-void DescriptorSetLayoutBuilder::setDescriptorSetLayoutCreateFlags(VkDescriptorSetLayoutCreateFlags f) {
+DescriptorSetLayoutBuilder& DescriptorSetLayoutBuilder::setDescriptorSetLayoutCreateFlags(VkDescriptorSetLayoutCreateFlags f) {
 	flags = f;
+	return *this;
 }
 
-void DescriptorSetLayoutBuilder::setVkDescriptorSetLayoutBindings(const std::vector< VkDescriptorSetLayoutBinding>& vec) {
+DescriptorSetLayoutBuilder& DescriptorSetLayoutBuilder::setVkDescriptorSetLayoutBindings(const std::vector< VkDescriptorSetLayoutBinding>& vec) {
 	bindings = vec;
+	return *this;
 }

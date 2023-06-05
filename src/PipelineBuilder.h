@@ -12,50 +12,50 @@ public:
 	
 	Pipeline build();
 
-	void setShaders(const std::vector<Shader>& shaders);
+	PipelineBuilder& setShaders(const std::vector<Shader>& shaders);
 
 	//VkPipelineVertexInputStateCreateInfo
-	void setVertexInputBindingDescriptions(const std::vector<VkVertexInputBindingDescription>& vec);
-	void setVertexInputAttributeDescriptions(const std::vector<VkVertexInputAttributeDescription>& vec);
+	PipelineBuilder& setVertexInputBindingDescriptions(const std::vector<VkVertexInputBindingDescription>& vec);
+	PipelineBuilder& setVertexInputAttributeDescriptions(const std::vector<VkVertexInputAttributeDescription>& vec);
 
 	//VkPipelineInputAssemblyStateCreateInfo
-	void setPrimitiveTopology(VkPrimitiveTopology topology);
-	void setAssemblyStateCreateFlags(VkPipelineInputAssemblyStateCreateFlags flags);
-	void setPrimitiveRestartEnable(VkBool32 enable);
+	PipelineBuilder& setPrimitiveTopology(VkPrimitiveTopology topology);
+	PipelineBuilder& setAssemblyStateCreateFlags(VkPipelineInputAssemblyStateCreateFlags flags);
+	PipelineBuilder& setPrimitiveRestartEnable(VkBool32 enable);
 
 	//VkPipelineViewportStateCreateInfo
-	void setViewportStateCreateFlags(VkPipelineViewportStateCreateFlags flags);
-	void setViewports(const std::vector<VkViewport>& viewports);
-	void setScissors(const std::vector<VkRect2D>& scirros);
+	PipelineBuilder& setViewportStateCreateFlags(VkPipelineViewportStateCreateFlags flags);
+	PipelineBuilder& setViewports(const std::vector<VkViewport>& viewports);
+	PipelineBuilder& setScissors(const std::vector<VkRect2D>& scirros);
 
 	//VkPipelineRasterizationStateCreateInfo
-	void setRasterizationStateCreateFlags(VkPipelineRasterizationStateCreateFlags flags);
-	void setDepthClampEnable(VkBool32 enable);
-	void setRasterizerDiscardEnable(VkBool32 enalbe);
-	void setPolygonMode(VkPolygonMode mode);
-	void setCullMode(VkCullModeFlags flags);
-	void setFrontFace(VkFrontFace face);
-	void setDepthBiasEnable(VkBool32 enable);
-	void setDepthBiasConstantFactor(float factor);
-	void setDepthBiasClamp(float factor);
-	void setDepthBiasSlopeFactor(float slopFactor);
-	void setLineWidth(float lineWidth);
+	PipelineBuilder& setRasterizationStateCreateFlags(VkPipelineRasterizationStateCreateFlags flags);
+	PipelineBuilder& setDepthClampEnable(VkBool32 enable);
+	PipelineBuilder& setRasterizerDiscardEnable(VkBool32 enalbe);
+	PipelineBuilder& setPolygonMode(VkPolygonMode mode);
+	PipelineBuilder& setCullMode(VkCullModeFlags flags);
+	PipelineBuilder& setFrontFace(VkFrontFace face);
+	PipelineBuilder& setDepthBiasEnable(VkBool32 enable);
+	PipelineBuilder& setDepthBiasConstantFactor(float factor);
+	PipelineBuilder& setDepthBiasClamp(float factor);
+	PipelineBuilder& setDepthBiasSlopeFactor(float slopFactor);
+	PipelineBuilder& setLineWidth(float lineWidth);
 
 	//VkPipelineMultisampleStateCreateInfo
-	void setMultisampleStateCreateFlags(VkPipelineMultisampleStateCreateFlags flags);
-	void setSampleCountFlagBits(VkSampleCountFlagBits rasterizationSamples);
-	void setSampleShadingEnable(VkBool32 sampleShadingEnable);
-	void setMinSampleShading(float minSampleShading);
-	void setSampleMASK(const VkSampleMask* pSampleMask);
-	void setAlphaToCoverageEnable(VkBool32 enable);
-	void setAlphaToOneEnable(VkBool32 enable);
+	PipelineBuilder& setMultisampleStateCreateFlags(VkPipelineMultisampleStateCreateFlags flags);
+	PipelineBuilder& setSampleCountFlagBits(VkSampleCountFlagBits rasterizationSamples);
+	PipelineBuilder& setSampleShadingEnable(VkBool32 sampleShadingEnable);
+	PipelineBuilder& setMinSampleShading(float minSampleShading);
+	PipelineBuilder& setSampleMASK(const VkSampleMask* pSampleMask);
+	PipelineBuilder& setAlphaToCoverageEnable(VkBool32 enable);
+	PipelineBuilder& setAlphaToOneEnable(VkBool32 enable);
 
 	//VkPipelineColorBlendCreateInfo
-	void setColorBlendAttachments(const std::vector<VkPipelineColorBlendAttachmentState>& vec);
-	void setColorBlendStateCreateFlags(VkPipelineColorBlendStateCreateFlags flags);
-	void setColorBlendLogicOpEnable(VkBool32 enalbe);
-	void setColorBlendLogicOp(VkLogicOp op);
-	void setColorBlendConstants(float d[4]);
+	PipelineBuilder& setColorBlendAttachments(const std::vector<VkPipelineColorBlendAttachmentState>& vec);
+	PipelineBuilder& setColorBlendStateCreateFlags(VkPipelineColorBlendStateCreateFlags flags);
+	PipelineBuilder& setColorBlendLogicOpEnable(VkBool32 enalbe);
+	PipelineBuilder& setColorBlendLogicOp(VkLogicOp op);
+	PipelineBuilder& setColorBlendConstants(float d[4]);
 	//void setBlendEnable(VkBool32 enable);
 	//void setSrcColorBlendFactor(VkBlendFactor factor);
 	//void setDstColorBlendFactor(VkBlendFactor factor);
@@ -66,15 +66,19 @@ public:
 	//void setColorComponentFlags(VkColorComponentFlags colorWriteMask);
 
 	//VkPipelineDynamicStateCreateInfo
-	void setPipelineDynamicStateCreateFlags(VkPipelineDynamicStateCreateFlags flags);
-	void setDynamicStates(const std::vector<VkDynamicState>& dynamicStates);
+	PipelineBuilder& setPipelineDynamicStateCreateFlags(VkPipelineDynamicStateCreateFlags flags);
+	PipelineBuilder& setDynamicStates(const std::vector<VkDynamicState>& dynamicStates);
 
 	//VkPipelineLayout
-	void setPipelineLayout(const PipelineLayout& pipelineLayout);
+	PipelineBuilder& setPipelineLayout(const PipelineLayout& pipelineLayout);
+
+	PipelineBuilder& setRenderPass(RenderPass pass);
+	PipelineBuilder& setSubPass(uint32_t id);
 private:
 	PipelineLayout pipelineLayout;
 	LogicalDevice dev;
 	RenderPass renderPass;
+	uint32_t subpass = 0;
 
 	//VkPipelineShaderStageCreateInfo
 	std::vector<Shader> shaders;

@@ -96,7 +96,7 @@ Pipeline PipelineBuilder::build() {
     ci.pDynamicState = &dynamicState;
     ci.layout = pipelineLayout.value();
     ci.renderPass = renderPass.pass;
-    ci.subpass = 0;
+    ci.subpass = subpass;
     ci.basePipelineHandle = VK_NULL_HANDLE;
 
     if (vkCreateGraphicsPipelines(dev.dev, VK_NULL_HANDLE, 1, &ci, nullptr, &pipeline.pipeline) != VK_SUCCESS) {
@@ -106,112 +106,139 @@ Pipeline PipelineBuilder::build() {
     return pipeline;
 }
 
-void PipelineBuilder::setShaders(const std::vector<Shader>& vec) {
+PipelineBuilder& PipelineBuilder::setShaders(const std::vector<Shader>& vec) {
     shaders = vec;
+    return *this;
 }
 
-void PipelineBuilder::setVertexInputBindingDescriptions(const std::vector<VkVertexInputBindingDescription>& vec) {
+PipelineBuilder& PipelineBuilder::setVertexInputBindingDescriptions(const std::vector<VkVertexInputBindingDescription>& vec) {
     vertexInputBindingDescriptions = vec;
+    return *this;
 }
 
-void PipelineBuilder::setVertexInputAttributeDescriptions(const std::vector<VkVertexInputAttributeDescription>& vec) {
+PipelineBuilder& PipelineBuilder::setVertexInputAttributeDescriptions(const std::vector<VkVertexInputAttributeDescription>& vec) {
     vertexInputAttributeDescriptions = vec;
+    return *this;
 }
 
-void PipelineBuilder::setPrimitiveTopology(VkPrimitiveTopology topo) {
+PipelineBuilder& PipelineBuilder::setPrimitiveTopology(VkPrimitiveTopology topo) {
     topology = topo;
+    return *this;
 }
 
-void PipelineBuilder::setAssemblyStateCreateFlags(VkPipelineInputAssemblyStateCreateFlags flags) {
+PipelineBuilder& PipelineBuilder::setAssemblyStateCreateFlags(VkPipelineInputAssemblyStateCreateFlags flags) {
     assemblyStateCreateFlags = flags;
+    return *this;
 }
 
-void PipelineBuilder::setPrimitiveRestartEnable(VkBool32 enable) {
+PipelineBuilder& PipelineBuilder::setPrimitiveRestartEnable(VkBool32 enable) {
     primitiveRestartEnable = enable;
+    return *this;
 }
 
-void PipelineBuilder::setViewportStateCreateFlags(VkPipelineViewportStateCreateFlags flags) {
+PipelineBuilder& PipelineBuilder::setViewportStateCreateFlags(VkPipelineViewportStateCreateFlags flags) {
     viewportStateCreateFlags = flags;
+    return *this;
 }
 
-void PipelineBuilder::setViewports(const std::vector<VkViewport>& vps) {
+PipelineBuilder& PipelineBuilder::setViewports(const std::vector<VkViewport>& vps) {
     viewports = vps;
+    return *this;
 }
 
-void PipelineBuilder::setScissors(const std::vector<VkRect2D>& vec) {
+PipelineBuilder& PipelineBuilder::setScissors(const std::vector<VkRect2D>& vec) {
     scissors = vec;
+    return *this;
 }
 
-void PipelineBuilder::setRasterizationStateCreateFlags(VkPipelineRasterizationStateCreateFlags flags) {
+PipelineBuilder& PipelineBuilder::setRasterizationStateCreateFlags(VkPipelineRasterizationStateCreateFlags flags) {
     rasterizationStateCreateInfoFlags = flags;
+    return *this;
 }
 
-void PipelineBuilder::setDepthClampEnable(VkBool32 enable) {
+PipelineBuilder& PipelineBuilder::setDepthClampEnable(VkBool32 enable) {
     depthClampEnable = enable;
+    return *this;
 }
 
-void PipelineBuilder::setRasterizerDiscardEnable(VkBool32 enable) {
+PipelineBuilder& PipelineBuilder::setRasterizerDiscardEnable(VkBool32 enable) {
     rasterizerDiscardEnable = enable;
+    return *this;
 }
 
-void PipelineBuilder::setPolygonMode(VkPolygonMode mode) {
+PipelineBuilder& PipelineBuilder::setPolygonMode(VkPolygonMode mode) {
     polygonMode = mode;
+    return *this;
 }
 
-void PipelineBuilder::setCullMode(VkCullModeFlags flags) {
+PipelineBuilder& PipelineBuilder::setCullMode(VkCullModeFlags flags) {
     cullModeFlags = flags;
+    return *this;
 }
 
-void PipelineBuilder::setFrontFace(VkFrontFace face) {
+PipelineBuilder& PipelineBuilder::setFrontFace(VkFrontFace face) {
     frontFace = face;
+    return *this;
 }
 
-void PipelineBuilder::setDepthBiasEnable(VkBool32 enable) {
+PipelineBuilder& PipelineBuilder::setDepthBiasEnable(VkBool32 enable) {
     depthBiasEnable = enable;
+    return *this;
 }
 
-void PipelineBuilder::setDepthBiasConstantFactor(float factor) {
+PipelineBuilder& PipelineBuilder::setDepthBiasConstantFactor(float factor) {
     depthBiasConstantFactor = factor;
+    return *this;
 }
 
-void PipelineBuilder::setDepthBiasClamp(float clamp) {
+PipelineBuilder& PipelineBuilder::setDepthBiasClamp(float clamp) {
     depthBiasClamp = clamp;
+    return *this;
 }
 
-void PipelineBuilder::setDepthBiasSlopeFactor(float slopFactor) {
+PipelineBuilder& PipelineBuilder::setDepthBiasSlopeFactor(float slopFactor) {
     depthBiasSlopeFactor = slopFactor;
+    return *this;
 }
 
-void PipelineBuilder::setLineWidth(float width) {
+PipelineBuilder& PipelineBuilder::setLineWidth(float width) {
     lineWidth = width;
+    return *this;
 }
 
-void PipelineBuilder::setMultisampleStateCreateFlags(VkPipelineMultisampleStateCreateFlags flags) {
+PipelineBuilder& PipelineBuilder::setMultisampleStateCreateFlags(VkPipelineMultisampleStateCreateFlags flags) {
     multiSampleStateCreateFlags = flags;
+    return *this;
 }
 
-void PipelineBuilder::setSampleCountFlagBits(VkSampleCountFlagBits bits) {
+PipelineBuilder& PipelineBuilder::setSampleCountFlagBits(VkSampleCountFlagBits bits) {
     rasterizationSamples = bits;
+    return *this;
 }
 
-void PipelineBuilder::setSampleShadingEnable(VkBool32 enable) {
+PipelineBuilder& PipelineBuilder::setSampleShadingEnable(VkBool32 enable) {
     sampleShadingEnable = enable;
+    return *this;
 }
 
-void PipelineBuilder::setMinSampleShading(float shading) {
+PipelineBuilder& PipelineBuilder::setMinSampleShading(float shading) {
     minSampleShading = shading;
+    return *this;
 }
 
-void PipelineBuilder::setSampleMASK(const VkSampleMask* pMask) {
+PipelineBuilder& PipelineBuilder::setSampleMASK(const VkSampleMask* pMask) {
     pSampleMask = pMask;
+    return *this;
 }
 
-void PipelineBuilder::setAlphaToCoverageEnable(VkBool32 enable) {
+PipelineBuilder& PipelineBuilder::setAlphaToCoverageEnable(VkBool32 enable) {
     alphaToCoverageEnable = enable;
+    return *this;
 }
 
-void PipelineBuilder::setAlphaToOneEnable(VkBool32 enable) {
+PipelineBuilder& PipelineBuilder::setAlphaToOneEnable(VkBool32 enable) {
     alphaToOneEnable = enable;
+    return *this;
 }
 
 //void PipelineBuilder::setBlendEnable(VkBool32 enable) {
@@ -246,37 +273,55 @@ void PipelineBuilder::setAlphaToOneEnable(VkBool32 enable) {
 //    colorBlendAttachmentState.colorWriteMask = colorWriteMask;
 //}
 
-void PipelineBuilder::setColorBlendAttachments(const std::vector<VkPipelineColorBlendAttachmentState>& vec) {
+PipelineBuilder& PipelineBuilder::setColorBlendAttachments(const std::vector<VkPipelineColorBlendAttachmentState>& vec) {
     colorBlendAttachmentStates = vec;
+    return *this;
 }
 
-void PipelineBuilder::setColorBlendStateCreateFlags(VkPipelineColorBlendStateCreateFlags flags) {
+PipelineBuilder& PipelineBuilder::setColorBlendStateCreateFlags(VkPipelineColorBlendStateCreateFlags flags) {
     colorBlendStateCreateflags = flags;
+    return *this;
 }
 
-void PipelineBuilder::setColorBlendLogicOpEnable(VkBool32 enalbe) {
+PipelineBuilder& PipelineBuilder::setColorBlendLogicOpEnable(VkBool32 enalbe) {
     colorBlendLogicOpEnable = enalbe;
+    return *this;
 }
 
-void PipelineBuilder::setColorBlendLogicOp(VkLogicOp op) {
+PipelineBuilder& PipelineBuilder::setColorBlendLogicOp(VkLogicOp op) {
     colorBlendlogicOp = op;
+    return *this;
 }
 
-void PipelineBuilder::setColorBlendConstants(float d[4]) {
+PipelineBuilder& PipelineBuilder::setColorBlendConstants(float d[4]) {
     colorBlendConstants[0] = d[0];
     colorBlendConstants[1] = d[1];
     colorBlendConstants[2] = d[2];
     colorBlendConstants[3] = d[3];
+    return *this;
 }
 
-void PipelineBuilder::setPipelineDynamicStateCreateFlags(VkPipelineDynamicStateCreateFlags flags) {
+PipelineBuilder& PipelineBuilder::setPipelineDynamicStateCreateFlags(VkPipelineDynamicStateCreateFlags flags) {
     dynamicStateCreateFlags = flags;
+    return *this;
 }
 
-void PipelineBuilder::setDynamicStates(const std::vector<VkDynamicState>& vec) {
+PipelineBuilder& PipelineBuilder::setDynamicStates(const std::vector<VkDynamicState>& vec) {
     dynamicStates = vec;
+    return *this;
 }
 
-void PipelineBuilder::setPipelineLayout(const PipelineLayout& l) {
+PipelineBuilder& PipelineBuilder::setPipelineLayout(const PipelineLayout& l) {
     pipelineLayout = l;
+    return *this;
+}
+
+PipelineBuilder& PipelineBuilder::setRenderPass(RenderPass pass) {
+    renderPass = pass;
+    return *this;
+}
+
+PipelineBuilder& PipelineBuilder::setSubPass(uint32_t id) {
+    subpass = id;
+    return *this;
 }

@@ -18,18 +18,22 @@ RenderPass RenderPassBuilder::build() {
 	return pass;
 }
 
-void RenderPassBuilder::setDevice(LogicalDevice d) {
+RenderPassBuilder& RenderPassBuilder::setDevice(LogicalDevice d) {
 	dev = d;
+	return *this;
 }
 
-void RenderPassBuilder::setAttachments(const std::vector<VkAttachmentDescription>& vec) {
+RenderPassBuilder& RenderPassBuilder::setAttachments(const std::vector<VkAttachmentDescription>& vec) {
 	attachmentDescriptions = vec;
+	return *this;
 }
 
-void RenderPassBuilder::setSubpassDescriptions(const std::vector<VkSubpassDescription>& vec) {
+RenderPassBuilder& RenderPassBuilder::setSubpassDescriptions(const std::vector<VkSubpassDescription>& vec) {
 	subpassDescriptions = vec;
+	return *this;
 }
 
-void RenderPassBuilder::setSubpassDependencies(const std::vector<VkSubpassDependency>& vec) {
+RenderPassBuilder& RenderPassBuilder::setSubpassDependencies(const std::vector<VkSubpassDependency>& vec) {
 	subpassDependencies = vec;
+	return *this;
 }

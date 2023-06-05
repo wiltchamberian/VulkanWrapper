@@ -6,9 +6,9 @@
 class DescriptorSetLayoutBuilder {
 public:
 	DescriptorSetLayout build();
-	void setDevice(LogicalDevice d);
-	void setDescriptorSetLayoutCreateFlags(VkDescriptorSetLayoutCreateFlags f);
-	void setVkDescriptorSetLayoutBindings(const std::vector< VkDescriptorSetLayoutBinding>& vec);
+	DescriptorSetLayoutBuilder& setDevice(LogicalDevice d);
+	DescriptorSetLayoutBuilder& setDescriptorSetLayoutCreateFlags(VkDescriptorSetLayoutCreateFlags f);
+	DescriptorSetLayoutBuilder& setVkDescriptorSetLayoutBindings(const std::vector< VkDescriptorSetLayoutBinding>& vec);
 private:
 	LogicalDevice                              dev;
 	VkDescriptorSetLayoutCreateFlags           flags;

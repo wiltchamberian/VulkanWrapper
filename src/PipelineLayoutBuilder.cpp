@@ -16,18 +16,22 @@ PipelineLayout PipelineLayoutBuilder::build() {
 	return layout;
 }
 
-void PipelineLayoutBuilder::setDevice(LogicalDevice d) {
+PipelineLayoutBuilder& PipelineLayoutBuilder::setDevice(LogicalDevice d) {
 	dev = d;
+	return *this;
 }
 
-void PipelineLayoutBuilder::setPipelineLayoutCreateFlags(VkPipelineLayoutCreateFlags flgs) {
+PipelineLayoutBuilder& PipelineLayoutBuilder::setPipelineLayoutCreateFlags(VkPipelineLayoutCreateFlags flgs) {
 	flags = flgs;
+	return *this;
 }
 
-void PipelineLayoutBuilder::setDescriptorSetLayouts(const std::vector<DescriptorSetLayout>& vec) {
+PipelineLayoutBuilder& PipelineLayoutBuilder::setDescriptorSetLayouts(const std::vector<DescriptorSetLayout>& vec) {
 	layouts = vec;
+	return *this;
 }
 
-void PipelineLayoutBuilder::setPushConstantRanges(const std::vector<VkPushConstantRange>& vec) {
+PipelineLayoutBuilder& PipelineLayoutBuilder::setPushConstantRanges(const std::vector<VkPushConstantRange>& vec) {
 	pushConstantRanges = vec;
+	return *this;
 }
