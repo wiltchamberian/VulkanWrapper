@@ -122,6 +122,6 @@ private:
 	float                                               colorBlendConstants[4];
 
 	//VkPipelineDynamicStateCreateInfo
-	VkPipelineDynamicStateCreateFlags		 dynamicStateCreateFlags;
-	std::vector<VkDynamicState>				 dynamicStates;
+	VkPipelineDynamicStateCreateFlags					dynamicStateCreateFlags;
+	std::vector<VkDynamicState>							dynamicStates;
 };

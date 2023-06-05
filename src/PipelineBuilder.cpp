@@ -7,19 +7,21 @@ Pipeline PipelineBuilder::build() {
     Pipeline pipeline;
 
     std::vector< VkPipelineShaderStageCreateInfo> shaderStages;
+    std::vector<VkSpecializationInfo> specilizations(shaders.size());
     for (int i = 0; i < shaders.size(); ++i) {
         VkPipelineShaderStageCreateInfo ci;
         ci.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
         ci.flags = shaders[i].flags;
         ci.stage = shaders[i].stage;
-        ci.module = shaders[i].module;
+        ci.module = shaders[i].getModule();
         ci.pName = shaders[i].name.c_str();
         
-        //TODO
-        /*ci.pSpecializationInfo->pMapEntries = shaders[i].specializationInfo.mapEntries.data();
-        ci.pSpecializationInfo->mapEntryCount = shaders[i].specializationInfo.mapEntries.size();
-        ci.pSpecializationInfo->pData = shaders[i].specializationInfo.data;
-        ci.pSpecializationInfo->dataSize = shaders[i].specializationInfo.dataSize;*/
+        //why vulkan use a pointer type of specializationInfo?
+        specilizations[i].pMapEntries = shaders[i].mapEntries.data();
+        specilizations[i].mapEntryCount = shaders[i].mapEntries.size();
+        specilizations[i].pData = shaders[i].data.data();
+        specilizations[i].dataSize = shaders[i].data.size();
+        ci.pSpecializationInfo = &specilizations[i];
     
         shaderStages.push_back(ci);
     }
@@ -101,6 +103,7 @@ Pipeline PipelineBuilder::build() {
         throw std::runtime_error("failed to create graphics pipeline!");
     }
 
+    return pipeline;
 }
 
 void PipelineBuilder::setShaders(const std::vector<Shader>& vec) {
