@@ -1,10 +1,11 @@
 #pragma once
+#include "export.h"
 #include <vector>
 #include "vulkan/vulkan.h"
 #include "RenderPass.h"
 #include "LogicalDevice.h"
 
-class RenderPassBuilder {
+class VULKAN_WRAPPER_API RenderPassBuilder {
 public:
 	RenderPass build();
 	RenderPassBuilder& setDevice(LogicalDevice dev);

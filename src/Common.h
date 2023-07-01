@@ -1,9 +1,11 @@
 #pragma once
+#include "export.h"
 #include "vulkan/vulkan.h"
 #include <vector>
 #include <optional>
 
-struct QueueFamilyIndices {
+class VULKAN_WRAPPER_API QueueFamilyIndices {
+public:
 	std::optional<uint32_t> graphicsFamily;
 	std::optional<uint32_t> computeFamily;
 	std::optional<uint32_t> transferFamily;

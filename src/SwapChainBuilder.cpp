@@ -1,7 +1,11 @@
 #include "SwapChainBuilder.h"
 #include <stdexcept>
 
-SwapChainBuilder::SwapChainBuilder(const LogicalDevice& dev, const Surface& surf)
+SwapChainBuilder::SwapChainBuilder() {
+
+}
+
+SwapChainBuilder::SwapChainBuilder(LogicalDevice& dev, Surface& surf)
 	:logicalDev(dev)
 	, surface(surf)
 {
@@ -125,6 +129,7 @@ SwapChainBuilder& SwapChainBuilder::setDefaultMinImageCount() {
 		}
 		minImageCount = imgCount;
 	}
+	return *this;
 }
 
 SwapChainBuilder& SwapChainBuilder::setExtent2D(VkExtent2D extent) {

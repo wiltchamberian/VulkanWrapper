@@ -15,14 +15,14 @@ Pipeline PipelineBuilder::build() {
         ci.stage = shaders[i].stage;
         ci.module = shaders[i].getModule();
         ci.pName = shaders[i].name.c_str();
-        
+
         //why vulkan use a pointer type of specializationInfo?
         specilizations[i].pMapEntries = shaders[i].mapEntries.data();
         specilizations[i].mapEntryCount = shaders[i].mapEntries.size();
         specilizations[i].pData = shaders[i].data.data();
         specilizations[i].dataSize = shaders[i].data.size();
         ci.pSpecializationInfo = &specilizations[i];
-    
+
         shaderStages.push_back(ci);
     }
 

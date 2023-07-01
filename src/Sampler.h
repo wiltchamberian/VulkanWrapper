@@ -2,7 +2,7 @@
 #include "vulkan/vulkan.h"
 #include "export.h"
 
-class Sampler {
+class VULKAN_WRAPPER_API Sampler {
 public:
 	VkSampler& value() {
 		return sampler;

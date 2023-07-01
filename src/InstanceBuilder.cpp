@@ -23,15 +23,21 @@ VulkanInstance InstanceBuilder::build() {
         strcpy(ext[i], extensions[i].c_str());
         ext[i][extensions[i].size()] = '\0';
     }
-
     createInfo.ppEnabledExtensionNames = ext;
-    createInfo.enabledLayerCount = 0;
+
+    createInfo.enabledLayerCount = layers.size();
+    char** ppLayers = new char* [layers.size()];
+    for (int i = 0; i < layers.size(); ++i) {
+        ppLayers[i] = (char*)layers[i].c_str();
+    }
+
 
     VkResult suc = vkCreateInstance(&createInfo, nullptr, &(vk.value()));
     for (int i = 0;i < extensions.size();++i) {
-        delete[] ext[i];
+        delete ext[i];
     }
     delete[] ext;
+    delete[] ppLayers;
     if (suc != VK_SUCCESS) {
         throw std::runtime_error("failed to create instance!");
     }
@@ -49,7 +55,22 @@ InstanceBuilder& InstanceBuilder::setAppVersion(int major, int minor, int patch)
     return *this;
 }
 
+InstanceBuilder& InstanceBuilder::setEngineVersion(int major, int minor, int patch) {
+    engineVersion = VK_MAKE_VERSION(major, minor, patch);
+    return *this;
+}
+
+InstanceBuilder& InstanceBuilder::setEngineName(const std::string& str) {
+    engineName = str;
+    return *this;
+}
+
 InstanceBuilder& InstanceBuilder::setExtensions(const std::vector<std::string>& Extensions) {
     extensions = Extensions;
+    return *this;
+}
+
+InstanceBuilder& InstanceBuilder::setLayers(const std::vector<std::string>& layers) {
+    this->layers = layers;
     return *this;
 }

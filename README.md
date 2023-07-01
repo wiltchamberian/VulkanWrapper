@@ -6,6 +6,8 @@
  simplify the coding a lot.
  The expectation is that the users can call Vulkan with only a 
  few lines of codes of configuration.
+ 
+ The project is not finished, it is still on devloping and now it may can't work.
 
 # Compiler compatibility
 > c++20

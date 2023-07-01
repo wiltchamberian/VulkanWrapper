@@ -5,7 +5,5 @@
 
 class VULKAN_WRAPPER_API RenderPass {
 public:
-
-
 	VkRenderPass pass;
 };

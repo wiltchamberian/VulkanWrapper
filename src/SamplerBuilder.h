@@ -1,8 +1,9 @@
 #pragma once
+#include "export.h"
 #include "sampler.h"
 #include "LogicalDevice.h"
 
-class SamplerBuilder {
+class VULKAN_WRAPPER_API SamplerBuilder {
 public:
 	Sampler build();
 

@@ -1,10 +1,11 @@
 #pragma once
+#include "export.h"
 #include <vector>
 #include "PipelineLayout.h"
 #include "DescriptorSetLayout.h"
 #include "LogicalDevice.h"
 
-class PipelineLayoutBuilder {
+class VULKAN_WRAPPER_API PipelineLayoutBuilder {
 public:
 	PipelineLayout build();
 

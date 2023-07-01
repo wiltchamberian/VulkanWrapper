@@ -2,6 +2,7 @@
 #define __SWAP_CHAIN_BUILDER_H
 
 #include <optional>
+#include "export.h"
 #include "Surface.h"
 #include "SwapChain.h"
 #include "LogicalDevice.h"
@@ -9,8 +10,8 @@
 
 class VULKAN_WRAPPER_API SwapChainBuilder {
 public:
-    SwapChainBuilder() {}
-    SwapChainBuilder(const LogicalDevice& dev, const Surface& surface);
+    SwapChainBuilder();
+    SwapChainBuilder(LogicalDevice& dev, Surface& surface);
 
     SwapChain build();
 

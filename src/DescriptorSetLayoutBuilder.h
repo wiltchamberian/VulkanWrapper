@@ -1,9 +1,10 @@
 #pragma once
+#include "export.h"
 #include <vector>
 #include "LogicalDevice.h"
 #include "DescriptorSetLayout.h"
 
-class DescriptorSetLayoutBuilder {
+class VULKAN_WRAPPER_API DescriptorSetLayoutBuilder {
 public:
 	DescriptorSetLayout build();
 	DescriptorSetLayoutBuilder& setDevice(LogicalDevice d);

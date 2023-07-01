@@ -1,10 +1,11 @@
 #pragma once
 #include <vector>
+#include "export.h"
 #include "vulkan/vulkan.h"
 #include "LogicalDevice.h"
 #include "Shader.h"
 
-class ShaderStageBuilder {
+class VULKAN_WRAPPER_API ShaderStageBuilder {
 public:
 	ShaderStageBuilder& setDevice(LogicalDevice dev);
 	Shader build();

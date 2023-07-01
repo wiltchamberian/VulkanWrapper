@@ -24,6 +24,7 @@ public:
     }
     DebugMessengerBuilder(VulkanInstance inst)
         : instance(inst)
+        ,flags(VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT)
         ,messageSeverity(VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT 
         | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT 
         | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT)
@@ -36,10 +37,10 @@ public:
 
     }
     DebugMessenger build();
-    void setDebugUtilsMessengerCreateFlags(VkDebugUtilsMessengerCreateFlagsEXT flag);
-    void setDebugUtilsMessageSeverityFlags(VkDebugUtilsMessageSeverityFlagsEXT flg);
-    void setUserCallback(PFN_vkDebugUtilsMessengerCallbackEXT cb);
-    void setUserData(void* data);
+    DebugMessengerBuilder& setDebugUtilsMessengerCreateFlags(VkDebugUtilsMessengerCreateFlagsEXT flag);
+    DebugMessengerBuilder& setDebugUtilsMessageSeverityFlags(VkDebugUtilsMessageSeverityFlagsEXT flg);
+    DebugMessengerBuilder& setUserCallback(PFN_vkDebugUtilsMessengerCallbackEXT cb);
+    DebugMessengerBuilder& setUserData(void* data);
 private:
     VkDebugUtilsMessengerCreateFlagsEXT     flags;
     VkDebugUtilsMessageSeverityFlagsEXT     messageSeverity;

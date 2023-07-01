@@ -1,9 +1,10 @@
 #pragma once
 #include <string>
 #include <vector>
+#include "export.h"
 #include "vulkan/vulkan.h"
 
-class Shader {
+class VULKAN_WRAPPER_API Shader {
 public:
 	friend class ShaderStageBuilder;
 	Shader& clearSpecializations();

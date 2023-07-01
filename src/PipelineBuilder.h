@@ -1,17 +1,20 @@
-#pragma once
+//This file is called baby as the visual studio has 
+//a bug that if it is called PipelineBuilder, the 
+//compiled lib can't find symbol....
+#pragma once 
 
+#include "export.h"
 #include "Pipeline.h"
+#include "Shader.h"
 #include "PipelineLayout.h"
 #include "LogicalDevice.h"
 #include "RenderPass.h"
-#include "Shader.h"
 #include <string>
+
 
 class VULKAN_WRAPPER_API PipelineBuilder {
 public:
-	
 	Pipeline build();
-
 	PipelineBuilder& setShaders(const std::vector<Shader>& shaders);
 
 	//VkPipelineVertexInputStateCreateInfo
@@ -115,7 +118,7 @@ private:
 	VkSampleCountFlagBits                    rasterizationSamples;
 	VkBool32                                 sampleShadingEnable;
 	float                                    minSampleShading;
-	const VkSampleMask*					     pSampleMask;
+	const VkSampleMask* pSampleMask;
 	VkBool32                                 alphaToCoverageEnable;
 	VkBool32                                 alphaToOneEnable;
 

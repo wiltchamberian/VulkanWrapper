@@ -22,18 +22,22 @@ DebugMessenger DebugMessengerBuilder::build() {
 
 }
 
-void DebugMessengerBuilder::setDebugUtilsMessengerCreateFlags(VkDebugUtilsMessengerCreateFlagsEXT flag) {
+DebugMessengerBuilder& DebugMessengerBuilder::setDebugUtilsMessengerCreateFlags(VkDebugUtilsMessengerCreateFlagsEXT flag) {
     flags = flag;
+    return *this;
 }
 
-void DebugMessengerBuilder::setDebugUtilsMessageSeverityFlags(VkDebugUtilsMessageSeverityFlagsEXT flg) {
+DebugMessengerBuilder& DebugMessengerBuilder::setDebugUtilsMessageSeverityFlags(VkDebugUtilsMessageSeverityFlagsEXT flg) {
     messageSeverity = flg;
+    return *this;
 }
 
-void DebugMessengerBuilder::setUserCallback(PFN_vkDebugUtilsMessengerCallbackEXT cb) {
+DebugMessengerBuilder& DebugMessengerBuilder::setUserCallback(PFN_vkDebugUtilsMessengerCallbackEXT cb) {
     pfnUserCallback = cb;
+    return *this;
 }
 
-void DebugMessengerBuilder::setUserData(void* data) {
+DebugMessengerBuilder& DebugMessengerBuilder::setUserData(void* data) {
     pUserData = data;
+    return *this;
 }

@@ -1,7 +1,8 @@
 #pragma once
+#include "export.h"
 #include "vulkan/vulkan.h"
 
-class PipelineLayout {
+class VULKAN_WRAPPER_API PipelineLayout {
 public:
 	VkPipelineLayout& value() {
 		return pipelineLayout;
