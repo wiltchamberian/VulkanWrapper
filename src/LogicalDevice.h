@@ -5,6 +5,7 @@
 #include "vulkan/vulkan.h"
 #include "Common.h"
 #include "PhysicalDevice.h"
+#include "DeviceQueue.h"
 #include <optional>
 #include <vector>
 
@@ -19,10 +20,12 @@ public:
 	PhysicalDevice& physical_device() {
 		return phy_dev;
 	}
+	void cleanUp();
+	DeviceQueue getDeviceQueue(VkQueueFlags que, int index = 0);
 public:
 	VkDevice dev = VK_NULL_HANDLE;
 	PhysicalDevice phy_dev;
-	QueueFamilyIndices indices_;
+	QueueFamilyIndices indices;
 };
 
 #endif 

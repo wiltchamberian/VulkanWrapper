@@ -1,8 +1,17 @@
 #include "DebugMessenger.h"
 
+void DebugMessenger::cleanUp() {
+    auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance.value(), "vkDestroyDebugUtilsMessengerEXT");
+    if (func != nullptr) {
+        func(instance.value(), messenger, nullptr);
+    }
+}
+
+
+
 DebugMessenger DebugMessengerBuilder::build() {
     DebugMessenger dm;
-
+    
     auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance.value(), "vkCreateDebugUtilsMessengerEXT");
     if (func != nullptr) {
         VkDebugUtilsMessengerCreateInfoEXT ci;
@@ -12,6 +21,7 @@ DebugMessenger DebugMessengerBuilder::build() {
         ci.pfnUserCallback = debugCallback;
         VkResult res = func(instance.value(), &ci, nullptr, &dm.value());
         if (res == VK_SUCCESS) {
+            dm.instance = instance;
             return dm;
         }
         else {
@@ -22,13 +32,18 @@ DebugMessenger DebugMessengerBuilder::build() {
 
 }
 
-DebugMessengerBuilder& DebugMessengerBuilder::setDebugUtilsMessengerCreateFlags(VkDebugUtilsMessengerCreateFlagsEXT flag) {
+DebugMessengerBuilder& DebugMessengerBuilder::setMessengerCreateFlags(VkDebugUtilsMessengerCreateFlagsEXT flag) {
     flags = flag;
     return *this;
 }
 
-DebugMessengerBuilder& DebugMessengerBuilder::setDebugUtilsMessageSeverityFlags(VkDebugUtilsMessageSeverityFlagsEXT flg) {
+DebugMessengerBuilder& DebugMessengerBuilder::setMessageSeverityFlags(VkDebugUtilsMessageSeverityFlagsEXT flg) {
     messageSeverity = flg;
+    return *this;
+}
+
+DebugMessengerBuilder& DebugMessengerBuilder::setMessageTypeFlags(VkDebugUtilsMessageTypeFlagsEXT flg) {
+    messageType = flg;
     return *this;
 }
 

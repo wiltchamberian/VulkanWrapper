@@ -4,6 +4,7 @@
 #include "export.h"
 #include "vulkan/vulkan.h"
 #include "InstanceBuilder.h"
+#include "Instance.h"
 #include "PhysicalDevice.h"
 #include "LogicalDevice.h"
 #include "SwapChainBuilder.h"

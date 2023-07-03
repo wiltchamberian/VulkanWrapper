@@ -156,6 +156,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\DeviceQueue.h" />
     <ClInclude Include="..\src\PipelineBuilder.h" />
     <ClInclude Include="..\src\Common.h" />
     <ClInclude Include="..\src\DescriptorSetLayout.h" />
@@ -181,6 +182,7 @@
     <ClInclude Include="framework.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\DeviceQueue.cpp" />
     <ClCompile Include="..\src\PipelineBuilder.cpp" />
     <ClCompile Include="..\src\DescriptorSetLayout.cpp" />
     <ClCompile Include="..\src\DescriptorSetLayoutBuilder.cpp" />

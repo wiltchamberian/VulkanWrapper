@@ -6,14 +6,17 @@
 
 class VULKAN_WRAPPER_API DebugMessenger {
 public:
+    friend class DebugMessengerBuilder;
     VkDebugUtilsMessengerEXT& value() {
         return messenger;
     }
     bool isValid() const {
         return messenger != VK_NULL_HANDLE;
     }
+    void cleanUp();
 private:
     VkDebugUtilsMessengerEXT messenger = VK_NULL_HANDLE;
+    VulkanInstance  instance;
 };
 
 class VULKAN_WRAPPER_API DebugMessengerBuilder {
@@ -37,8 +40,9 @@ public:
 
     }
     DebugMessenger build();
-    DebugMessengerBuilder& setDebugUtilsMessengerCreateFlags(VkDebugUtilsMessengerCreateFlagsEXT flag);
-    DebugMessengerBuilder& setDebugUtilsMessageSeverityFlags(VkDebugUtilsMessageSeverityFlagsEXT flg);
+    DebugMessengerBuilder& setMessengerCreateFlags(VkDebugUtilsMessengerCreateFlagsEXT flag);
+    DebugMessengerBuilder& setMessageSeverityFlags(VkDebugUtilsMessageSeverityFlagsEXT flg);
+    DebugMessengerBuilder& setMessageTypeFlags(VkDebugUtilsMessageTypeFlagsEXT flg);
     DebugMessengerBuilder& setUserCallback(PFN_vkDebugUtilsMessengerCallbackEXT cb);
     DebugMessengerBuilder& setUserData(void* data);
 private:

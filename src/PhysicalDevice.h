@@ -14,7 +14,7 @@ public:
 	bool isValid() {
 		return (dev != VK_NULL_HANDLE);
 	}
-	LogicalDevice createLogicalDevice(VkQueueFlags flags);
+	LogicalDevice createLogicalDevice(VkQueueFlags flags, VkPhysicalDeviceFeatures features = {});
 	bool isDeviceSuitable(VkQueueFlags flags);
 	SwapChainSupportDetails querySwapChainSupport(Surface surface);
 	VkPhysicalDevice& value() {

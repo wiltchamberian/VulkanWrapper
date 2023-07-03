@@ -2,7 +2,8 @@
 #include <vector>
 #include <stdexcept>
 
-PhysicalDevice VulkanInstance::selectPhysicalDevice(VkQueueFlags flags) {
+
+PhysicalDevice VulkanInstance::selectPhysicalDevice(VkQueueFlags flags,PhysicalDeviceFilter filter) {
 	PhysicalDevice dev;
 
     uint32_t deviceCount = 0;
@@ -19,8 +20,18 @@ PhysicalDevice VulkanInstance::selectPhysicalDevice(VkQueueFlags flags) {
     bool bingo = false;
     for (const auto& device : devices) {
         dev.value() = device;
-        if (dev.isDeviceSuitable(flags)) {
-            bingo = true;
+        VkPhysicalDeviceProperties deviceProperties;
+        VkPhysicalDeviceFeatures deviceFeatures;
+        vkGetPhysicalDeviceProperties(device, &deviceProperties);
+        vkGetPhysicalDeviceFeatures(device, &deviceFeatures);
+        bingo = true;
+        if (filter != nullptr && !filter(deviceProperties, deviceFeatures)) {
+            bingo = false;
+        }
+        if (!dev.isDeviceSuitable(flags)) {
+            bingo = false;
+        }
+        if (bingo) {
             break;
         }
     }
@@ -31,4 +42,9 @@ PhysicalDevice VulkanInstance::selectPhysicalDevice(VkQueueFlags flags) {
     }
 
     return dev;
+}
+
+void VulkanInstance::clearUp() {
+    vkDestroyInstance(vk, nullptr);
+    vk = VK_NULL_HANDLE;
 }

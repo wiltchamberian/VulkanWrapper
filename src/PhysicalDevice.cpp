@@ -42,63 +42,54 @@ QueueFamilyIndices PhysicalDevice::findQueueFamilies(VkQueueFlags flags) {
     std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
     vkGetPhysicalDeviceQueueFamilyProperties(dev, &queueFamilyCount, queueFamilies.data());
 
-    int i = 0;
+    int j = 0;
+    const int queueFlagsBitsNum = 8;
+    indices.indexMap.resize(queueFlagsBitsNum);
     for (const auto& queueFamily : queueFamilies) {
         VkQueueFlags ans = (queueFamily.queueFlags & flags);
-        if (ans) {
-            if (ans & VK_QUEUE_GRAPHICS_BIT) {
-                if (!indices.graphicsFamily.has_value()) {
-                    indices.graphicsFamily = i;
-                }
-            }
-            if (ans & VK_QUEUE_COMPUTE_BIT) {
-                if (!indices.computeFamily.has_value()) {
-                    indices.computeFamily = i;
-                }
-            }
-            if (ans & VK_QUEUE_TRANSFER_BIT) {
-                if (!indices.transferFamily.has_value()) {
-                    indices.transferFamily = i;
-                }
-            }
-            if (ans & VK_QUEUE_SPARSE_BINDING_BIT) {
-                if (!indices.sparseBindingFamily.has_value()) {
-                    indices.sparseBindingFamily = i;
-                }
-            }
-            if (ans & VK_QUEUE_PROTECTED_BIT) {
-                if (!indices.protectedFamily.has_value()) {
-                    indices.protectedFamily = i;
+        VkQueueFlags ds = 1;
+        for (int i = 0; i < queueFlagsBitsNum; ++i) {
+            ds = 1 << i;
+            if ((ans & ds) != 0) {
+                if (!indices.indexMap[i].has_value()) {
+                    indices.indexMap[i] = j;
                 }
             }
         }
         if (indices.isComplete(flags)) {
             break;
         }
-        ++i;
+        ++j;
     }
     return indices;
 }
 
-LogicalDevice PhysicalDevice::createLogicalDevice(VkQueueFlags flags) {
-
+LogicalDevice PhysicalDevice::createLogicalDevice(VkQueueFlags flags, VkPhysicalDeviceFeatures deviceFeatures) {
     QueueFamilyIndices indices = findQueueFamilies(flags);
 
-    VkDeviceQueueCreateInfo queueCreateInfo{};
-    queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-    queueCreateInfo.queueFamilyIndex = indices.graphicsFamily.value();
-    queueCreateInfo.queueCount = 1;
-
-    float queuePriority = 1.0f;
-    queueCreateInfo.pQueuePriorities = &queuePriority;
-
-    VkPhysicalDeviceFeatures deviceFeatures{};
+    std::vector<VkDeviceQueueCreateInfo> vec;
+    const int queueFlagsBitsNum = 8;
+    for (int i = 0; i < queueFlagsBitsNum; ++i) {
+        VkQueueFlags bit = 1 << i;
+        if (flags & bit) {
+            if (indices.indexMap[i].has_value()) {
+                VkDeviceQueueCreateInfo queueCreateInfo{};
+                queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+                queueCreateInfo.queueFamilyIndex = indices.indexMap[i].value();
+                queueCreateInfo.queueCount = 1;
+                //TODO: set priority by human
+                float queuePriority = 1.0f;
+                queueCreateInfo.pQueuePriorities = &queuePriority;
+                vec.push_back(queueCreateInfo);
+            }
+        }
+    }
 
     VkDeviceCreateInfo createInfo{};
     createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
 
-    createInfo.pQueueCreateInfos = &queueCreateInfo;
-    createInfo.queueCreateInfoCount = 1;
+    createInfo.pQueueCreateInfos = vec.data();
+    createInfo.queueCreateInfoCount = vec.size();
 
     createInfo.pEnabledFeatures = &deviceFeatures;
 
@@ -115,12 +106,10 @@ LogicalDevice PhysicalDevice::createLogicalDevice(VkQueueFlags flags) {
 #endif
 
     LogicalDevice logicalDevice;
-    logicalDevice.indices_ = indices;
+    logicalDevice.indices = indices;
     if (vkCreateDevice(dev, &createInfo, nullptr, &logicalDevice.dev) != VK_SUCCESS) {
         throw std::runtime_error("failed to create logical device!");
     }
-
-    //vkGetDeviceQueue(logicalDevice.dev, indices.graphicsFamily.value(), 0, &graphicsQueue);
 
     return logicalDevice;
 
