@@ -173,6 +173,7 @@
     <ClInclude Include="..\src\Shader.h" />
     <ClInclude Include="..\src\ShaderStageBuilder.h" />
     <ClInclude Include="..\src\Surface.h" />
+    <ClInclude Include="..\src\SurfaceBuilder.h" />
     <ClInclude Include="..\src\SwapChain.h" />
     <ClInclude Include="..\src\SwapChainBuilder.h" />
     <ClInclude Include="..\src\Tools.h" />
@@ -198,6 +199,7 @@
     <ClCompile Include="..\src\Shader.cpp" />
     <ClCompile Include="..\src\ShaderStageBuilder.cpp" />
     <ClCompile Include="..\src\Surface.cpp" />
+    <ClCompile Include="..\src\SurfaceBuilder.cpp" />
     <ClCompile Include="..\src\SwapChain.cpp" />
     <ClCompile Include="..\src\SwapChainBuilder.cpp" />
     <ClCompile Include="..\src\Tools.cpp" />

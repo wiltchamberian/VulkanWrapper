@@ -1,9 +1,11 @@
 #include "Instance.h"
+#include "PhysicalDevice.h"
+#include "Surface.h"
 #include <vector>
 #include <stdexcept>
 
 
-PhysicalDevice VulkanInstance::selectPhysicalDevice(VkQueueFlags flags,PhysicalDeviceFilter filter) {
+PhysicalDevice VulkanInstance::selectPhysicalDevice(VkQueueFlags flags, Surface surface, PhysicalDeviceFilter filter) {
 	PhysicalDevice dev;
 
     uint32_t deviceCount = 0;
@@ -28,7 +30,7 @@ PhysicalDevice VulkanInstance::selectPhysicalDevice(VkQueueFlags flags,PhysicalD
         if (filter != nullptr && !filter(deviceProperties, deviceFeatures)) {
             bingo = false;
         }
-        if (!dev.isDeviceSuitable(flags)) {
+        if (!dev.isDeviceSuitable(flags, surface)) {
             bingo = false;
         }
         if (bingo) {

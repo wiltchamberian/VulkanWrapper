@@ -11,6 +11,7 @@
 #include "PipelineBuilder.h"
 #include "RenderPassBuilder.h"
 #include "SwapChain.h"
+#include "SurfaceBuilder.h"
 
 class VULKAN_WRAPPER_API VulkanWrapper {
 public:

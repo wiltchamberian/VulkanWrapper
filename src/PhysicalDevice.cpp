@@ -1,11 +1,14 @@
 #include "PhysicalDevice.h"
 #include <vector>
+#include <set>
 #include <stdexcept>
 #include "LogicalDevice.h"
+#include "Surface.h"
 #include "Common.h"
+#include "Tools.h"
 
-bool PhysicalDevice::isDeviceSuitable(VkQueueFlags flags) {
-    auto indices = findQueueFamilies(flags);
+bool PhysicalDevice::isDeviceSuitable(VkQueueFlags flags, Surface surface) {
+    QueueFamilyIndices indices = findQueueFamilies(flags, surface);
     return indices.isComplete(flags);
 }
 
@@ -33,7 +36,7 @@ SwapChainSupportDetails PhysicalDevice::querySwapChainSupport(Surface surface) {
     return details;
 }
 
-QueueFamilyIndices PhysicalDevice::findQueueFamilies(VkQueueFlags flags) {
+QueueFamilyIndices PhysicalDevice::findQueueFamilies(VkQueueFlags flags, Surface surface) {
     QueueFamilyIndices indices;
 
     uint32_t queueFamilyCount = 0;
@@ -56,6 +59,11 @@ QueueFamilyIndices PhysicalDevice::findQueueFamilies(VkQueueFlags flags) {
                 }
             }
         }
+        VkBool32 presentSupport = false;
+        vkGetPhysicalDeviceSurfaceSupportKHR(dev, j, surface.value(), &presentSupport);
+        if (presentSupport) {
+            indices.indexMap[help::log2((uint64_t)(QUEUE_PRESENT_BIT))] = j;
+        }
         if (indices.isComplete(flags)) {
             break;
         }
@@ -65,24 +73,27 @@ QueueFamilyIndices PhysicalDevice::findQueueFamilies(VkQueueFlags flags) {
 }
 
 LogicalDevice PhysicalDevice::createLogicalDevice(VkQueueFlags flags, VkPhysicalDeviceFeatures deviceFeatures) {
-    QueueFamilyIndices indices = findQueueFamilies(flags);
-
     std::vector<VkDeviceQueueCreateInfo> vec;
+    std::set<uint32_t> uniqueQueueFamilies;
     const int queueFlagsBitsNum = 8;
     for (int i = 0; i < queueFlagsBitsNum; ++i) {
         VkQueueFlags bit = 1 << i;
         if (flags & bit) {
             if (indices.indexMap[i].has_value()) {
-                VkDeviceQueueCreateInfo queueCreateInfo{};
-                queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-                queueCreateInfo.queueFamilyIndex = indices.indexMap[i].value();
-                queueCreateInfo.queueCount = 1;
-                //TODO: set priority by human
-                float queuePriority = 1.0f;
-                queueCreateInfo.pQueuePriorities = &queuePriority;
-                vec.push_back(queueCreateInfo);
+                uniqueQueueFamilies.insert(indices.indexMap[i].value());
             }
         }
+    }
+
+    for (uint32_t queueFamily : uniqueQueueFamilies) {
+        VkDeviceQueueCreateInfo queueCreateInfo{};
+        queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+        queueCreateInfo.queueFamilyIndex = queueFamily;
+        queueCreateInfo.queueCount = 1;
+        //TODO: set priority by human
+        float queuePriority = 1.0f;
+        queueCreateInfo.pQueuePriorities = &queuePriority;
+        vec.push_back(queueCreateInfo);
     }
 
     VkDeviceCreateInfo createInfo{};
