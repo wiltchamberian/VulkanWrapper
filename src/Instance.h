@@ -3,6 +3,9 @@
 
 #include "export.h"
 #include "vulkan/vulkan.h"
+#include "Common.h"
+#include <vector>
+#include <string>
 
 typedef bool (*PhysicalDeviceFilter)(VkPhysicalDeviceProperties& properties, VkPhysicalDeviceFeatures& features);
 
@@ -17,7 +20,7 @@ public:
 	VkInstance& value() {
 		return vk;
 	}
-	PhysicalDevice selectPhysicalDevice(VkQueueFlags flags, Surface surface, PhysicalDeviceFilter filter = nullptr);
+	PhysicalDevice selectPhysicalDevice(VkQueueFlags flags, Surface surface, SwapChainSupportDetails support, const std::vector<std::string>& extensions = {}, PhysicalDeviceFilter filter = nullptr);
 	void clearUp();
 private:
 	PhysicalDeviceFilter filter = nullptr;

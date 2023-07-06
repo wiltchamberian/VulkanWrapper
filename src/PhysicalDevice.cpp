@@ -7,9 +7,15 @@
 #include "Common.h"
 #include "Tools.h"
 
-bool PhysicalDevice::isDeviceSuitable(VkQueueFlags flags, Surface surface) {
+bool PhysicalDevice::isDeviceSuitable(VkQueueFlags flags, Surface surface, SwapChainSupportDetails support, const std::vector<std::string>& extensions) {
     QueueFamilyIndices indices = findQueueFamilies(flags, surface);
-    return indices.isComplete(flags);
+    bool extensionsSupported = checkDeviceExtensionSupport(extensions);
+    bool swapChainSupported = false;
+    if (extensionsSupported) {
+        swapChainSupported = checkSwapChainSupport(support, surface);
+    }
+
+    return indices.isComplete(flags) && extensionsSupported && swapChainSupported;
 }
 
 SwapChainSupportDetails PhysicalDevice::querySwapChainSupport(Surface surface) {
@@ -72,7 +78,51 @@ QueueFamilyIndices PhysicalDevice::findQueueFamilies(VkQueueFlags flags, Surface
     return indices;
 }
 
-LogicalDevice PhysicalDevice::createLogicalDevice(VkQueueFlags flags, VkPhysicalDeviceFeatures deviceFeatures) {
+bool PhysicalDevice::checkDeviceExtensionSupport(const std::vector<std::string>& extensions) {
+    uint32_t extensionCount;
+    vkEnumerateDeviceExtensionProperties(dev, nullptr, &extensionCount, nullptr);
+
+    std::vector<VkExtensionProperties> availableExtensions(extensionCount);
+    vkEnumerateDeviceExtensionProperties(dev, nullptr, &extensionCount, availableExtensions.data());
+
+    std::set<std::string> requiredExtensions(extensions.begin(), extensions.end());
+
+    for (const auto& extension : availableExtensions) {
+        requiredExtensions.erase(extension.extensionName);
+    }
+
+    return requiredExtensions.empty();
+
+}
+
+bool PhysicalDevice::checkSwapChainSupport(const SwapChainSupportDetails & details, Surface surface) {
+    // 自定义比较器
+    struct CustomComparator {
+        bool operator()(const VkSurfaceFormatKHR& a, const VkSurfaceFormatKHR& b) const {
+            return ((a.format < b.format) || (a.colorSpace < b.colorSpace)) && (!(a.format > b.format));
+        }
+    };
+    
+    SwapChainSupportDetails supportDetails = querySwapChainSupport(surface);
+    std::set< VkSurfaceFormatKHR, CustomComparator> formats(details.formats.begin(),details.formats.end());
+    std::set< VkPresentModeKHR> presentModes(details.presentModes.begin(), details.presentModes.end());
+    //std::set< VkSurfaceCapabilitiesKHR> capabilities;
+    //if (details.capabilities.has_value()) {
+    //    capabilities.insert(details.capabilities.value());
+    //} 
+    for (int i = 0; i < supportDetails.formats.size(); ++i) {
+        formats.erase(supportDetails.formats[i]);
+    }
+    for (int i = 0; i < supportDetails.presentModes.size(); ++i) {
+        presentModes.erase(supportDetails.presentModes[i]);
+    }
+    //if (supportDetails.capabilities.has_value()) {
+    //    capabilities.erase(supportDetails.capabilities.value());
+    //}
+    return formats.empty() && presentModes.empty()/* && capabilities.empty()*/;
+}
+
+LogicalDevice PhysicalDevice::createLogicalDevice(VkQueueFlags flags, VkPhysicalDeviceFeatures deviceFeatures, const std::vector<std::string>& extensions) {
     std::vector<VkDeviceQueueCreateInfo> vec;
     std::set<uint32_t> uniqueQueueFamilies;
     const int queueFlagsBitsNum = 8;
@@ -106,6 +156,13 @@ LogicalDevice PhysicalDevice::createLogicalDevice(VkQueueFlags flags, VkPhysical
 
     createInfo.enabledExtensionCount = 0;
     createInfo.enabledLayerCount = 0;
+
+    createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
+    std::vector<const char*> deviceExtensions(extensions.size());
+    for (int i = 0; i < deviceExtensions.size(); ++i) {
+        deviceExtensions[i] = extensions[i].c_str();
+    }
+    createInfo.ppEnabledExtensionNames = deviceExtensions.data();
 #if 0
     if (enableValidationLayers) {
         createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
