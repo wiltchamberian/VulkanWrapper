@@ -1,10 +1,6 @@
 #include "SwapChainBuilder.h"
 #include <stdexcept>
 
-SwapChainBuilder::SwapChainBuilder() {
-
-}
-
 SwapChainBuilder::SwapChainBuilder(LogicalDevice& dev, Surface& surf)
 	:logicalDev(dev)
 	, surface(surf)
@@ -89,8 +85,17 @@ SwapChainBuilder& SwapChainBuilder::setSurface(const Surface& surf) {
 	return *this;
 }
 
-SwapChainBuilder& SwapChainBuilder::setSurfaceFormat(VkSurfaceFormatKHR form) {
+SwapChainBuilder& SwapChainBuilder::setSurfaceFormat(VkSurfaceFormatKHR form, VkSurfaceFormatKHR defaultFormat) {
 	surfaceFormat = form;
+	std::vector<VkSurfaceFormatKHR> vec;
+	if (logicalDev.isValid() && logicalDev.phy_dev.isValid()) {
+		vec = logicalDev.phy_dev.queryPhysicalDeviceSurfaceFormats(surface);
+		for (auto& it : vec) {
+			if (form.format == it.format && form.colorSpace == it.colorSpace) {
+				surfaceFormat = it;
+			}
+		}
+	}
 	return *this;
 }
 
@@ -132,21 +137,15 @@ SwapChainBuilder& SwapChainBuilder::setDefaultMinImageCount() {
 	return *this;
 }
 
-SwapChainBuilder& SwapChainBuilder::setExtent2D(VkExtent2D extent) {
-	imageExtent = extent;
-	return *this;
-}
-
-SwapChainBuilder& SwapChainBuilder::setDefaultExtent2D() {
-	if (!details.capabilities.has_value()) {
-		queryPhysicalDeviceSurfaceCapabilities();
-	}
-	if (details.capabilities.has_value()) {
-		if (details.capabilities.value().currentExtent.width != std::numeric_limits<uint32_t>::max()) {
-			imageExtent = details.capabilities.value().currentExtent;
-		}
-		else {
-			//TODO
+SwapChainBuilder& SwapChainBuilder::setExtent2D(VkExtent2D extent, VkExtent2D defaultExtent) {
+	imageExtent = defaultExtent;
+	if (logicalDev.isValid() && logicalDev.phy_dev.isValid() && surface.isValid()) {
+		VkSurfaceCapabilitiesKHR cap = logicalDev.phy_dev.queryPhysicalDeviceSurfaceCapabilities(surface);
+		if (cap.minImageExtent.width <= extent.width &&
+			cap.minImageExtent.height <= extent.height
+			&& extent.width <= cap.maxImageExtent.width
+			&& extent.height <= cap.maxImageExtent.height) {
+			imageExtent = extent;
 		}
 	}
 	return *this;
@@ -182,8 +181,17 @@ SwapChainBuilder& SwapChainBuilder::setCompositeAlpha(VkCompositeAlphaFlagBitsKH
 	return *this;
 }
 
-SwapChainBuilder& SwapChainBuilder::setPresentMode(VkPresentModeKHR mode) {
+SwapChainBuilder& SwapChainBuilder::setPresentMode(VkPresentModeKHR mode, VkPresentModeKHR defaultMode) {
 	presentMode = mode;
+	std::vector<VkPresentModeKHR> vec;
+	if (logicalDev.isValid() && logicalDev.phy_dev.isValid()) {
+		vec = logicalDev.phy_dev.queryPhysicalDeviceSurfacePresentModes(surface);
+		for (auto& it : vec) {
+			if (mode == it) {
+				presentMode = it;
+			}
+		}
+	}
 	return *this;
 }
 

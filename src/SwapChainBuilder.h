@@ -10,7 +10,6 @@
 
 class VULKAN_WRAPPER_API SwapChainBuilder {
 public:
-    SwapChainBuilder();
     SwapChainBuilder(LogicalDevice& dev, Surface& surface);
 
     SwapChain build();
@@ -18,20 +17,21 @@ public:
     SwapChainSupportDetails& querySwapChainSupport();
     SwapChainBuilder& setLogicalDevice(LogicalDevice dev);
 	SwapChainBuilder& setSurface(const Surface& surface);
-    SwapChainBuilder& setSurfaceFormat(VkSurfaceFormatKHR);
+    SwapChainBuilder& setSurfaceFormat(VkSurfaceFormatKHR, VkSurfaceFormatKHR defaultFormat);
+    [[deprecated]]
     SwapChainBuilder& setSurfaceFormatCheck(VkSurfaceFormatKHR);
     SwapChainBuilder& setCreateFlags(VkSwapchainCreateFlagsKHR flgs);
     SwapChainBuilder& setMinImageCount(uint32_t imageCount);
     SwapChainBuilder& setDefaultMinImageCount();
-    SwapChainBuilder& setExtent2D(VkExtent2D extent);
-    SwapChainBuilder& setDefaultExtent2D();
+    SwapChainBuilder& setExtent2D(VkExtent2D extent, VkExtent2D defaultExtent);
     SwapChainBuilder& setImageArrayLayers(uint32_t layers);
     SwapChainBuilder& setImageUsageFlags(VkImageUsageFlags flags);
     SwapChainBuilder& setSharingMode(VkSharingMode mode);
     SwapChainBuilder& setQueueFamilyIndices(const std::vector<uint32_t>& indices);
     SwapChainBuilder& setSurfaceTransform(VkSurfaceTransformFlagBitsKHR bits);
     SwapChainBuilder& setCompositeAlpha(VkCompositeAlphaFlagBitsKHR flags);
-    SwapChainBuilder& setPresentMode(VkPresentModeKHR presentMode);
+    SwapChainBuilder& setPresentMode(VkPresentModeKHR presentMode, VkPresentModeKHR defaultMode);
+    [[deprecated]]
     SwapChainBuilder& setPresentModeCheck(VkPresentModeKHR presentMode);
     SwapChainBuilder& setClipped(VkBool32 clip);
     SwapChainBuilder& setOldSwapChain(SwapChain old);

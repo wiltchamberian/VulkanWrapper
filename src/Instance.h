@@ -20,7 +20,7 @@ public:
 	VkInstance& value() {
 		return vk;
 	}
-	PhysicalDevice selectPhysicalDevice(VkQueueFlags flags, Surface surface, SwapChainSupportDetails support, const std::vector<std::string>& extensions = {}, PhysicalDeviceFilter filter = nullptr);
+	PhysicalDevice selectPhysicalDevice(VkQueueFlags flags, Surface surface, const std::vector<std::string>& extensions = {}, PhysicalDeviceFilter filter = nullptr);
 	void clearUp();
 private:
 	PhysicalDeviceFilter filter = nullptr;

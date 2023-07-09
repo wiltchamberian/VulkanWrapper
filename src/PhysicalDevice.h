@@ -16,8 +16,11 @@ public:
 	bool isValid() {
 		return (dev != VK_NULL_HANDLE);
 	}
+	VkSurfaceCapabilitiesKHR queryPhysicalDeviceSurfaceCapabilities(Surface surface);
+	std::vector<VkSurfaceFormatKHR> queryPhysicalDeviceSurfaceFormats(Surface surface);
+	std::vector<VkPresentModeKHR> queryPhysicalDeviceSurfacePresentModes(Surface surface);
 	LogicalDevice createLogicalDevice(VkQueueFlags flags, VkPhysicalDeviceFeatures features = {}, const std::vector<std::string>& extensions = {});
-	bool isDeviceSuitable(VkQueueFlags flags, Surface surface, SwapChainSupportDetails support, const std::vector<std::string>& extensions = {});
+	bool isDeviceSuitable(VkQueueFlags flags, Surface surface, const std::vector<std::string>& extensions = {});
 	SwapChainSupportDetails querySwapChainSupport(Surface surface);
 	VkPhysicalDevice& value() {
 		return dev;

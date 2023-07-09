@@ -5,7 +5,7 @@
 #include <stdexcept>
 
 
-PhysicalDevice VulkanInstance::selectPhysicalDevice(VkQueueFlags flags, Surface surface, SwapChainSupportDetails support, const std::vector<std::string>& extensions, PhysicalDeviceFilter filter) {
+PhysicalDevice VulkanInstance::selectPhysicalDevice(VkQueueFlags flags, Surface surface, const std::vector<std::string>& extensions, PhysicalDeviceFilter filter) {
 	PhysicalDevice dev;
 
     uint32_t deviceCount = 0;
@@ -30,7 +30,7 @@ PhysicalDevice VulkanInstance::selectPhysicalDevice(VkQueueFlags flags, Surface 
         if (filter != nullptr && !filter(deviceProperties, deviceFeatures)) {
             bingo = false;
         }
-        if (!dev.isDeviceSuitable(flags, surface, support)) {
+        if (!dev.isDeviceSuitable(flags, surface)) {
             bingo = false;
         }
         if (bingo) {

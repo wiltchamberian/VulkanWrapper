@@ -7,12 +7,13 @@
 #include "Common.h"
 #include "Tools.h"
 
-bool PhysicalDevice::isDeviceSuitable(VkQueueFlags flags, Surface surface, SwapChainSupportDetails support, const std::vector<std::string>& extensions) {
+bool PhysicalDevice::isDeviceSuitable(VkQueueFlags flags, Surface surface, const std::vector<std::string>& extensions) {
     QueueFamilyIndices indices = findQueueFamilies(flags, surface);
     bool extensionsSupported = checkDeviceExtensionSupport(extensions);
     bool swapChainSupported = false;
     if (extensionsSupported) {
-        swapChainSupported = checkSwapChainSupport(support, surface);
+        SwapChainSupportDetails details = querySwapChainSupport(surface);
+        swapChainSupported = !details.formats.empty() && !details.presentModes.empty();
     }
 
     return indices.isComplete(flags) && extensionsSupported && swapChainSupported;
@@ -120,6 +121,41 @@ bool PhysicalDevice::checkSwapChainSupport(const SwapChainSupportDetails & detai
     //    capabilities.erase(supportDetails.capabilities.value());
     //}
     return formats.empty() && presentModes.empty()/* && capabilities.empty()*/;
+}
+
+VkSurfaceCapabilitiesKHR PhysicalDevice::queryPhysicalDeviceSurfaceCapabilities(Surface surface) {
+    VkSurfaceCapabilitiesKHR cap{};
+    if (surface.isValid()) {
+        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(dev, surface.value(), &cap);
+    }
+    return cap;
+}
+
+std::vector<VkSurfaceFormatKHR> PhysicalDevice::queryPhysicalDeviceSurfaceFormats(Surface surface) {
+    std::vector<VkSurfaceFormatKHR> formats;
+    formats.clear();
+    if (surface.isValid()) {
+        uint32_t formatCount = 0;
+        vkGetPhysicalDeviceSurfaceFormatsKHR(dev, surface.value(), &formatCount, nullptr);
+        if (formatCount != 0) {
+            formats.resize(formatCount);
+            vkGetPhysicalDeviceSurfaceFormatsKHR(dev, surface.value(), &formatCount, formats.data());
+        }
+    }
+    return formats;
+}
+
+std::vector<VkPresentModeKHR> PhysicalDevice::queryPhysicalDeviceSurfacePresentModes(Surface surface) {
+    std::vector<VkPresentModeKHR> presents;
+    if (surface.isValid()) {
+        uint32_t presentModeCount = 0;
+        vkGetPhysicalDeviceSurfacePresentModesKHR(dev, surface.value(), &presentModeCount, nullptr);
+        if (presentModeCount != 0) {
+            presents.resize(presentModeCount);
+            vkGetPhysicalDeviceSurfacePresentModesKHR(dev, surface.value(), &presentModeCount, presents.data());
+        }
+    }
+    return presents;
 }
 
 LogicalDevice PhysicalDevice::createLogicalDevice(VkQueueFlags flags, VkPhysicalDeviceFeatures deviceFeatures, const std::vector<std::string>& extensions) {
