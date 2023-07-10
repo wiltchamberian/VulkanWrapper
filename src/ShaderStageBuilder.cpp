@@ -1,16 +1,16 @@
 #include "ShaderStageBuilder.h"
 #include <stdexcept>
 
-ShaderStageBuilder& ShaderStageBuilder::setDevice(LogicalDevice d) {
-    dev = d;
-    return *this;
+ShaderStageBuilder::ShaderStageBuilder(LogicalDevice d)
+    :dev(d)
+{
 }
 
 Shader ShaderStageBuilder::build() {
-    VkShaderModule module = createShaderModule(code);
+    VkShaderModule mod = createShaderModule(code);
     Shader shader;
     shader.name = name;
-    shader.module = module;
+    shader.module = mod;
     shader.stage = stageFlags;
     shader.flags = pipelineStageCreateFlags;
     return shader;
@@ -24,6 +24,17 @@ ShaderStageBuilder& ShaderStageBuilder::setShaderName(const char* name) {
 ShaderStageBuilder& ShaderStageBuilder::setShaderName(const std::string& name) {
     this->name = name;
     return *this;
+}
+
+ShaderStageBuilder& ShaderStageBuilder::setFuncName(const char* name) {
+    this->funcName = name;
+    return *this;
+}
+
+ShaderStageBuilder& ShaderStageBuilder::setFuncName(const std::string& name) {
+    
+    return *this;
+
 }
 
 ShaderStageBuilder& ShaderStageBuilder::setShaderCode(const std::vector<char>& code) {

@@ -157,6 +157,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\src\DeviceQueue.h" />
+    <ClInclude Include="..\src\ImageView.h" />
+    <ClInclude Include="..\src\ImageViewBuilder.h" />
     <ClInclude Include="..\src\PipelineBuilder.h" />
     <ClInclude Include="..\src\Common.h" />
     <ClInclude Include="..\src\DescriptorSetLayout.h" />
@@ -184,6 +186,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\DeviceQueue.cpp" />
+    <ClCompile Include="..\src\ImageView.cpp" />
+    <ClCompile Include="..\src\ImageViewBuilder.cpp" />
     <ClCompile Include="..\src\PipelineBuilder.cpp" />
     <ClCompile Include="..\src\DescriptorSetLayout.cpp" />
     <ClCompile Include="..\src\DescriptorSetLayoutBuilder.cpp" />

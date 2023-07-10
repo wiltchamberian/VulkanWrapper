@@ -71,6 +71,10 @@ SwapChain SwapChainBuilder::build() {
 	if (vkCreateSwapchainKHR(logicalDev.dev, &ci, nullptr, &chain.value()) != VK_SUCCESS) {
 		throw std::runtime_error("failed to create swap chain!");
 	}
+	else {
+		chain.surfaceFormat = surfaceFormat.value();
+		chain.extent = ci.imageExtent;
+	}
 
 	return chain;
 }

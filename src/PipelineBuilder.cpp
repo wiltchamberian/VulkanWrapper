@@ -3,6 +3,15 @@
 #include "PipelineBuilder.h"
 #include "Tools.h"
 
+PipelineBuilder::PipelineBuilder()
+:depthBiasConstantFactor(0.0)
+,depthBiasClamp(0.0)
+,depthBiasSlopeFactor(0.0)
+,lineWidth(0.0)
+{
+
+}
+
 Pipeline PipelineBuilder::build() {
     Pipeline pipeline;
 
@@ -14,7 +23,7 @@ Pipeline PipelineBuilder::build() {
         ci.flags = shaders[i].flags;
         ci.stage = shaders[i].stage;
         ci.module = shaders[i].getModule();
-        ci.pName = shaders[i].name.c_str();
+        ci.pName = shaders[i].funcName.c_str();
 
         //why vulkan use a pointer type of specializationInfo?
         specilizations[i].pMapEntries = shaders[i].mapEntries.data();
@@ -101,6 +110,9 @@ Pipeline PipelineBuilder::build() {
 
     if (vkCreateGraphicsPipelines(dev.dev, VK_NULL_HANDLE, 1, &ci, nullptr, &pipeline.pipeline) != VK_SUCCESS) {
         throw std::runtime_error("failed to create graphics pipeline!");
+    }
+    else {
+        pipeline.dev = this->dev;
     }
 
     return pipeline;
@@ -211,7 +223,7 @@ PipelineBuilder& PipelineBuilder::setMultisampleStateCreateFlags(VkPipelineMulti
     return *this;
 }
 
-PipelineBuilder& PipelineBuilder::setSampleCountFlagBits(VkSampleCountFlagBits bits) {
+PipelineBuilder& PipelineBuilder::setRasterizationSamples(VkSampleCountFlagBits bits) {
     rasterizationSamples = bits;
     return *this;
 }
@@ -226,7 +238,7 @@ PipelineBuilder& PipelineBuilder::setMinSampleShading(float shading) {
     return *this;
 }
 
-PipelineBuilder& PipelineBuilder::setSampleMASK(const VkSampleMask* pMask) {
+PipelineBuilder& PipelineBuilder::setSampleMask(const VkSampleMask* pMask) {
     pSampleMask = pMask;
     return *this;
 }

@@ -9,11 +9,13 @@
 #include "PipelineLayout.h"
 #include "LogicalDevice.h"
 #include "RenderPass.h"
+#include "vulkan/vulkan.h"
 #include <string>
 
 
 class VULKAN_WRAPPER_API PipelineBuilder {
 public:
+	PipelineBuilder();
 	Pipeline build();
 	PipelineBuilder& setShaders(const std::vector<Shader>& shaders);
 
@@ -46,14 +48,14 @@ public:
 
 	//VkPipelineMultisampleStateCreateInfo
 	PipelineBuilder& setMultisampleStateCreateFlags(VkPipelineMultisampleStateCreateFlags flags);
-	PipelineBuilder& setSampleCountFlagBits(VkSampleCountFlagBits rasterizationSamples);
+	PipelineBuilder& setRasterizationSamples(VkSampleCountFlagBits rasterizationSamples);
 	PipelineBuilder& setSampleShadingEnable(VkBool32 sampleShadingEnable);
 	PipelineBuilder& setMinSampleShading(float minSampleShading);
-	PipelineBuilder& setSampleMASK(const VkSampleMask* pSampleMask);
+	PipelineBuilder& setSampleMask(const VkSampleMask* pSampleMask);
 	PipelineBuilder& setAlphaToCoverageEnable(VkBool32 enable);
 	PipelineBuilder& setAlphaToOneEnable(VkBool32 enable);
 
-	//VkPipelineColorBlendCreateInfo
+	//VkPipelineColorBlendStateCreateInfo
 	PipelineBuilder& setColorBlendAttachments(const std::vector<VkPipelineColorBlendAttachmentState>& vec);
 	PipelineBuilder& setColorBlendStateCreateFlags(VkPipelineColorBlendStateCreateFlags flags);
 	PipelineBuilder& setColorBlendLogicOpEnable(VkBool32 enalbe);
@@ -122,6 +124,7 @@ private:
 	VkBool32                                 alphaToCoverageEnable;
 	VkBool32                                 alphaToOneEnable;
 
+	//VkPipelineColorBlendStateCreateInfo
 	std::vector<VkPipelineColorBlendAttachmentState>    colorBlendAttachmentStates;
 	VkPipelineColorBlendStateCreateFlags				colorBlendStateCreateflags;
 	VkBool32											colorBlendLogicOpEnable;

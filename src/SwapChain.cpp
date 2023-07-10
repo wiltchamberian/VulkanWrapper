@@ -8,3 +8,11 @@ std::vector<VkImage> SwapChain::getImages(){
 	vkGetSwapchainImagesKHR(dev.dev, chain, &imageCount, imgs.data());
 	return imgs;
 }
+
+const VkExtent2D& SwapChain::getExtent() {
+	return extent;
+}
+
+const VkSurfaceFormatKHR& SwapChain::getSurfaceFormat() {
+	return surfaceFormat;
+}

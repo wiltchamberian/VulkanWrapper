@@ -1,10 +1,11 @@
 #pragma once
+#include "export.h"
 #include <vector>
 #include <string>
 
 namespace help {
 
-	std::vector<char> readFile(const std::string& filename);
+	VULKAN_WRAPPER_API std::vector<char> readFile(const std::string& filename);
 
 	int log2(uint64_t num);
 

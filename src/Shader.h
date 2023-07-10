@@ -12,7 +12,8 @@ public:
 	Shader& popMapEntry();
 	Shader& setConstantData(uint8_t* d, size_t siz);
 	VkShaderModule getModule();
-	VkPipelineShaderStageCreateFlagBits flags;
+	VkPipelineShaderStageCreateFlags flags;
+	std::string funcName;
 	std::string name;
 	//着色器类型（顶点，像素...)
 	VkShaderStageFlagBits stage;

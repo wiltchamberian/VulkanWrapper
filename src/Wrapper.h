@@ -12,6 +12,8 @@
 #include "RenderPassBuilder.h"
 #include "SwapChain.h"
 #include "SurfaceBuilder.h"
+#include "ShaderStageBuilder.h"
+#include "Tools.h"
 
 class VULKAN_WRAPPER_API VulkanWrapper {
 public:
