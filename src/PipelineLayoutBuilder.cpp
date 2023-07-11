@@ -16,9 +16,9 @@ PipelineLayout PipelineLayoutBuilder::build() {
 	return layout;
 }
 
-PipelineLayoutBuilder& PipelineLayoutBuilder::setDevice(LogicalDevice d) {
-	dev = d;
-	return *this;
+PipelineLayoutBuilder::PipelineLayoutBuilder(LogicalDevice d) 
+:dev(d)
+{
 }
 
 PipelineLayoutBuilder& PipelineLayoutBuilder::setPipelineLayoutCreateFlags(VkPipelineLayoutCreateFlags flgs) {

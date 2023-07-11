@@ -1,5 +1,7 @@
 #include "Surface.h"
 
 void Surface::cleanUp() {
-	vkDestroySurfaceKHR(instance.value(), surface, nullptr);
+	if (instance.isValid()) {
+		vkDestroySurfaceKHR(instance.value(), surface, nullptr);
+	}
 }

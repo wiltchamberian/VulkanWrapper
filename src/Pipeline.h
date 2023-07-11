@@ -6,6 +6,7 @@
 class VULKAN_WRAPPER_API Pipeline {
 public:
 	friend class PipelineBuilder;
+	VkPipeline& value() { return pipeline; }
 	void cleanUp();
 private:
 	LogicalDevice dev;

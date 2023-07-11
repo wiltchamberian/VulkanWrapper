@@ -104,9 +104,10 @@ Pipeline PipelineBuilder::build() {
     ci.pColorBlendState = &colorBlending;
     ci.pDynamicState = &dynamicState;
     ci.layout = pipelineLayout.value();
-    ci.renderPass = renderPass.pass;
+    ci.renderPass = renderPass.value();
     ci.subpass = subpass;
-    ci.basePipelineHandle = VK_NULL_HANDLE;
+    ci.basePipelineHandle = basePipeline.value();
+    ci.basePipelineIndex = basePipelineIndex;
 
     if (vkCreateGraphicsPipelines(dev.dev, VK_NULL_HANDLE, 1, &ci, nullptr, &pipeline.pipeline) != VK_SUCCESS) {
         throw std::runtime_error("failed to create graphics pipeline!");
@@ -253,38 +254,6 @@ PipelineBuilder& PipelineBuilder::setAlphaToOneEnable(VkBool32 enable) {
     return *this;
 }
 
-//void PipelineBuilder::setBlendEnable(VkBool32 enable) {
-//    colorBlendAttachmentState.blendEnable = enable;
-//}
-//
-//void PipelineBuilder::setSrcColorBlendFactor(VkBlendFactor factor) {
-//    colorBlendAttachmentState.srcColorBlendFactor = factor;
-//}
-//
-//void PipelineBuilder::setDstColorBlendFactor(VkBlendFactor factor) {
-//    colorBlendAttachmentState.dstColorBlendFactor = factor;
-//}
-//
-//void PipelineBuilder::setColorBlendOp(VkBlendOp op) {
-//    colorBlendAttachmentState.colorBlendOp = op;
-//}
-//
-//void PipelineBuilder::setSrcAlphaBlendFactor(VkBlendFactor factor) {
-//    colorBlendAttachmentState.srcAlphaBlendFactor = factor;
-//}
-//
-//void PipelineBuilder::setDstAlphaBlendFactor(VkBlendFactor factor) {
-//    colorBlendAttachmentState.dstAlphaBlendFactor = factor;
-//}
-//
-//void PipelineBuilder::setAlphaBlendOp(VkBlendOp op) {
-//    colorBlendAttachmentState.alphaBlendOp = op;
-//}
-//
-//void PipelineBuilder::setColorComponentFlags(VkColorComponentFlags colorWriteMask) {
-//    colorBlendAttachmentState.colorWriteMask = colorWriteMask;
-//}
-
 PipelineBuilder& PipelineBuilder::setColorBlendAttachments(const std::vector<VkPipelineColorBlendAttachmentState>& vec) {
     colorBlendAttachmentStates = vec;
     return *this;
@@ -313,6 +282,14 @@ PipelineBuilder& PipelineBuilder::setColorBlendConstants(float d[4]) {
     return *this;
 }
 
+PipelineBuilder& PipelineBuilder::setColorBlendConstants(float d0, float d1, float d2, float d3) {
+    colorBlendConstants[0] = d0;
+    colorBlendConstants[1] = d1;
+    colorBlendConstants[2] = d2;
+    colorBlendConstants[3] = d3;
+    return *this;
+}
+
 PipelineBuilder& PipelineBuilder::setPipelineDynamicStateCreateFlags(VkPipelineDynamicStateCreateFlags flags) {
     dynamicStateCreateFlags = flags;
     return *this;
@@ -335,5 +312,15 @@ PipelineBuilder& PipelineBuilder::setRenderPass(RenderPass pass) {
 
 PipelineBuilder& PipelineBuilder::setSubPass(uint32_t id) {
     subpass = id;
+    return *this;
+}
+
+PipelineBuilder& PipelineBuilder::setBasePipelineHandle(Pipeline pipeline) {
+    basePipeline = pipeline;
+    return *this;
+}
+
+PipelineBuilder& PipelineBuilder::setBasePipelineIndex(int32_t index) {
+    basePipelineIndex = index;
     return *this;
 }

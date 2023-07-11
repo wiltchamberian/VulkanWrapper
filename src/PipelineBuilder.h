@@ -61,14 +61,7 @@ public:
 	PipelineBuilder& setColorBlendLogicOpEnable(VkBool32 enalbe);
 	PipelineBuilder& setColorBlendLogicOp(VkLogicOp op);
 	PipelineBuilder& setColorBlendConstants(float d[4]);
-	//void setBlendEnable(VkBool32 enable);
-	//void setSrcColorBlendFactor(VkBlendFactor factor);
-	//void setDstColorBlendFactor(VkBlendFactor factor);
-	//void setColorBlendOp(VkBlendOp op);
-	//void setSrcAlphaBlendFactor(VkBlendFactor factor);
-	//void setDstAlphaBlendFactor(VkBlendFactor factor);
-	//void setAlphaBlendOp(VkBlendOp op);
-	//void setColorComponentFlags(VkColorComponentFlags colorWriteMask);
+	PipelineBuilder& setColorBlendConstants(float,float,float,float);
 
 	//VkPipelineDynamicStateCreateInfo
 	PipelineBuilder& setPipelineDynamicStateCreateFlags(VkPipelineDynamicStateCreateFlags flags);
@@ -79,11 +72,16 @@ public:
 
 	PipelineBuilder& setRenderPass(RenderPass pass);
 	PipelineBuilder& setSubPass(uint32_t id);
+
+	PipelineBuilder& setBasePipelineHandle(Pipeline pipeline);
+	PipelineBuilder& setBasePipelineIndex(int32_t index);
 private:
 	PipelineLayout pipelineLayout;
 	LogicalDevice dev;
 	RenderPass renderPass;
 	uint32_t subpass = 0;
+	Pipeline basePipeline;
+	int32_t basePipelineIndex = -1;
 
 	//VkPipelineShaderStageCreateInfo
 	std::vector<Shader> shaders;

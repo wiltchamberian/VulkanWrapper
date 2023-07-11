@@ -1,6 +1,11 @@
 #include "RenderPassBuilder.h"
 #include <stdexcept>
 
+RenderPassBuilder::RenderPassBuilder(const LogicalDevice& d)
+:dev(d){
+
+}
+
 RenderPass RenderPassBuilder::build() {
 	RenderPass pass;
 	VkRenderPassCreateInfo renderPassInfo{};
@@ -11,16 +16,11 @@ RenderPass RenderPassBuilder::build() {
 	renderPassInfo.subpassCount = subpassDescriptions.size();
 	renderPassInfo.pDependencies = subpassDependencies.data();
 	renderPassInfo.dependencyCount = subpassDependencies.size();
-	if (vkCreateRenderPass(dev.dev, &renderPassInfo, nullptr, &pass.pass) != VK_SUCCESS) {
-		pass.pass = VK_NULL_HANDLE;
+	if (vkCreateRenderPass(dev.dev, &renderPassInfo, nullptr, &pass.value()) != VK_SUCCESS) {
+		pass.value() = VK_NULL_HANDLE;
 		throw std::runtime_error("failed to create render pass!");
 	}
 	return pass;
-}
-
-RenderPassBuilder& RenderPassBuilder::setDevice(LogicalDevice d) {
-	dev = d;
-	return *this;
 }
 
 RenderPassBuilder& RenderPassBuilder::setAttachments(const std::vector<VkAttachmentDescription>& vec) {

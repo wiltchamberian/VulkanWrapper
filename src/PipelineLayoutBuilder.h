@@ -7,9 +7,8 @@
 
 class VULKAN_WRAPPER_API PipelineLayoutBuilder {
 public:
+    PipelineLayoutBuilder(LogicalDevice dev);
 	PipelineLayout build();
-
-    PipelineLayoutBuilder& setDevice(LogicalDevice dev);
     PipelineLayoutBuilder& setPipelineLayoutCreateFlags(VkPipelineLayoutCreateFlags flags);
     PipelineLayoutBuilder& setDescriptorSetLayouts(const std::vector<DescriptorSetLayout>& vec);
     PipelineLayoutBuilder& setPushConstantRanges(const std::vector<VkPushConstantRange>& vec);

@@ -7,8 +7,8 @@
 
 class VULKAN_WRAPPER_API RenderPassBuilder {
 public:
+	RenderPassBuilder(const LogicalDevice& dev);
 	RenderPass build();
-	RenderPassBuilder& setDevice(LogicalDevice dev);
 	RenderPassBuilder& setAttachments(const std::vector<VkAttachmentDescription>& vec);
 	RenderPassBuilder& setSubpassDescriptions(const std::vector<VkSubpassDescription>& vec);
 	RenderPassBuilder& setSubpassDependencies(const std::vector<VkSubpassDependency>& vec);

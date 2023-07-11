@@ -157,6 +157,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\src\DeviceQueue.h" />
+    <ClInclude Include="..\src\FrameBuffer.h" />
+    <ClInclude Include="..\src\FrameBufferBuilder.h" />
     <ClInclude Include="..\src\ImageView.h" />
     <ClInclude Include="..\src\ImageViewBuilder.h" />
     <ClInclude Include="..\src\PipelineBuilder.h" />
@@ -186,6 +188,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\DeviceQueue.cpp" />
+    <ClCompile Include="..\src\FrameBuffer.cpp" />
+    <ClCompile Include="..\src\FrameBufferBuilder.cpp" />
     <ClCompile Include="..\src\ImageView.cpp" />
     <ClCompile Include="..\src\ImageViewBuilder.cpp" />
     <ClCompile Include="..\src\PipelineBuilder.cpp" />
