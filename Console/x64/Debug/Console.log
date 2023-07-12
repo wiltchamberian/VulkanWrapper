@@ -1,0 +1,77 @@
+﻿  Console.cpp
+E:\yao_tang\projects\VulkanWrapper\src\Common.h(21,39): warning C4251: “QueueFamilyIndices::indexMap”: class“std::vector<std::optional<uint32_t>,std::allocator<std::optional<uint32_t>>>”需要有 dll 接口由 class“QueueFamilyIndices”的客户端使用
+E:\yao_tang\projects\VulkanWrapper\src\Common.h(21,7): message : 参见“std::vector<std::optional<uint32_t>,std::allocator<std::optional<uint32_t>>>”的声明
+E:\yao_tang\projects\VulkanWrapper\src\InstanceBuilder.h(20,14): warning C4251: “InstanceBuilder::appName”: class“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口由 class“InstanceBuilder”的客户端使用
+C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.34.31933\include\xstring(5297,17): message : 参见“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”的声明
+E:\yao_tang\projects\VulkanWrapper\src\InstanceBuilder.h(22,14): warning C4251: “InstanceBuilder::engineName”: class“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口由 class“InstanceBuilder”的客户端使用
+C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.34.31933\include\xstring(5297,17): message : 参见“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”的声明
+E:\yao_tang\projects\VulkanWrapper\src\InstanceBuilder.h(23,27): warning C4251: “InstanceBuilder::extensions”: class“std::vector<std::string,std::allocator<std::string>>”需要有 dll 接口由 class“InstanceBuilder”的客户端使用
+E:\yao_tang\projects\VulkanWrapper\src\Instance.h(23,86): message : 参见“std::vector<std::string,std::allocator<std::string>>”的声明
+E:\yao_tang\projects\VulkanWrapper\src\InstanceBuilder.h(24,27): warning C4251: “InstanceBuilder::layers”: class“std::vector<std::string,std::allocator<std::string>>”需要有 dll 接口由 class“InstanceBuilder”的客户端使用
+E:\yao_tang\projects\VulkanWrapper\src\Instance.h(23,86): message : 参见“std::vector<std::string,std::allocator<std::string>>”的声明
+E:\yao_tang\projects\VulkanWrapper\src\SwapChainBuilder.h(45,38): warning C4251: “SwapChainBuilder::minImageCount”: class“std::optional<uint32_t>”需要有 dll 接口由 class“SwapChainBuilder”的客户端使用
+E:\yao_tang\projects\VulkanWrapper\src\Common.h(21,19): message : 参见“std::optional<uint32_t>”的声明
+E:\yao_tang\projects\VulkanWrapper\src\SwapChainBuilder.h(46,38): warning C4251: “SwapChainBuilder::surfaceFormat”: class“std::optional<VkSurfaceFormatKHR>”需要有 dll 接口由 class“SwapChainBuilder”的客户端使用
+E:\yao_tang\projects\VulkanWrapper\src\SwapChainBuilder.h(46,10): message : 参见“std::optional<VkSurfaceFormatKHR>”的声明
+E:\yao_tang\projects\VulkanWrapper\src\SwapChainBuilder.h(51,38): warning C4251: “SwapChainBuilder::queueFamilyIndices”: class“std::vector<uint32_t,std::allocator<uint32_t>>”需要有 dll 接口由 class“SwapChainBuilder”的客户端使用
+E:\yao_tang\projects\VulkanWrapper\src\SwapChainBuilder.h(30,56): message : 参见“std::vector<uint32_t,std::allocator<uint32_t>>”的声明
+E:\yao_tang\projects\VulkanWrapper\src\SwapChainBuilder.h(54,38): warning C4251: “SwapChainBuilder::presentMode”: class“std::optional<VkPresentModeKHR>”需要有 dll 接口由 class“SwapChainBuilder”的客户端使用
+E:\yao_tang\projects\VulkanWrapper\src\SwapChainBuilder.h(54,10): message : 参见“std::optional<VkPresentModeKHR>”的声明
+E:\yao_tang\projects\VulkanWrapper\src\Shader.h(16,14): warning C4251: “Shader::funcName”: class“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口由 class“Shader”的客户端使用
+C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.34.31933\include\xstring(5297,17): message : 参见“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”的声明
+E:\yao_tang\projects\VulkanWrapper\src\Shader.h(17,14): warning C4251: “Shader::name”: class“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口由 class“Shader”的客户端使用
+C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.34.31933\include\xstring(5297,17): message : 参见“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”的声明
+E:\yao_tang\projects\VulkanWrapper\src\Shader.h(20,40): warning C4251: “Shader::mapEntries”: class“std::vector<VkSpecializationMapEntry,std::allocator<VkSpecializationMapEntry>>”需要有 dll 接口由 class“Shader”的客户端使用
+E:\yao_tang\projects\VulkanWrapper\src\Shader.h(20,7): message : 参见“std::vector<VkSpecializationMapEntry,std::allocator<VkSpecializationMapEntry>>”的声明
+E:\yao_tang\projects\VulkanWrapper\src\Shader.h(21,23): warning C4251: “Shader::data”: class“std::vector<uint8_t,std::allocator<uint8_t>>”需要有 dll 接口由 class“Shader”的客户端使用
+E:\yao_tang\projects\VulkanWrapper\src\Shader.h(21,7): message : 参见“std::vector<uint8_t,std::allocator<uint8_t>>”的声明
+E:\yao_tang\projects\VulkanWrapper\src\PipelineBuilder.h(87,22): warning C4251: “PipelineBuilder::shaders”: class“std::vector<Shader,std::allocator<Shader>>”需要有 dll 接口由 class“PipelineBuilder”的客户端使用
+E:\yao_tang\projects\VulkanWrapper\src\PipelineBuilder.h(20,41): message : 参见“std::vector<Shader,std::allocator<Shader>>”的声明
+E:\yao_tang\projects\VulkanWrapper\src\PipelineBuilder.h(90,47): warning C4251: “PipelineBuilder::vertexInputBindingDescriptions”: class“std::vector<VkVertexInputBindingDescription,std::allocator<VkVertexInputBindingDescription>>”需要有 dll 接口由 class“PipelineBuilder”的客户端使用
+E:\yao_tang\projects\VulkanWrapper\src\PipelineBuilder.h(23,64): message : 参见“std::vector<VkVertexInputBindingDescription,std::allocator<VkVertexInputBindingDescription>>”的声明
+E:\yao_tang\projects\VulkanWrapper\src\PipelineBuilder.h(91,49): warning C4251: “PipelineBuilder::vertexInputAttributeDescriptions”: class“std::vector<VkVertexInputAttributeDescription,std::allocator<VkVertexInputAttributeDescription>>”需要有 dll 接口由 class“PipelineBuilder”的客户端使用
+E:\yao_tang\projects\VulkanWrapper\src\PipelineBuilder.h(24,66): message : 参见“std::vector<VkVertexInputAttributeDescription,std::allocator<VkVertexInputAttributeDescription>>”的声明
+E:\yao_tang\projects\VulkanWrapper\src\PipelineBuilder.h(100,31): warning C4251: “PipelineBuilder::viewports”: class“std::vector<VkViewport,std::allocator<VkViewport>>”需要有 dll 接口由 class“PipelineBuilder”的客户端使用
+E:\yao_tang\projects\VulkanWrapper\src\PipelineBuilder.h(33,43): message : 参见“std::vector<VkViewport,std::allocator<VkViewport>>”的声明
+E:\yao_tang\projects\VulkanWrapper\src\PipelineBuilder.h(101,29): warning C4251: “PipelineBuilder::scissors”: class“std::vector<VkRect2D,std::allocator<VkRect2D>>”需要有 dll 接口由 class“PipelineBuilder”的客户端使用
+E:\yao_tang\projects\VulkanWrapper\src\PipelineBuilder.h(34,42): message : 参见“std::vector<VkRect2D,std::allocator<VkRect2D>>”的声明
+E:\yao_tang\projects\VulkanWrapper\src\PipelineBuilder.h(126,54): warning C4251: “PipelineBuilder::colorBlendAttachmentStates”: class“std::vector<VkPipelineColorBlendAttachmentState,std::allocator<VkPipelineColorBlendAttachmentState>>”需要有 dll 接口由 class“PipelineBuilder”的客户端使用
+E:\yao_tang\projects\VulkanWrapper\src\PipelineBuilder.h(59,55): message : 参见“std::vector<VkPipelineColorBlendAttachmentState,std::allocator<VkPipelineColorBlendAttachmentState>>”的声明
+E:\yao_tang\projects\VulkanWrapper\src\PipelineBuilder.h(134,36): warning C4251: “PipelineBuilder::dynamicStates”: class“std::vector<VkDynamicState,std::allocator<VkDynamicState>>”需要有 dll 接口由 class“PipelineBuilder”的客户端使用
+E:\yao_tang\projects\VulkanWrapper\src\PipelineBuilder.h(68,47): message : 参见“std::vector<VkDynamicState,std::allocator<VkDynamicState>>”的声明
+E:\yao_tang\projects\VulkanWrapper\src\PipelineLayoutBuilder.h(18,41): warning C4251: “PipelineLayoutBuilder::layouts”: class“std::vector<DescriptorSetLayout,std::allocator<DescriptorSetLayout>>”需要有 dll 接口由 class“PipelineLayoutBuilder”的客户端使用
+E:\yao_tang\projects\VulkanWrapper\src\PipelineLayoutBuilder.h(13,63): message : 参见“std::vector<DescriptorSetLayout,std::allocator<DescriptorSetLayout>>”的声明
+E:\yao_tang\projects\VulkanWrapper\src\PipelineLayoutBuilder.h(19,41): warning C4251: “PipelineLayoutBuilder::pushConstantRanges”: class“std::vector<VkPushConstantRange,std::allocator<VkPushConstantRange>>”需要有 dll 接口由 class“PipelineLayoutBuilder”的客户端使用
+E:\yao_tang\projects\VulkanWrapper\src\PipelineLayoutBuilder.h(14,61): message : 参见“std::vector<VkPushConstantRange,std::allocator<VkPushConstantRange>>”的声明
+E:\yao_tang\projects\VulkanWrapper\src\RenderPassBuilder.h(17,39): warning C4251: “RenderPassBuilder::attachmentDescriptions”: class“std::vector<VkAttachmentDescription,std::allocator<VkAttachmentDescription>>”需要有 dll 接口由 class“RenderPassBuilder”的客户端使用
+E:\yao_tang\projects\VulkanWrapper\src\RenderPassBuilder.h(12,47): message : 参见“std::vector<VkAttachmentDescription,std::allocator<VkAttachmentDescription>>”的声明
+E:\yao_tang\projects\VulkanWrapper\src\RenderPassBuilder.h(18,36): warning C4251: “RenderPassBuilder::subpassDescriptions”: class“std::vector<VkSubpassDescription,std::allocator<VkSubpassDescription>>”需要有 dll 接口由 class“RenderPassBuilder”的客户端使用
+E:\yao_tang\projects\VulkanWrapper\src\RenderPassBuilder.h(13,55): message : 参见“std::vector<VkSubpassDescription,std::allocator<VkSubpassDescription>>”的声明
+E:\yao_tang\projects\VulkanWrapper\src\RenderPassBuilder.h(19,35): warning C4251: “RenderPassBuilder::subpassDependencies”: class“std::vector<VkSubpassDependency,std::allocator<VkSubpassDependency>>”需要有 dll 接口由 class“RenderPassBuilder”的客户端使用
+E:\yao_tang\projects\VulkanWrapper\src\RenderPassBuilder.h(14,55): message : 参见“std::vector<VkSubpassDependency,std::allocator<VkSubpassDependency>>”的声明
+E:\yao_tang\projects\VulkanWrapper\src\ShaderStageBuilder.h(22,14): warning C4251: “ShaderStageBuilder::name”: class“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口由 class“ShaderStageBuilder”的客户端使用
+C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.34.31933\include\xstring(5297,17): message : 参见“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”的声明
+E:\yao_tang\projects\VulkanWrapper\src\ShaderStageBuilder.h(23,14): warning C4251: “ShaderStageBuilder::funcName”: class“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口由 class“ShaderStageBuilder”的客户端使用
+C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.34.31933\include\xstring(5297,17): message : 参见“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”的声明
+E:\yao_tang\projects\VulkanWrapper\src\ShaderStageBuilder.h(24,20): warning C4251: “ShaderStageBuilder::code”: class“std::vector<char,std::allocator<char>>”需要有 dll 接口由 class“ShaderStageBuilder”的客户端使用
+E:\yao_tang\projects\VulkanWrapper\src\ShaderStageBuilder.h(16,47): message : 参见“std::vector<char,std::allocator<char>>”的声明
+E:\yao_tang\projects\VulkanWrapper\src\FrameBufferBuilder.h(23,28): warning C4251: “FrameBufferBuilder::attachments”: class“std::vector<ImageView,std::allocator<ImageView>>”需要有 dll 接口由 class“FrameBufferBuilder”的客户端使用
+E:\yao_tang\projects\VulkanWrapper\src\FrameBufferBuilder.h(16,51): message : 参见“std::vector<ImageView,std::allocator<ImageView>>”的声明
+E:\yao_tang\projects\VulkanWrapper\Console\Console.cpp(24,23): warning C4018: “<”: 有符号/无符号不匹配
+E:\yao_tang\projects\VulkanWrapper\Console\Console.cpp(93,1): warning C4267: “初始化”: 从“size_t”转换到“int32_t”，可能丢失数据
+glfw3.lib(init.obj) : warning LNK4099: 未找到 PDB“”(使用“glfw3.lib(init.obj)”或在“”中寻找)；正在链接对象，如同没有调试信息一样
+glfw3.lib(window.obj) : warning LNK4099: 未找到 PDB“”(使用“glfw3.lib(window.obj)”或在“”中寻找)；正在链接对象，如同没有调试信息一样
+glfw3.lib(vulkan.obj) : warning LNK4099: 未找到 PDB“”(使用“glfw3.lib(vulkan.obj)”或在“”中寻找)；正在链接对象，如同没有调试信息一样
+glfw3.lib(input.obj) : warning LNK4099: 未找到 PDB“”(使用“glfw3.lib(input.obj)”或在“”中寻找)；正在链接对象，如同没有调试信息一样
+glfw3.lib(win32_init.obj) : warning LNK4099: 未找到 PDB“”(使用“glfw3.lib(win32_init.obj)”或在“”中寻找)；正在链接对象，如同没有调试信息一样
+glfw3.lib(win32_monitor.obj) : warning LNK4099: 未找到 PDB“”(使用“glfw3.lib(win32_monitor.obj)”或在“”中寻找)；正在链接对象，如同没有调试信息一样
+glfw3.lib(win32_time.obj) : warning LNK4099: 未找到 PDB“”(使用“glfw3.lib(win32_time.obj)”或在“”中寻找)；正在链接对象，如同没有调试信息一样
+glfw3.lib(win32_thread.obj) : warning LNK4099: 未找到 PDB“”(使用“glfw3.lib(win32_thread.obj)”或在“”中寻找)；正在链接对象，如同没有调试信息一样
+glfw3.lib(monitor.obj) : warning LNK4099: 未找到 PDB“”(使用“glfw3.lib(monitor.obj)”或在“”中寻找)；正在链接对象，如同没有调试信息一样
+glfw3.lib(context.obj) : warning LNK4099: 未找到 PDB“”(使用“glfw3.lib(context.obj)”或在“”中寻找)；正在链接对象，如同没有调试信息一样
+glfw3.lib(win32_window.obj) : warning LNK4099: 未找到 PDB“”(使用“glfw3.lib(win32_window.obj)”或在“”中寻找)；正在链接对象，如同没有调试信息一样
+glfw3.lib(win32_joystick.obj) : warning LNK4099: 未找到 PDB“”(使用“glfw3.lib(win32_joystick.obj)”或在“”中寻找)；正在链接对象，如同没有调试信息一样
+glfw3.lib(wgl_context.obj) : warning LNK4099: 未找到 PDB“”(使用“glfw3.lib(wgl_context.obj)”或在“”中寻找)；正在链接对象，如同没有调试信息一样
+glfw3.lib(egl_context.obj) : warning LNK4099: 未找到 PDB“”(使用“glfw3.lib(egl_context.obj)”或在“”中寻找)；正在链接对象，如同没有调试信息一样
+glfw3.lib(osmesa_context.obj) : warning LNK4099: 未找到 PDB“”(使用“glfw3.lib(osmesa_context.obj)”或在“”中寻找)；正在链接对象，如同没有调试信息一样
+  Console.vcxproj -> E:\yao_tang\projects\VulkanWrapper\VulkanWrapper\x64\Debug\Console.exe

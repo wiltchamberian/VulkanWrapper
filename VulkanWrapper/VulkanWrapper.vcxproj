@@ -156,6 +156,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\CommandBuffer.h" />
+    <ClInclude Include="..\src\CommandPool.h" />
+    <ClInclude Include="..\src\CommandPoolBuilder.h" />
     <ClInclude Include="..\src\DeviceQueue.h" />
     <ClInclude Include="..\src\FrameBuffer.h" />
     <ClInclude Include="..\src\FrameBufferBuilder.h" />
@@ -187,6 +190,9 @@
     <ClInclude Include="framework.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\CommandBuffer.cpp" />
+    <ClCompile Include="..\src\CommandPool.cpp" />
+    <ClCompile Include="..\src\CommandPoolBuilder.cpp" />
     <ClCompile Include="..\src\DeviceQueue.cpp" />
     <ClCompile Include="..\src\FrameBuffer.cpp" />
     <ClCompile Include="..\src\FrameBufferBuilder.cpp" />

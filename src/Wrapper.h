@@ -16,6 +16,7 @@
 #include "ShaderStageBuilder.h"
 #include "FrameBufferBuilder.h"
 #include "FrameBuffer.h"
+#include "ImageViewBuilder.h"
 #include "Tools.h"
 
 class VULKAN_WRAPPER_API VulkanWrapper {

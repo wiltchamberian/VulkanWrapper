@@ -9,6 +9,7 @@ class VULKAN_WRAPPER_API FrameBuffer {
 public:
 	friend class FrameBufferBuilder;
 	VkFramebuffer& value() { return fb; }
+	void cleanUp();
 private:
 	LogicalDevice dev;
 	VkFramebuffer fb;
