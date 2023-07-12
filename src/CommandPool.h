@@ -11,7 +11,8 @@ class CommandPool {
 public:
 	friend class CommandPoolBuilder;
 	void cleanUp();
-	CommandBuffer allocBuffer(VkCommandBufferLevel level, uint32_t count);
+	CommandBuffer allocBuffer(VkCommandBufferLevel level);
+	std::vector<CommandBuffer> allocBuffers(VkCommandBufferLevel level,uint32_t count);
 	void destroyBuffer(const CommandBuffer& buf);
 private:
 	LogicalDevice dev;
