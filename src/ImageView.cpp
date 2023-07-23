@@ -1,5 +1,5 @@
 #include "ImageView.h"
 
 void ImageView::cleanUp() {
-	vkDestroyImageView(dev.dev, view, nullptr);
+	vkDestroyImageView(dev.value(), view, nullptr);
 }

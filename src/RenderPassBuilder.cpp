@@ -16,7 +16,7 @@ RenderPass RenderPassBuilder::build() {
 	renderPassInfo.subpassCount = subpassDescriptions.size();
 	renderPassInfo.pDependencies = subpassDependencies.data();
 	renderPassInfo.dependencyCount = subpassDependencies.size();
-	if (vkCreateRenderPass(dev.dev, &renderPassInfo, nullptr, &pass.value()) != VK_SUCCESS) {
+	if (vkCreateRenderPass(dev.value(), &renderPassInfo, nullptr, &pass.value()) != VK_SUCCESS) {
 		pass.value() = VK_NULL_HANDLE;
 		throw std::runtime_error("failed to create render pass!");
 	}

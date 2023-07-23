@@ -211,7 +211,7 @@ LogicalDevice PhysicalDevice::createLogicalDevice(VkQueueFlags flags, VkPhysical
 
     LogicalDevice logicalDevice;
     logicalDevice.indices = indices;
-    if (vkCreateDevice(dev, &createInfo, nullptr, &logicalDevice.dev) != VK_SUCCESS) {
+    if (vkCreateDevice(dev, &createInfo, nullptr, &logicalDevice.value()) != VK_SUCCESS) {
         throw std::runtime_error("failed to create logical device!");
     }
 

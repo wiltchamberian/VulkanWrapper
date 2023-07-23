@@ -1,4 +1,5 @@
 #include "LogicalDevice.h"
+#include "Fence.h"
 #include <stdexcept>
 
 void LogicalDevice::cleanUp() {
@@ -20,4 +21,22 @@ DeviceQueue LogicalDevice::getDeviceQueue(VkQueueFlags que, int index) {
 		}
 	}
 	return deviceQue;
+}
+
+void LogicalDevice::waitForFences(const FenceGroup& group, VkBool32 waitAll, uint64_t timeout) {
+	vkWaitForFences(dev, group.size(), group.data(), waitAll, timeout);
+}
+
+void LogicalDevice::waitForFence(const Fence& fence, VkBool32 waitAll, uint64_t timeout) {
+	vkWaitForFences(dev, 1, fence.data(), waitAll, timeout);
+}
+
+void LogicalDevice::resetFences(const FenceGroup& group) {
+	if (group.size() > 0) {
+		vkResetFences(dev, group.size(), group.data());
+	}
+}
+
+void LogicalDevice::waitIdle() {
+	vkDeviceWaitIdle(dev);
 }

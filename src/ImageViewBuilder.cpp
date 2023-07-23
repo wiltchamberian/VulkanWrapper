@@ -15,7 +15,7 @@ ImageView ImageViewBuilder::build() {
 	ci.pNext = nullptr;
 	ImageView imageview;
 	imageview.dev = dev;
-	if (vkCreateImageView(dev.dev, &ci, nullptr, &imageview.value()) != VK_SUCCESS) {
+	if (vkCreateImageView(dev.value(), &ci, nullptr, &imageview.value()) != VK_SUCCESS) {
 		throw std::runtime_error("failed to create image views!");
 	}
 }

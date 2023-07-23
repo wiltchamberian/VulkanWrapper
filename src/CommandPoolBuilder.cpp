@@ -11,7 +11,7 @@ CommandPoolBuilder::CommandPoolBuilder(LogicalDevice d)
 
 CommandPool CommandPoolBuilder::build() {
 	CommandPool pool;
-	if (vkCreateCommandPool(dev.dev, &ci, nullptr, &pool.pool) != VK_SUCCESS) {
+	if (vkCreateCommandPool(dev.value(), &ci, nullptr, &pool.pool) != VK_SUCCESS) {
 		throw std::runtime_error("failed to create command pool!");
 	}
 	else {

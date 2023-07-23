@@ -66,3 +66,12 @@ CommandBuffer& CommandBuffer::end() {
 	}
 	return *this;
 }
+
+CommandBuffer& CommandBuffer::reset(VkCommandBufferResetFlags flags) {
+	vkResetCommandBuffer(buf, flags);
+	return *this;
+}
+
+CommandBuffer& CommandBuffer::record() {
+	return *this;
+}

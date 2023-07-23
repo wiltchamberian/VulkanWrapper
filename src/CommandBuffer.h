@@ -19,6 +19,8 @@ public:
 	CommandBuffer& draw(uint32_t vertexCount,uint32_t instanceCount,uint32_t firstVertex,uint32_t firstInstance);
 	CommandBuffer& endRenderPass();
 	CommandBuffer& end();
+	CommandBuffer& reset(VkCommandBufferResetFlags flags = 0);
+	CommandBuffer& record();
 private:
 	VkCommandBuffer buf = VK_NULL_HANDLE;
 };

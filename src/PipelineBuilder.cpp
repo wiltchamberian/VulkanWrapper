@@ -109,7 +109,7 @@ Pipeline PipelineBuilder::build() {
     ci.basePipelineHandle = basePipeline.value();
     ci.basePipelineIndex = basePipelineIndex;
 
-    if (vkCreateGraphicsPipelines(dev.dev, VK_NULL_HANDLE, 1, &ci, nullptr, &pipeline.pipeline) != VK_SUCCESS) {
+    if (vkCreateGraphicsPipelines(dev.value(), VK_NULL_HANDLE, 1, &ci, nullptr, &pipeline.pipeline) != VK_SUCCESS) {
         throw std::runtime_error("failed to create graphics pipeline!");
     }
     else {

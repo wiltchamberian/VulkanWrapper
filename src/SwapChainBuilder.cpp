@@ -10,21 +10,21 @@ SwapChainBuilder::SwapChainBuilder(LogicalDevice& dev, Surface& surf)
 }
 
 SwapChainSupportDetails& SwapChainBuilder::querySwapChainSupport() {
-	if (logicalDev.phy_dev.isValid() && surface.isValid()) {
-		vkGetPhysicalDeviceSurfaceCapabilitiesKHR(logicalDev.phy_dev.value(), surface.value(), &details.capabilities.value());
+	if (logicalDev.physical_device().isValid() && surface.isValid()) {
+		vkGetPhysicalDeviceSurfaceCapabilitiesKHR(logicalDev.physical_device().value(), surface.value(), &details.capabilities.value());
 
 		uint32_t formatCount = 0;
-		vkGetPhysicalDeviceSurfaceFormatsKHR(logicalDev.phy_dev.value(), surface.value(), &formatCount, nullptr);
+		vkGetPhysicalDeviceSurfaceFormatsKHR(logicalDev.physical_device().value(), surface.value(), &formatCount, nullptr);
 		if (formatCount != 0) {
 			details.formats.resize(formatCount);
-			vkGetPhysicalDeviceSurfaceFormatsKHR(logicalDev.phy_dev.value(), surface.value(), &formatCount, details.formats.data());
+			vkGetPhysicalDeviceSurfaceFormatsKHR(logicalDev.physical_device().value(), surface.value(), &formatCount, details.formats.data());
 		}
 
 		uint32_t presentModeCount = 0;
-		vkGetPhysicalDeviceSurfacePresentModesKHR(logicalDev.phy_dev.value(), surface.value(), &presentModeCount, nullptr);
+		vkGetPhysicalDeviceSurfacePresentModesKHR(logicalDev.physical_device().value(), surface.value(), &presentModeCount, nullptr);
 		if (presentModeCount != 0) {
 			details.presentModes.resize(presentModeCount);
-			vkGetPhysicalDeviceSurfacePresentModesKHR(logicalDev.phy_dev.value(), surface.value(), &presentModeCount, details.presentModes.data());
+			vkGetPhysicalDeviceSurfacePresentModesKHR(logicalDev.physical_device().value(), surface.value(), &presentModeCount, details.presentModes.data());
 		}
 	}
 	
@@ -68,7 +68,7 @@ SwapChain SwapChainBuilder::build() {
 	ci.clipped = clipped;
 	ci.oldSwapchain = oldSwapchain.value();
 
-	if (vkCreateSwapchainKHR(logicalDev.dev, &ci, nullptr, &chain.value()) != VK_SUCCESS) {
+	if (vkCreateSwapchainKHR(logicalDev.value(), &ci, nullptr, &chain.value()) != VK_SUCCESS) {
 		throw std::runtime_error("failed to create swap chain!");
 	}
 	else {
@@ -92,8 +92,8 @@ SwapChainBuilder& SwapChainBuilder::setSurface(const Surface& surf) {
 SwapChainBuilder& SwapChainBuilder::setSurfaceFormat(VkSurfaceFormatKHR form, VkSurfaceFormatKHR defaultFormat) {
 	surfaceFormat = form;
 	std::vector<VkSurfaceFormatKHR> vec;
-	if (logicalDev.isValid() && logicalDev.phy_dev.isValid()) {
-		vec = logicalDev.phy_dev.queryPhysicalDeviceSurfaceFormats(surface);
+	if (logicalDev.isValid() && logicalDev.physical_device().isValid()) {
+		vec = logicalDev.physical_device().queryPhysicalDeviceSurfaceFormats(surface);
 		for (auto& it : vec) {
 			if (form.format == it.format && form.colorSpace == it.colorSpace) {
 				surfaceFormat = it;
@@ -143,8 +143,8 @@ SwapChainBuilder& SwapChainBuilder::setDefaultMinImageCount() {
 
 SwapChainBuilder& SwapChainBuilder::setExtent2D(VkExtent2D extent, VkExtent2D defaultExtent) {
 	imageExtent = defaultExtent;
-	if (logicalDev.isValid() && logicalDev.phy_dev.isValid() && surface.isValid()) {
-		VkSurfaceCapabilitiesKHR cap = logicalDev.phy_dev.queryPhysicalDeviceSurfaceCapabilities(surface);
+	if (logicalDev.isValid() && logicalDev.physical_device().isValid() && surface.isValid()) {
+		VkSurfaceCapabilitiesKHR cap = logicalDev.physical_device().queryPhysicalDeviceSurfaceCapabilities(surface);
 		if (cap.minImageExtent.width <= extent.width &&
 			cap.minImageExtent.height <= extent.height
 			&& extent.width <= cap.maxImageExtent.width
@@ -188,8 +188,8 @@ SwapChainBuilder& SwapChainBuilder::setCompositeAlpha(VkCompositeAlphaFlagBitsKH
 SwapChainBuilder& SwapChainBuilder::setPresentMode(VkPresentModeKHR mode, VkPresentModeKHR defaultMode) {
 	presentMode = mode;
 	std::vector<VkPresentModeKHR> vec;
-	if (logicalDev.isValid() && logicalDev.phy_dev.isValid()) {
-		vec = logicalDev.phy_dev.queryPhysicalDeviceSurfacePresentModes(surface);
+	if (logicalDev.isValid() && logicalDev.physical_device().isValid()) {
+		vec = logicalDev.physical_device().queryPhysicalDeviceSurfacePresentModes(surface);
 		for (auto& it : vec) {
 			if (mode == it) {
 				presentMode = it;
@@ -224,31 +224,31 @@ SwapChainBuilder& SwapChainBuilder::setOldSwapChain(SwapChain old) {
 }
 
 void SwapChainBuilder::queryPhysicalDeviceSurfaceCapabilities() {
-	if (logicalDev.phy_dev.isValid() && surface.isValid()) {
-		vkGetPhysicalDeviceSurfaceCapabilitiesKHR(logicalDev.phy_dev.value(), surface.value(), &details.capabilities.value());
+	if (logicalDev.physical_device().isValid() && surface.isValid()) {
+		vkGetPhysicalDeviceSurfaceCapabilitiesKHR(logicalDev.physical_device().value(), surface.value(), &details.capabilities.value());
 	}
 }
 
 void SwapChainBuilder::queryPhysicalDeviceSurfaceFormats() {
 	details.formats.clear();
-	if (logicalDev.phy_dev.isValid() && surface.isValid()) {
+	if (logicalDev.physical_device().isValid() && surface.isValid()) {
 		uint32_t formatCount = 0;
-		vkGetPhysicalDeviceSurfaceFormatsKHR(logicalDev.phy_dev.value(), surface.value(), &formatCount, nullptr);
+		vkGetPhysicalDeviceSurfaceFormatsKHR(logicalDev.physical_device().value(), surface.value(), &formatCount, nullptr);
 		if (formatCount != 0) {
 			details.formats.resize(formatCount);
-			vkGetPhysicalDeviceSurfaceFormatsKHR(logicalDev.phy_dev.value(), surface.value(), &formatCount, details.formats.data());
+			vkGetPhysicalDeviceSurfaceFormatsKHR(logicalDev.physical_device().value(), surface.value(), &formatCount, details.formats.data());
 		}
 	}
 }
 
 void SwapChainBuilder::queryPhysicalDeviceSurfacePresentModes() {
 	details.presentModes.clear();
-	if (logicalDev.phy_dev.isValid() && surface.isValid()) {
+	if (logicalDev.physical_device().isValid() && surface.isValid()) {
 		uint32_t presentModeCount = 0;
-		vkGetPhysicalDeviceSurfacePresentModesKHR(logicalDev.phy_dev.value(), surface.value(), &presentModeCount, nullptr);
+		vkGetPhysicalDeviceSurfacePresentModesKHR(logicalDev.physical_device().value(), surface.value(), &presentModeCount, nullptr);
 		if (presentModeCount != 0) {
 			details.presentModes.resize(presentModeCount);
-			vkGetPhysicalDeviceSurfacePresentModesKHR(logicalDev.phy_dev.value(), surface.value(), &presentModeCount, details.presentModes.data());
+			vkGetPhysicalDeviceSurfacePresentModesKHR(logicalDev.physical_device().value(), surface.value(), &presentModeCount, details.presentModes.data());
 		}
 	}
 }

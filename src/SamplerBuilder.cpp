@@ -4,7 +4,7 @@
 
 Sampler SamplerBuilder::build() {
 	Sampler sampler;
-	VkResult suc = vkCreateSampler(dev.dev, &ci, nullptr, &sampler.value());
+	VkResult suc = vkCreateSampler(dev.value(), &ci, nullptr, &sampler.value());
 	if (suc != VK_SUCCESS) {
 		throw std::runtime_error("failed to create sampler!");
 	}

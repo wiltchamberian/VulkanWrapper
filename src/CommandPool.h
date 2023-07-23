@@ -10,6 +10,7 @@ class CommandBuffer;
 class CommandPool {
 public:
 	friend class CommandPoolBuilder;
+	VkCommandPool& value() { return pool;  }
 	void cleanUp();
 	CommandBuffer allocBuffer(VkCommandBufferLevel level);
 	std::vector<CommandBuffer> allocBuffers(VkCommandBufferLevel level,uint32_t count);

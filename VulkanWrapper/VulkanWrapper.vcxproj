@@ -160,6 +160,8 @@
     <ClInclude Include="..\src\CommandPool.h" />
     <ClInclude Include="..\src\CommandPoolBuilder.h" />
     <ClInclude Include="..\src\DeviceQueue.h" />
+    <ClInclude Include="..\src\Fence.h" />
+    <ClInclude Include="..\src\FenceBuilder.h" />
     <ClInclude Include="..\src\FrameBuffer.h" />
     <ClInclude Include="..\src\FrameBufferBuilder.h" />
     <ClInclude Include="..\src\ImageView.h" />
@@ -177,6 +179,8 @@
     <ClInclude Include="..\src\PipelineLayoutBuilder.h" />
     <ClInclude Include="..\src\RenderPassBuilder.h" />
     <ClInclude Include="..\src\Sampler.h" />
+    <ClInclude Include="..\src\Semaphore.h" />
+    <ClInclude Include="..\src\SemaphoreBuilder.h" />
     <ClInclude Include="..\src\Shader.h" />
     <ClInclude Include="..\src\ShaderStageBuilder.h" />
     <ClInclude Include="..\src\Surface.h" />
@@ -194,6 +198,8 @@
     <ClCompile Include="..\src\CommandPool.cpp" />
     <ClCompile Include="..\src\CommandPoolBuilder.cpp" />
     <ClCompile Include="..\src\DeviceQueue.cpp" />
+    <ClCompile Include="..\src\Fence.cpp" />
+    <ClCompile Include="..\src\FenceBuilder.cpp" />
     <ClCompile Include="..\src\FrameBuffer.cpp" />
     <ClCompile Include="..\src\FrameBufferBuilder.cpp" />
     <ClCompile Include="..\src\ImageView.cpp" />
@@ -210,6 +216,8 @@
     <ClCompile Include="..\src\RenderPassBuilder.cpp" />
     <ClCompile Include="..\src\Sampler.cpp" />
     <ClCompile Include="..\src\SamplerBuilder.cpp" />
+    <ClCompile Include="..\src\Semaphore.cpp" />
+    <ClCompile Include="..\src\SemaphoreBuilder.cpp" />
     <ClCompile Include="..\src\Shader.cpp" />
     <ClCompile Include="..\src\ShaderStageBuilder.cpp" />
     <ClCompile Include="..\src\Surface.cpp" />

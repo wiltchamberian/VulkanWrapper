@@ -9,8 +9,12 @@
 #include <optional>
 #include <vector>
 
+class Fence;
+class FenceGroup;
+
 class VULKAN_WRAPPER_API LogicalDevice {
 public:
+	friend class PhysicalDevice;
 	bool isValid() const {
 		return dev != VK_NULL_HANDLE;
 	}
@@ -22,7 +26,11 @@ public:
 	}
 	void cleanUp();
 	DeviceQueue getDeviceQueue(VkQueueFlags que, int index = 0);
-public:
+	void waitForFences(const FenceGroup& group, VkBool32 waitAll, uint64_t timeout);
+	void waitForFence(const Fence& fence, VkBool32 waitAll, uint64_t timeout);
+	void resetFences(const FenceGroup& group);
+	void waitIdle();
+private:
 	VkDevice dev = VK_NULL_HANDLE;
 	PhysicalDevice phy_dev;
 	QueueFamilyIndices indices;

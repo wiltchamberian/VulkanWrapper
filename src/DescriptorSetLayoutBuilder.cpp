@@ -9,7 +9,7 @@ DescriptorSetLayout DescriptorSetLayoutBuilder::build() {
 	ci.bindingCount = bindings.size();
 	ci.pBindings = bindings.data();
 	
-	auto suc = vkCreateDescriptorSetLayout(dev.dev,&ci , nullptr, &layout.value());
+	auto suc = vkCreateDescriptorSetLayout(dev.value(), &ci, nullptr, &layout.value());
 	if (suc != VK_SUCCESS) {
 		throw std::runtime_error("failed to create DescriptorSetLayout!");
 	}

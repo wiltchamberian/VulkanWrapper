@@ -9,7 +9,7 @@ PipelineLayout PipelineLayoutBuilder::build() {
 	ci.setLayoutCount = layouts.size();
 	ci.pPushConstantRanges = pushConstantRanges.data();
 	ci.pushConstantRangeCount = pushConstantRanges.size();
-	VkResult suc = vkCreatePipelineLayout(dev.dev, &ci, nullptr, &(layout.value()));
+	VkResult suc = vkCreatePipelineLayout(dev.value(), &ci, nullptr, &(layout.value()));
 	if (suc != VK_SUCCESS) {
 		throw std::runtime_error("failed to create pipelineLayout!");
 	}

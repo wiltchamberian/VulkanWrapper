@@ -4,7 +4,7 @@
 
 void CommandPool::cleanUp() {
 	if (dev.isValid()) {
-		vkDestroyCommandPool(dev.dev, pool, nullptr);
+		vkDestroyCommandPool(dev.value(), pool, nullptr);
 	}
 }
 
@@ -15,7 +15,7 @@ CommandBuffer CommandPool::allocBuffer(VkCommandBufferLevel level) {
 	allocInfo.commandPool = this->pool;
 	allocInfo.level = level;
 	allocInfo.commandBufferCount = 1;
-	if (vkAllocateCommandBuffers(dev.dev, &allocInfo, &buffer.buf) != VK_SUCCESS) {
+	if (vkAllocateCommandBuffers(dev.value(), &allocInfo, &buffer.buf) != VK_SUCCESS) {
 		throw std::runtime_error("failed to allocate command buffers!");
 	}
 	return buffer;
@@ -30,7 +30,7 @@ std::vector<CommandBuffer> CommandPool::allocBuffers(VkCommandBufferLevel level,
 	allocInfo.level = level;
 	allocInfo.commandBufferCount = count;
 	std::vector<VkCommandBuffer> bufs(count);
-	if (vkAllocateCommandBuffers(dev.dev, &allocInfo, bufs.data()) != VK_SUCCESS) {
+	if (vkAllocateCommandBuffers(dev.value(), &allocInfo, bufs.data()) != VK_SUCCESS) {
 		throw std::runtime_error("failed to allocate command buffers!");
 	}
 	else {
@@ -43,5 +43,5 @@ std::vector<CommandBuffer> CommandPool::allocBuffers(VkCommandBufferLevel level,
 }
 
 void CommandPool::destroyBuffer(const CommandBuffer& buf) {
-	
+
 }
