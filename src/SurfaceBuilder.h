@@ -14,7 +14,7 @@
 #ifdef _WIN32
 class VULKAN_WRAPPER_API SurfaceBuilder {
 public:
-	SurfaceBuilder(const VulkanInstance& instance);
+	SurfaceBuilder(const VulkanInstance& instance, HINSTANCE hInstance, HWND hwnd);
 	Surface build();
 	SurfaceBuilder& setFlags(VkWin32SurfaceCreateFlagsKHR flags);
 	SurfaceBuilder& setHINSTANCE(HINSTANCE hInstance);

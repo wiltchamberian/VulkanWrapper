@@ -5,6 +5,8 @@
 
 #define GLFW_INCLUDE_VULKAN
 #include "glfw/glfw3.h"
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include "glfw/glfw3native.h"
 
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
@@ -23,6 +25,9 @@ std::vector<std::string> getExtensions() {
     std::vector<std::string> extensions;
     for (int i = 0; i < glfwExtensionCount; ++i) {
         extensions.push_back(std::string(glfwExtensions[i]));
+    }
+    if (true) {
+        extensions.push_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
     }
     return extensions;
 }
@@ -56,11 +61,27 @@ private:
     const uint32_t WIDTH = 800;
     const uint32_t HEIGHT = 600;
     GLFWwindow* window = nullptr;
+    HINSTANCE hInstance;
+    HWND hwnd;
+
     VulkanInstance instance;
     PhysicalDevice phyDevice;
     LogicalDevice  device;
+    SwapChain swapChain;
+    std::vector<FrameBuffer> swapChainFramebuffers;
+    RenderPass renderPass;
+    Pipeline pipeline;
+
+    CommandPool pool;
+    CommandBuffer cmdBuffer;
+
+    //drawFrame
+    Semaphore imageAvailableSemaphore;
+    Semaphore renderFinishedSemaphore;
+    Fence inFlightFence;
+
     void initWindow() {
-        glfwInit();
+        assert(glfwInit() == GLFW_TRUE);
 
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
@@ -70,7 +91,9 @@ private:
 
     void initVulkan() { 
         instance = InstanceBuilder().setExtensions(getExtensions()).build();
-        Surface surface = SurfaceBuilder(instance).build();
+        hInstance = GetModuleHandle(nullptr);
+        hwnd = glfwGetWin32Window(window);
+        Surface surface = SurfaceBuilder(instance,hInstance, hwnd).build();
 
         phyDevice = instance.selectPhysicalDevice(
             QUEUE_GRAPHICS_BIT| QUEUE_PRESENT_BIT, 
@@ -83,12 +106,24 @@ private:
         SwapChainSupportDetails details = builder.querySwapChainSupport();
         builder.setSurfaceFormat({ VK_FORMAT_B8G8R8A8_SRGB ,VK_COLOR_SPACE_SRGB_NONLINEAR_KHR }, details.formats[0]);
         builder.setPresentMode(VK_PRESENT_MODE_MAILBOX_KHR, VK_PRESENT_MODE_FIFO_KHR);
-        builder.setExtent2D(details.capabilities.value().currentExtent, getExtent(window, details.capabilities.value()));
+        builder.setImageExtent(details.capabilities.value().currentExtent, getExtent(window, details.capabilities.value()));
+        builder.setMinImageCount(std::min<uint32_t>(details.capabilities.value().minImageCount + 1, details.capabilities.value().maxImageCount));
+        builder.setImageArrayLayers(1);
+        builder.setImageUsageFlags(VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT);
+        builder.setPreTransform(details.capabilities.value().currentTransform);
+        builder.setCompositeAlpha(VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR);
+        builder.setClipped(VK_TRUE);
+        builder.setOldSwapChain(SwapChain());
+        builder.setImageSharingMode(VK_SHARING_MODE_CONCURRENT);
 
-        SwapChain chain = builder.build();
+        QueueFamilyIndices indices = phyDevice.findQueueFamilies(QUEUE_GRAPHICS_BIT | QUEUE_PRESENT_BIT, surface);
+        std::vector<uint32_t> queueFamilyIndicesVec = indices.exportIndices();
+        builder.setQueueFamilyIndices(queueFamilyIndicesVec);
+
+        swapChain = builder.build();
 
         ImageViewBuilder imgViewBuilder(device);
-        std::vector<VkImage> imgs = chain.getImages();
+        std::vector<VkImage> imgs = swapChain.getImages();
         std::vector<ImageView> imgViews(imgs.size());
         int32_t imgSize = imgs.size();
         VkImageSubresourceRange range{};
@@ -100,7 +135,7 @@ private:
         for (size_t i = 0; i <imgSize; i++) {
             imgViews[i] = imgViewBuilder.setImage(imgs[i])
                 .setImageViewType(VK_IMAGE_VIEW_TYPE_2D)
-                .setFormat(chain.getSurfaceFormat().format)
+                .setFormat(swapChain.getSurfaceFormat().format)
                 .setComponentMapping(VkComponentMapping(VK_COMPONENT_SWIZZLE_IDENTITY,
                     VK_COMPONENT_SWIZZLE_IDENTITY,
                     VK_COMPONENT_SWIZZLE_IDENTITY,
@@ -123,23 +158,9 @@ private:
             .setStageFlags(VK_SHADER_STAGE_FRAGMENT_BIT)
             .build();
 
-        PipelineBuilder pipelineBuilder;
-
-        VkViewport viewport{};
-        viewport.x = 0.0f;
-        viewport.y = 0.0f;
-        viewport.width = (float)chain.getExtent().width;
-        viewport.height = (float)chain.getExtent().height;
-        viewport.minDepth = 0.0f;
-        viewport.maxDepth = 1.0f;
-
-        VkRect2D scissor{};
-        scissor.offset = { 0, 0 };
-        scissor.extent = chain.getExtent();
-
-        PipelineLayout layout = PipelineLayoutBuilder(device).build();
+        //build render pass
         VkAttachmentDescription colorAttachment{};
-        colorAttachment.format = chain.getSurfaceFormat().format;
+        colorAttachment.format = swapChain.getSurfaceFormat().format;
         colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
         colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
         colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -156,10 +177,36 @@ private:
         subpass.colorAttachmentCount = 1;
         subpass.pColorAttachments = &colorAttachmentRef;
 
-        RenderPass pass = RenderPassBuilder(device).setAttachments({ colorAttachment })
+        VkSubpassDependency dependency{};
+        dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+        dependency.dstSubpass = 0;
+        dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        dependency.srcAccessMask = 0;
+        dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+        renderPass = RenderPassBuilder(device).setAttachments({ colorAttachment })
             .setSubpassDescriptions({ subpass })
+            .setSubpassDependencies({ dependency })
             .build();
-        Pipeline pipeline = pipelineBuilder.setShaders({ vertex, frag })
+
+        //build pipline
+        PipelineBuilder pipelineBuilder;
+
+        VkViewport viewport{};
+        viewport.x = 0.0f;
+        viewport.y = 0.0f;
+        viewport.width = (float)swapChain.getExtent().width;
+        viewport.height = (float)swapChain.getExtent().height;
+        viewport.minDepth = 0.0f;
+        viewport.maxDepth = 1.0f;
+
+        VkRect2D scissor{};
+        scissor.offset = { 0, 0 };
+        scissor.extent = swapChain.getExtent();
+
+        PipelineLayout layout = PipelineLayoutBuilder(device).build();
+
+        pipeline = pipelineBuilder.setShaders({ vertex, frag })
             .setDynamicStates({ VK_DYNAMIC_STATE_VIEWPORT,VK_DYNAMIC_STATE_SCISSOR })
             .setPrimitiveTopology(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST)
             .setPrimitiveRestartEnable(VK_FALSE)
@@ -187,29 +234,129 @@ private:
             //layout
             .setPipelineLayout(layout)
             //renderpass
-            .setRenderPass(pass)
+            .setRenderPass(renderPass)
             .build();
 
-        //framebuffers
-        std::vector<FrameBuffer> swapChainFramebuffers;
+        //create framebuffers
         FrameBufferBuilder fbBuilder(device);
-        for (size_t i = 0; i < chain.getImages().size(); i++) {
-            fbBuilder.setRenderPass(pass)
-                .setWidth(chain.getExtent().width)
-                .setHeight(chain.getExtent().height)
+        for (size_t i = 0; i < swapChain.getImages().size(); i++) {
+            fbBuilder.setRenderPass(renderPass)
+                .setWidth(swapChain.getExtent().width)
+                .setHeight(swapChain.getExtent().height)
                 .setLayers(1)
                 .setAttachments(imgViews);
             swapChainFramebuffers.push_back(fbBuilder.build());
         }
+
+        //create command buffers
+        QueueFamilyIndices queueFamilyIndices = phyDevice.findQueueFamilies(QUEUE_GRAPHICS_BIT | QUEUE_PRESENT_BIT, surface);
+        CommandPoolBuilder poolBuilder(device);
+        poolBuilder.setCommandPoolCreateFlags(VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT);
+        poolBuilder.setQueueFamilyIndex(queueFamilyIndices.getIndex(QUEUE_GRAPHICS_BIT));
+        pool = poolBuilder.build();
+
+        cmdBuffer = pool.allocBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY);
+
+
+        //createSemaphores
+        SemaphoreBuilder semaphoreBuilder(device);
+        imageAvailableSemaphore = semaphoreBuilder.build();
+        renderFinishedSemaphore = semaphoreBuilder.build();
+        inFlightFence = FenceBuilder(device)
+                        .setFenceCreateFlags(VK_FENCE_CREATE_SIGNALED_BIT)
+                        .build();
+
+    }
+
+    void recordCommandBuffer(uint32_t imageIndex) {
+        VkCommandBufferBeginInfo beginInfo{};
+        beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+        beginInfo.flags = 0; // Optional
+        beginInfo.pInheritanceInfo = nullptr; // Optional
+        cmdBuffer.begin(beginInfo);
+       
+        VkRenderPassBeginInfo renderPassInfo{};
+        renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+        renderPassInfo.renderPass = renderPass.value();
+        renderPassInfo.framebuffer = swapChainFramebuffers[imageIndex].value();
+        renderPassInfo.renderArea.offset = { 0, 0 };
+        renderPassInfo.renderArea.extent = swapChain.getExtent();
+        VkClearValue clearColor = { {{0.0f, 0.0f, 0.0f, 1.0f}} };
+        renderPassInfo.clearValueCount = 1;
+        renderPassInfo.pClearValues = &clearColor;
+
+        cmdBuffer.beginRenderPass(renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+
+        cmdBuffer.bindPipeline(pipeline, VK_PIPELINE_BIND_POINT_GRAPHICS);
+        
+        VkExtent2D ext = swapChain.getExtent();
+        VkViewport viewport{.x = 0.0f, .y = 0.0f ,.width = static_cast<float>(ext.width),
+        .height = static_cast<float>(ext.height), .minDepth = 0.0f, .maxDepth = 1.0f};
+        cmdBuffer.setViewPort(viewport);
+       
+        VkRect2D scissor{};
+        scissor.offset = { 0, 0 };
+        scissor.extent = ext;
+        cmdBuffer.setScissor(scissor);
+
+        cmdBuffer.draw(3, 1, 0, 0); //similar as glDrawBuffers
+
+        cmdBuffer.endRenderPass();
+        cmdBuffer.end();
+    }
+
+    void drawFrame() {
+        inFlightFence.wait(UINT64_MAX);
+        inFlightFence.reset();
+        uint32_t imageIndex = swapChain.acquireNextImageKHR(UINT64_MAX, imageAvailableSemaphore, Fence());
+        cmdBuffer.reset();
+        recordCommandBuffer(imageIndex);
+
+        DeviceQueue queue = device.getDeviceQueue(QUEUE_GRAPHICS_BIT, 0);
+        VkSubmitInfo submitInfo{};
+        submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+        VkSemaphore waitSemaphores[] = { imageAvailableSemaphore.value()};
+        VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
+        submitInfo.waitSemaphoreCount = 1;
+        submitInfo.pWaitSemaphores = waitSemaphores;
+        submitInfo.pWaitDstStageMask = waitStages;
+        submitInfo.commandBufferCount = 1;
+        submitInfo.pCommandBuffers = &cmdBuffer.value();
+
+        VkSemaphore signalSemaphores[] = { renderFinishedSemaphore.value()};
+        submitInfo.signalSemaphoreCount = 1;
+        submitInfo.pSignalSemaphores = signalSemaphores;
+        queue.submit(submitInfo, inFlightFence);
+
+        VkPresentInfoKHR presentInfo{};
+        presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+        presentInfo.waitSemaphoreCount = 1;
+        presentInfo.pWaitSemaphores = signalSemaphores;
+        VkSwapchainKHR swapChains[] = { swapChain.value()};
+        presentInfo.swapchainCount = 1;
+        presentInfo.pSwapchains = swapChains;
+        presentInfo.pImageIndices = &imageIndex;
+        presentInfo.pResults = nullptr; // Optional
+
+        DeviceQueue presentQueue = device.getDeviceQueue(QUEUE_PRESENT_BIT);
+        presentQueue.presentKHR(presentInfo);
+
     }
 
     void mainLoop() {
         while (!glfwWindowShouldClose(window)) {
             glfwPollEvents();
+            drawFrame();
         }
     }
 
     void cleanup() {
+        imageAvailableSemaphore.cleanUp();
+        renderFinishedSemaphore.cleanUp();
+        inFlightFence.cleanUp();
+
+        pool.cleanUp();
+
         glfwDestroyWindow(window);
         glfwTerminate();
     }

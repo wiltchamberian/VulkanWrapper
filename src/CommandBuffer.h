@@ -5,9 +5,12 @@
 #include "vulkan/vulkan.h"
 #include "Pipeline.h"
 
-class CommandBuffer {
+class VULKAN_WRAPPER_API CommandBuffer {
 public:
 	friend class CommandPool;
+	VkCommandBuffer& value() {
+		return buf;
+	}
 	CommandBuffer& begin(VkCommandBufferBeginInfo info);
 	CommandBuffer& begin(VkCommandBufferUsageFlags flags, const VkCommandBufferInheritanceInfo* pInheritanceInfo = nullptr);
 	CommandBuffer& beginRenderPass(VkRenderPassBeginInfo info, VkSubpassContents content);

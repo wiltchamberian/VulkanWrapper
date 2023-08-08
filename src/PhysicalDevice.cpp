@@ -8,7 +8,7 @@
 #include "Tools.h"
 
 bool PhysicalDevice::isDeviceSuitable(VkQueueFlags flags, Surface surface, const std::vector<std::string>& extensions) {
-    QueueFamilyIndices indices = findQueueFamilies(flags, surface);
+    indices = findQueueFamilies(flags, surface);
     bool extensionsSupported = checkDeviceExtensionSupport(extensions);
     bool swapChainSupported = false;
     if (extensionsSupported) {
@@ -21,8 +21,10 @@ bool PhysicalDevice::isDeviceSuitable(VkQueueFlags flags, Surface surface, const
 
 SwapChainSupportDetails PhysicalDevice::querySwapChainSupport(Surface surface) {
     SwapChainSupportDetails details;
-
-    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(dev, surface.value(), &details.capabilities.value());
+    
+    VkSurfaceCapabilitiesKHR cap;
+    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(dev, surface.value(), &cap);
+    details.capabilities = cap;
 
     uint32_t formatCount = 0;
     vkGetPhysicalDeviceSurfaceFormatsKHR(dev, surface.value(), &formatCount, nullptr);
@@ -213,6 +215,9 @@ LogicalDevice PhysicalDevice::createLogicalDevice(VkQueueFlags flags, VkPhysical
     logicalDevice.indices = indices;
     if (vkCreateDevice(dev, &createInfo, nullptr, &logicalDevice.value()) != VK_SUCCESS) {
         throw std::runtime_error("failed to create logical device!");
+    }
+    else {
+        logicalDevice.physical_device() = *this;
     }
 
     return logicalDevice;

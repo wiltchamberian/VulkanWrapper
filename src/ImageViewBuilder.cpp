@@ -14,10 +14,13 @@ ImageView ImageViewBuilder::build() {
 	ci.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
 	ci.pNext = nullptr;
 	ImageView imageview;
-	imageview.dev = dev;
 	if (vkCreateImageView(dev.value(), &ci, nullptr, &imageview.value()) != VK_SUCCESS) {
 		throw std::runtime_error("failed to create image views!");
 	}
+	else {
+		imageview.dev = dev;
+	}
+	return imageview;
 }
 
 ImageViewBuilder& ImageViewBuilder::setImageViewCreateFlags(VkImageViewCreateFlags flags) {

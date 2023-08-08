@@ -18,6 +18,12 @@
 #include "FrameBuffer.h"
 #include "ImageViewBuilder.h"
 #include "Tools.h"
+#include "SemaphoreBuilder.h"
+#include "FenceBuilder.h"
+#include "CommandPoolBuilder.h"
+#include "CommandPool.h"
+#include "CommandBuffer.h"
+
 
 class VULKAN_WRAPPER_API VulkanWrapper {
 public:

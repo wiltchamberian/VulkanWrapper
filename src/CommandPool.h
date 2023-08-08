@@ -7,7 +7,7 @@
 
 class CommandBuffer;
 
-class CommandPool {
+class VULKAN_WRAPPER_API CommandPool {
 public:
 	friend class CommandPoolBuilder;
 	VkCommandPool& value() { return pool;  }

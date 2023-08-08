@@ -25,10 +25,11 @@ public:
 	VkPhysicalDevice& value() {
 		return dev;
 	}
+
+	QueueFamilyIndices findQueueFamilies(VkQueueFlags flags, Surface surface);
 private:
 	VkPhysicalDevice dev = VK_NULL_HANDLE;
 	QueueFamilyIndices indices;
-	QueueFamilyIndices findQueueFamilies(VkQueueFlags flags, Surface surface);
 	bool checkDeviceExtensionSupport(const std::vector<std::string>& extensions);
 	bool checkSwapChainSupport(const SwapChainSupportDetails& details, Surface surface);
 };

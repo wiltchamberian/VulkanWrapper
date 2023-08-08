@@ -1,11 +1,13 @@
 #include "SurfaceBuilder.h"
 #include <stdexcept>
 
-SurfaceBuilder::SurfaceBuilder(const VulkanInstance& instance)
+SurfaceBuilder::SurfaceBuilder(const VulkanInstance& instance, HINSTANCE hInstance, HWND hwnd)
 :khr{}
 ,instance(instance)
 {
 	khr.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
+	khr.hinstance = hInstance;
+	khr.hwnd = hwnd;
 }
 
 Surface SurfaceBuilder::build() {

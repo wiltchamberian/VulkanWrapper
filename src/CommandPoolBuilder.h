@@ -7,7 +7,7 @@
 
 class CommandPool;
 
-class CommandPoolBuilder {
+class VULKAN_WRAPPER_API CommandPoolBuilder {
 public:
 	CommandPoolBuilder(LogicalDevice dev);
 	CommandPool build();

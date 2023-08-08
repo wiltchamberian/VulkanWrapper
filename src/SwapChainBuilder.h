@@ -23,12 +23,12 @@ public:
     SwapChainBuilder& setCreateFlags(VkSwapchainCreateFlagsKHR flgs);
     SwapChainBuilder& setMinImageCount(uint32_t imageCount);
     SwapChainBuilder& setDefaultMinImageCount();
-    SwapChainBuilder& setExtent2D(VkExtent2D extent, VkExtent2D defaultExtent);
+    SwapChainBuilder& setImageExtent(VkExtent2D extent, VkExtent2D defaultExtent);
     SwapChainBuilder& setImageArrayLayers(uint32_t layers);
     SwapChainBuilder& setImageUsageFlags(VkImageUsageFlags flags);
-    SwapChainBuilder& setSharingMode(VkSharingMode mode);
+    SwapChainBuilder& setImageSharingMode(VkSharingMode mode);
     SwapChainBuilder& setQueueFamilyIndices(const std::vector<uint32_t>& indices);
-    SwapChainBuilder& setSurfaceTransform(VkSurfaceTransformFlagBitsKHR bits);
+    SwapChainBuilder& setPreTransform(VkSurfaceTransformFlagBitsKHR bits);
     SwapChainBuilder& setCompositeAlpha(VkCompositeAlphaFlagBitsKHR flags);
     SwapChainBuilder& setPresentMode(VkPresentModeKHR presentMode, VkPresentModeKHR defaultMode);
     [[deprecated]]
@@ -45,7 +45,7 @@ private:
     std::optional<uint32_t>          minImageCount;
     std::optional<VkSurfaceFormatKHR>surfaceFormat;
     VkExtent2D                       imageExtent;
-    uint32_t                         imageArrayLayers;
+    uint32_t                         imageArrayLayers = 0;
     VkImageUsageFlags                imageUsage;
     VkSharingMode                    imageSharingMode;
     std::vector<uint32_t>            queueFamilyIndices;

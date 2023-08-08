@@ -4,8 +4,8 @@
 SemaphoreBuilder::SemaphoreBuilder(LogicalDevice d)
 :dev(d)
 {
+	ci = {};
 	ci.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-	ci.pNext = nullptr;
 }
 
 Semaphore SemaphoreBuilder::build() {

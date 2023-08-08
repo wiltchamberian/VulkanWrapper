@@ -12,10 +12,12 @@ public:
 	VkFence& value() { return fence; }
 	const VkFence& value() const { return fence; }
 	const VkFence* data() const { return &fence;  }
+	void reset();
+	void wait(uint64_t timeout);
 	void cleanUp();
 private:
 	LogicalDevice dev;
-	VkFence fence;
+	VkFence fence = VK_NULL_HANDLE;
 };
 
 class VULKAN_WRAPPER_API FenceGroup {
@@ -25,6 +27,8 @@ public:
 	const VkFence* data() const { return fences.data(); } 
 	size_t size() const { return  fences.size(); }
 	void cleanUp();
+	void wait(VkBool32 waitAll, uint64_t timeout);
+	void reset();
 private:
 	LogicalDevice dev;
 	std::vector<VkFence> fences;

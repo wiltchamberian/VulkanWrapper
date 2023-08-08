@@ -17,27 +17,26 @@ VulkanInstance InstanceBuilder::build() {
     createInfo.pApplicationInfo = &appInfo;
 
     createInfo.enabledExtensionCount = extensions.size();
-    char** ext = new char*[extensions.size()];
-    for (int i = 0;i < extensions.size();++i) {
-        ext[i] = new char[extensions[i].size()+1];
-        strcpy(ext[i], extensions[i].c_str());
-        ext[i][extensions[i].size()] = '\0';
+    if (createInfo.enabledExtensionCount > 0) {
+        char** ext = new char* [createInfo.enabledExtensionCount];
+        for (int i = 0; i < extensions.size(); ++i) {
+            ext[i] = const_cast<char*>(extensions[i].c_str());
+        }
+        createInfo.ppEnabledExtensionNames = ext;
     }
-    createInfo.ppEnabledExtensionNames = ext;
-
+    
     createInfo.enabledLayerCount = layers.size();
-    char** ppLayers = new char* [layers.size()];
-    for (int i = 0; i < layers.size(); ++i) {
-        ppLayers[i] = (char*)layers[i].c_str();
+    if (createInfo.enabledLayerCount > 0) {
+        char** ppLayers = new char* [createInfo.enabledLayerCount];
+        for (int i = 0; i < layers.size(); ++i) {
+            ppLayers[i] = const_cast<char*>(layers[i].c_str());
+        }
+        createInfo.ppEnabledLayerNames = ppLayers;
     }
-
-
+    
     VkResult suc = vkCreateInstance(&createInfo, nullptr, &(vk.value()));
-    for (int i = 0;i < extensions.size();++i) {
-        delete ext[i];
-    }
-    delete[] ext;
-    delete[] ppLayers;
+    delete[] createInfo.ppEnabledExtensionNames;
+    delete[] createInfo.ppEnabledLayerNames;
     if (suc != VK_SUCCESS) {
         throw std::runtime_error("failed to create instance!");
     }

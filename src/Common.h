@@ -18,6 +18,26 @@ public:
 		}
 		return true;
 	}
+	uint32_t getIndex(VkQueueFlags flags) {
+		const int queueFlagsBitsNum = 8;
+		for (int i = 0; i < queueFlagsBitsNum; ++i) {
+			if ((1 << i) & flags) {
+				if (indexMap.size() >= i + 1 && indexMap[i].has_value()) {
+					return indexMap[i].value();
+				}
+			}
+		}
+		return -1;
+	}
+	std::vector<uint32_t> exportIndices() {
+		std::vector<uint32_t> vec;
+		for (uint32_t i = 0; i < indexMap.size(); ++i) {
+			if (indexMap[i].has_value()) {
+				vec.push_back(indexMap[i].value());
+			}
+		}
+		return vec;
+	}
 	std::vector<std::optional<uint32_t>> indexMap;
 };
 

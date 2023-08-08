@@ -11,7 +11,9 @@ SwapChainBuilder::SwapChainBuilder(LogicalDevice& dev, Surface& surf)
 
 SwapChainSupportDetails& SwapChainBuilder::querySwapChainSupport() {
 	if (logicalDev.physical_device().isValid() && surface.isValid()) {
-		vkGetPhysicalDeviceSurfaceCapabilitiesKHR(logicalDev.physical_device().value(), surface.value(), &details.capabilities.value());
+		VkSurfaceCapabilitiesKHR cap;
+		vkGetPhysicalDeviceSurfaceCapabilitiesKHR(logicalDev.physical_device().value(), surface.value(), &cap);
+		details.capabilities = cap;
 
 		uint32_t formatCount = 0;
 		vkGetPhysicalDeviceSurfaceFormatsKHR(logicalDev.physical_device().value(), surface.value(), &formatCount, nullptr);
@@ -48,6 +50,9 @@ SwapChain SwapChainBuilder::build() {
 			return chain;
 		}
 	}
+	else {
+		ci.minImageCount = minImageCount.value();
+	}
 	if (surfaceFormat.has_value()) {
 		ci.imageFormat = surfaceFormat.value().format;
 		ci.imageColorSpace = surfaceFormat.value().colorSpace;
@@ -74,6 +79,7 @@ SwapChain SwapChainBuilder::build() {
 	else {
 		chain.surfaceFormat = surfaceFormat.value();
 		chain.extent = ci.imageExtent;
+		chain.dev = logicalDev;
 	}
 
 	return chain;
@@ -141,7 +147,7 @@ SwapChainBuilder& SwapChainBuilder::setDefaultMinImageCount() {
 	return *this;
 }
 
-SwapChainBuilder& SwapChainBuilder::setExtent2D(VkExtent2D extent, VkExtent2D defaultExtent) {
+SwapChainBuilder& SwapChainBuilder::setImageExtent(VkExtent2D extent, VkExtent2D defaultExtent) {
 	imageExtent = defaultExtent;
 	if (logicalDev.isValid() && logicalDev.physical_device().isValid() && surface.isValid()) {
 		VkSurfaceCapabilitiesKHR cap = logicalDev.physical_device().queryPhysicalDeviceSurfaceCapabilities(surface);
@@ -165,7 +171,7 @@ SwapChainBuilder& SwapChainBuilder::setImageUsageFlags(VkImageUsageFlags flags) 
 	return *this;
 }
 
-SwapChainBuilder& SwapChainBuilder::setSharingMode(VkSharingMode mode) {
+SwapChainBuilder& SwapChainBuilder::setImageSharingMode(VkSharingMode mode) {
 	imageSharingMode = mode;
 	return *this;
 }
@@ -175,7 +181,7 @@ SwapChainBuilder& SwapChainBuilder::setQueueFamilyIndices(const std::vector<uint
 	return *this;
 }
 
-SwapChainBuilder& SwapChainBuilder::setSurfaceTransform(VkSurfaceTransformFlagBitsKHR bits) {
+SwapChainBuilder& SwapChainBuilder::setPreTransform(VkSurfaceTransformFlagBitsKHR bits) {
 	preTransform = bits;
 	return *this;
 }
