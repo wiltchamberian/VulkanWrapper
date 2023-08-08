@@ -3,11 +3,12 @@
 #include "PipelineBuilder.h"
 #include "Tools.h"
 
-PipelineBuilder::PipelineBuilder()
+PipelineBuilder::PipelineBuilder(const LogicalDevice& d)
 :depthBiasConstantFactor(0.0)
 ,depthBiasClamp(0.0)
 ,depthBiasSlopeFactor(0.0)
 ,lineWidth(0.0)
+,dev(d)
 {
 
 }

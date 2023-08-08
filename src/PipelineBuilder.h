@@ -15,7 +15,7 @@
 
 class VULKAN_WRAPPER_API PipelineBuilder {
 public:
-	PipelineBuilder();
+	PipelineBuilder(const LogicalDevice& dev);
 	Pipeline build();
 	PipelineBuilder& setShaders(const std::vector<Shader>& shaders);
 

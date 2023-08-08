@@ -20,6 +20,9 @@ RenderPass RenderPassBuilder::build() {
 		pass.value() = VK_NULL_HANDLE;
 		throw std::runtime_error("failed to create render pass!");
 	}
+	else {
+		pass.dev = dev;
+	}
 	return pass;
 }
 

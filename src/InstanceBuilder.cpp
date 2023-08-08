@@ -33,6 +33,10 @@ VulkanInstance InstanceBuilder::build() {
         }
         createInfo.ppEnabledLayerNames = ppLayers;
     }
+
+    if (debugInfo.sType == VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT) {
+        createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*)(&debugInfo);
+    }
     
     VkResult suc = vkCreateInstance(&createInfo, nullptr, &(vk.value()));
     delete[] createInfo.ppEnabledExtensionNames;
@@ -71,5 +75,10 @@ InstanceBuilder& InstanceBuilder::setExtensions(const std::vector<std::string>& 
 
 InstanceBuilder& InstanceBuilder::setLayers(const std::vector<std::string>& layers) {
     this->layers = layers;
+    return *this;
+}
+
+InstanceBuilder& InstanceBuilder::setDebugInfo(const VkDebugUtilsMessengerCreateInfoEXT& debugCreateInfo) {
+    this->debugInfo = debugCreateInfo;
     return *this;
 }

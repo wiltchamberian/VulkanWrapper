@@ -15,6 +15,7 @@ public:
 	InstanceBuilder& setEngineName(const std::string& str);
 	InstanceBuilder& setExtensions(const std::vector<std::string>& extensions);
 	InstanceBuilder& setLayers(const std::vector<std::string>& layers);
+	InstanceBuilder& setDebugInfo(const VkDebugUtilsMessengerCreateInfoEXT& debugCreateInfo);
 private:
 	uint32_t appVersion = VK_MAKE_VERSION(1,0,0);
 	std::string appName = "application";
@@ -22,6 +23,8 @@ private:
 	std::string engineName = "engine";
 	std::vector<std::string> extensions;
 	std::vector<std::string> layers;
+
+	VkDebugUtilsMessengerCreateInfoEXT debugInfo{};
 
 };
 

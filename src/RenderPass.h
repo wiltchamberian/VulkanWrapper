@@ -6,6 +6,7 @@
 
 class VULKAN_WRAPPER_API RenderPass {
 public:
+	friend class RenderPassBuilder;
 	void cleanUp();
 	VkRenderPass& value() { return pass; }
 private:

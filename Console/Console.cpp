@@ -18,6 +18,35 @@
 #include <cstdlib>
 #include <algorithm>
 
+#include <Windows.h>
+
+std::string GetExecutablePath() {
+    WCHAR buffer[MAX_PATH];
+    GetModuleFileName(nullptr, buffer, MAX_PATH);
+    
+    int length = WideCharToMultiByte(CP_UTF8, 0, buffer, -1, nullptr, 0, nullptr, nullptr);
+    if (length == 0) {
+        // Error handling
+        return "";
+    }
+
+    char* buf = new char[length];
+    WideCharToMultiByte(CP_UTF8, 0, buffer, -1, buf, length, nullptr, nullptr);
+
+    std::string result(buf);
+    delete[] buf;
+
+    size_t siz = result.size();
+    for (int i = 0; i < siz; ++i) {
+        if (result[siz - i - 1] == '\\') {
+            result.resize(siz - i);
+            break;
+        }
+    }
+
+    return result;
+}
+
 std::vector<std::string> getExtensions() {
     uint32_t glfwExtensionCount = 0;
     const char** glfwExtensions;
@@ -47,6 +76,10 @@ VkExtent2D getExtent(GLFWwindow* window, VkSurfaceCapabilitiesKHR capabilities){
     return actualExtent;
 }
 
+VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData) {
+    std::cerr << "validation layer: " << pCallbackData->pMessage << std::endl;
+    return VK_FALSE;
+}
 
 class HelloTriangleApplication {
 public:
@@ -90,7 +123,13 @@ private:
     }
 
     void initVulkan() { 
-        instance = InstanceBuilder().setExtensions(getExtensions()).build();
+        VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo{};
+        debugCreateInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+        debugCreateInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+        debugCreateInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+        debugCreateInfo.pfnUserCallback = debugCallback;
+        instance = InstanceBuilder().setExtensions(getExtensions()).
+            setDebugInfo(debugCreateInfo).build();
         hInstance = GetModuleHandle(nullptr);
         hwnd = glfwGetWin32Window(window);
         Surface surface = SurfaceBuilder(instance,hInstance, hwnd).build();
@@ -145,8 +184,9 @@ private:
         }
 
         //create shaders
-        std::string vertexShaderPath = "./shaders/test/shader_vert.spv";
-        std::string fragShaderPath = "./shaders/test/shader_frag.spv";
+        std::string exePath = GetExecutablePath();
+        std::string vertexShaderPath = exePath + "../rc/shaders/test/shader_vert.spv";
+        std::string fragShaderPath = exePath + "../rc/shaders/test/shader_frag.spv";
         auto vertexCode = help::readFile(vertexShaderPath);
         auto fragCode = help::readFile(fragShaderPath);
         Shader vertex = ShaderStageBuilder(device).setShaderCode(vertexCode)
@@ -190,7 +230,7 @@ private:
             .build();
 
         //build pipline
-        PipelineBuilder pipelineBuilder;
+        PipelineBuilder pipelineBuilder(device);
 
         VkViewport viewport{};
         viewport.x = 0.0f;
