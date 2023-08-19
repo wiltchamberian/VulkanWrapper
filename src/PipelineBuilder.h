@@ -114,7 +114,7 @@ private:
 	float                                      lineWidth;
 
 	//VkPipelineMultisampleStateCreateInfo
-	VkPipelineMultisampleStateCreateFlags    multiSampleStateCreateFlags;
+	VkPipelineMultisampleStateCreateFlags    multiSampleStateCreateFlags = 0;
 	VkSampleCountFlagBits                    rasterizationSamples;
 	VkBool32                                 sampleShadingEnable;
 	float                                    minSampleShading;

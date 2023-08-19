@@ -130,6 +130,17 @@ private:
         debugCreateInfo.pfnUserCallback = debugCallback;
         instance = InstanceBuilder().setExtensions(getExtensions()).
             setDebugInfo(debugCreateInfo).build();
+
+        //debug related
+#if 0
+        VkDebugReportCallbackCreateInfoEXT debug_create{};
+        debug_create.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
+        debug_create.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT;
+        debug_create.pfnCallback = nullptr;
+        VkResult debugReport = vkCreateDebugReportCallbackEXT(instance.value(), &debug_create, nullptr, nullptr);
+#endif 
+
+        //windows
         hInstance = GetModuleHandle(nullptr);
         hwnd = glfwGetWin32Window(window);
         Surface surface = SurfaceBuilder(instance,hInstance, hwnd).build();
@@ -223,7 +234,7 @@ private:
         dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
         dependency.srcAccessMask = 0;
         dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-        dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+        dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
         renderPass = RenderPassBuilder(device).setAttachments({ colorAttachment })
             .setSubpassDescriptions({ subpass })
             .setSubpassDependencies({ dependency })
@@ -250,6 +261,7 @@ private:
             .setDynamicStates({ VK_DYNAMIC_STATE_VIEWPORT,VK_DYNAMIC_STATE_SCISSOR })
             .setPrimitiveTopology(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST)
             .setPrimitiveRestartEnable(VK_FALSE)
+            .setAssemblyStateCreateFlags(0)
             .setViewports({ viewport })
             .setScissors({scissor})
             //rasterization
@@ -296,7 +308,7 @@ private:
         pool = poolBuilder.build();
 
         cmdBuffer = pool.allocBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY);
-
+        recordCommandBuffer(0);
 
         //createSemaphores
         SemaphoreBuilder semaphoreBuilder(device);
@@ -311,7 +323,7 @@ private:
     void recordCommandBuffer(uint32_t imageIndex) {
         VkCommandBufferBeginInfo beginInfo{};
         beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-        beginInfo.flags = 0; // Optional
+        beginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT; // Optional
         beginInfo.pInheritanceInfo = nullptr; // Optional
         cmdBuffer.begin(beginInfo);
        

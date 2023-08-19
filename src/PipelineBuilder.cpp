@@ -4,11 +4,39 @@
 #include "Tools.h"
 
 PipelineBuilder::PipelineBuilder(const LogicalDevice& d)
-:depthBiasConstantFactor(0.0)
-,depthBiasClamp(0.0)
-,depthBiasSlopeFactor(0.0)
-,lineWidth(0.0)
-,dev(d)
+: dev(d)
+//VkPipelineInputAssemblyStateCreateInfo
+, assemblyStateCreateFlags(0)
+, topology(VK_PRIMITIVE_TOPOLOGY_POINT_LIST)
+, primitiveRestartEnable(VK_FALSE)
+//VkPipelineViewportStateCreateInfo
+, viewportStateCreateFlags(0)
+//VkPipelineRasterizationStateCreateInfo
+, rasterizationStateCreateInfoFlags(0)
+, depthClampEnable(VK_FALSE)
+, rasterizerDiscardEnable(VK_FALSE)
+, polygonMode(VK_POLYGON_MODE_FILL)
+, cullModeFlags(0)
+, frontFace(VK_FRONT_FACE_COUNTER_CLOCKWISE)
+, depthBiasEnable(VK_FALSE)
+, depthBiasConstantFactor(0.0)
+, depthBiasClamp(0.0)
+, depthBiasSlopeFactor(0.0)
+, lineWidth(1.0)
+, multiSampleStateCreateFlags(0)
+, rasterizationSamples(VK_SAMPLE_COUNT_1_BIT)
+, sampleShadingEnable(VK_FALSE)
+, minSampleShading(1.0)
+, pSampleMask(nullptr)
+, alphaToCoverageEnable(VK_FALSE)
+, alphaToOneEnable(VK_FALSE)
+//VkPipelineColorBlendStateCreateInfo
+, colorBlendStateCreateflags(0)
+, colorBlendLogicOpEnable(VK_FALSE)
+, colorBlendlogicOp(VK_LOGIC_OP_CLEAR)
+, colorBlendConstants{ 0.0,0.0,0.0,0.0 }
+//VkPipelineDynamicStateCreateInfo
+, dynamicStateCreateFlags(0)
 {
 
 }
@@ -47,6 +75,7 @@ Pipeline PipelineBuilder::build() {
     inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
     inputAssembly.topology = topology;
     inputAssembly.primitiveRestartEnable = primitiveRestartEnable;
+    inputAssembly.flags = assemblyStateCreateFlags;
 
     VkPipelineViewportStateCreateInfo viewportState{};
     viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
