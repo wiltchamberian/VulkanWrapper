@@ -10,6 +10,6 @@ public:
 	void cleanUp();
 private:
 	LogicalDevice dev;
-	VkPipeline pipeline;
+	VkPipeline pipeline = VK_NULL_HANDLE;
 };
 

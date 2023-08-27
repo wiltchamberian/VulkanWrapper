@@ -14,6 +14,7 @@ class Surface;
 
 class VULKAN_WRAPPER_API VulkanInstance {
 public:
+	friend class InstanceBuilder;
 	bool isValid() {
 		return vk != VK_NULL_HANDLE;
 	}
@@ -25,6 +26,7 @@ public:
 private:
 	PhysicalDeviceFilter filter = nullptr;
 	VkInstance vk = VK_NULL_HANDLE;
+	VkDebugUtilsMessengerEXT debugMessenger = VK_NULL_HANDLE;
 };
 
 #endif

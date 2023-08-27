@@ -11,9 +11,9 @@ public:
 	VkCommandBuffer& value() {
 		return buf;
 	}
-	CommandBuffer& begin(VkCommandBufferBeginInfo info);
+	CommandBuffer& begin(const VkCommandBufferBeginInfo& info);
 	CommandBuffer& begin(VkCommandBufferUsageFlags flags, const VkCommandBufferInheritanceInfo* pInheritanceInfo = nullptr);
-	CommandBuffer& beginRenderPass(VkRenderPassBeginInfo info, VkSubpassContents content);
+	CommandBuffer& beginRenderPass(const VkRenderPassBeginInfo& info, VkSubpassContents content);
 	CommandBuffer& bindPipeline(Pipeline& pipeline, VkPipelineBindPoint bindPoint);
 	CommandBuffer& setViewPort(uint32_t firstViewport,uint32_t viewportCount,const VkViewport* pViewports);
 	CommandBuffer& setViewPort(VkViewport& pViewport);

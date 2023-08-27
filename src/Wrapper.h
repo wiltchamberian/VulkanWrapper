@@ -23,6 +23,7 @@
 #include "CommandPoolBuilder.h"
 #include "CommandPool.h"
 #include "CommandBuffer.h"
+#include "DebugMessengerBuilder.h"
 
 
 class VULKAN_WRAPPER_API VulkanWrapper {

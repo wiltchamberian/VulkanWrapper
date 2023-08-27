@@ -3,6 +3,8 @@
 
 ShaderStageBuilder::ShaderStageBuilder(LogicalDevice d)
     :dev(d)
+    ,pipelineStageCreateFlags(VK_PIPELINE_SHADER_STAGE_CREATE_ALLOW_VARYING_SUBGROUP_SIZE_BIT)
+    ,stageFlags(VK_SHADER_STAGE_VERTEX_BIT)
 {
 }
 
@@ -10,9 +12,11 @@ Shader ShaderStageBuilder::build() {
     VkShaderModule mod = createShaderModule(code);
     Shader shader;
     shader.name = name;
+    shader.funcName = funcName;
     shader.module = mod;
     shader.stage = stageFlags;
     shader.flags = pipelineStageCreateFlags;
+    shader.dev = dev;
     return shader;
 }
 
@@ -32,7 +36,7 @@ ShaderStageBuilder& ShaderStageBuilder::setFuncName(const char* name) {
 }
 
 ShaderStageBuilder& ShaderStageBuilder::setFuncName(const std::string& name) {
-    
+    this->funcName = name;
     return *this;
 
 }

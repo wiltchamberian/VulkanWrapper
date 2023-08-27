@@ -98,6 +98,7 @@ private:
     HWND hwnd;
 
     VulkanInstance instance;
+    DebugMessenger dbMessenger;
     PhysicalDevice phyDevice;
     LogicalDevice  device;
     SwapChain swapChain;
@@ -132,6 +133,8 @@ private:
             setDebugInfo(debugCreateInfo).build();
 
         //debug related
+        DebugMessengerBuilder dbBuilder(instance);
+        dbMessenger = dbBuilder.build();
 #if 0
         VkDebugReportCallbackCreateInfoEXT debug_create{};
         debug_create.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
@@ -257,11 +260,17 @@ private:
 
         PipelineLayout layout = PipelineLayoutBuilder(device).build();
 
+        VkPipelineColorBlendAttachmentState colorBlendAttachment{};
+        colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+        colorBlendAttachment.blendEnable = VK_FALSE;
+
         pipeline = pipelineBuilder.setShaders({ vertex, frag })
             .setDynamicStates({ VK_DYNAMIC_STATE_VIEWPORT,VK_DYNAMIC_STATE_SCISSOR })
+            //VkPipelineInputAssemblyStateCreateInfo
             .setPrimitiveTopology(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST)
             .setPrimitiveRestartEnable(VK_FALSE)
             .setAssemblyStateCreateFlags(0)
+            //viewportStateCreateInfo
             .setViewports({ viewport })
             .setScissors({scissor})
             //rasterization
@@ -280,6 +289,7 @@ private:
             .setAlphaToCoverageEnable(VK_FALSE)
             .setAlphaToOneEnable(VK_FALSE)
             //ColorBlendState
+            .setColorBlendAttachments({ colorBlendAttachment })
             .setColorBlendLogicOpEnable(VK_FALSE)
             .setColorBlendLogicOp(VK_LOGIC_OP_COPY)
             .setColorBlendConstants(0,0,0,0)
@@ -296,7 +306,7 @@ private:
                 .setWidth(swapChain.getExtent().width)
                 .setHeight(swapChain.getExtent().height)
                 .setLayers(1)
-                .setAttachments(imgViews);
+                .setAttachments({ imgViews[i] });
             swapChainFramebuffers.push_back(fbBuilder.build());
         }
 
@@ -308,7 +318,6 @@ private:
         pool = poolBuilder.build();
 
         cmdBuffer = pool.allocBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY);
-        recordCommandBuffer(0);
 
         //createSemaphores
         SemaphoreBuilder semaphoreBuilder(device);

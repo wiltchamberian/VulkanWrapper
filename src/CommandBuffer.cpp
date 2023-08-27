@@ -1,7 +1,7 @@
 #include "CommandBuffer.h"
 #include <stdexcept>
 
-CommandBuffer& CommandBuffer::begin(VkCommandBufferBeginInfo info) {
+CommandBuffer& CommandBuffer::begin(const VkCommandBufferBeginInfo& info) {
 	if (vkBeginCommandBuffer(buf, &info) != VK_SUCCESS) {
 		throw std::runtime_error("failed to begin recording command buffer!");
 	}
@@ -20,7 +20,7 @@ CommandBuffer& CommandBuffer::begin(VkCommandBufferUsageFlags flags, const VkCom
 
 }
 
-CommandBuffer& CommandBuffer::beginRenderPass(VkRenderPassBeginInfo info, VkSubpassContents content) {
+CommandBuffer& CommandBuffer::beginRenderPass(const VkRenderPassBeginInfo& info, VkSubpassContents content) {
 	vkCmdBeginRenderPass(buf, &info, content);
 	return *this;
 }

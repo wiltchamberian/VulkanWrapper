@@ -2,6 +2,7 @@
 #include "export.h"
 #include "vulkan/vulkan.h"
 #include <vector>
+#include <string>
 #include <optional>
 #include <unordered_map>
 
@@ -63,3 +64,5 @@ struct SwapChainSupportDetails {
 	std::vector<VkSurfaceFormatKHR> formats;
 	std::vector<VkPresentModeKHR> presentModes;
 };
+
+extern std::string GetExecutablePath();

@@ -1,5 +1,9 @@
 #include "Shader.h"
 
+void Shader::cleanUp() {
+	vkDestroyShaderModule(dev.value(), module, nullptr);
+}
+
 Shader& Shader::clearSpecializations() {
 	mapEntries.clear();
 	return *this;

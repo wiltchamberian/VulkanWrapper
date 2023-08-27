@@ -47,7 +47,7 @@ Pipeline PipelineBuilder::build() {
     std::vector< VkPipelineShaderStageCreateInfo> shaderStages;
     std::vector<VkSpecializationInfo> specilizations(shaders.size());
     for (int i = 0; i < shaders.size(); ++i) {
-        VkPipelineShaderStageCreateInfo ci;
+        VkPipelineShaderStageCreateInfo ci{};
         ci.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
         ci.flags = shaders[i].flags;
         ci.stage = shaders[i].stage;

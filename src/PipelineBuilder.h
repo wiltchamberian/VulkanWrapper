@@ -81,7 +81,7 @@ private:
 	RenderPass renderPass;
 	uint32_t subpass = 0;
 	Pipeline basePipeline;
-	int32_t basePipelineIndex = -1;
+	int32_t basePipelineIndex = 0;
 
 	//VkPipelineShaderStageCreateInfo
 	std::vector<Shader> shaders;

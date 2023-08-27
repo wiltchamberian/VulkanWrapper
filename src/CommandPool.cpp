@@ -18,6 +18,8 @@ CommandBuffer CommandPool::allocBuffer(VkCommandBufferLevel level) {
 	if (vkAllocateCommandBuffers(dev.value(), &allocInfo, &buffer.buf) != VK_SUCCESS) {
 		throw std::runtime_error("failed to allocate command buffers!");
 	}
+	else {
+	}
 	return buffer;
 }
 
