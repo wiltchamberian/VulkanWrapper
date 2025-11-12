@@ -2,6 +2,7 @@
 //
 
 #include "Wrapper.h"
+#include "vulkan/vulkan.h"
 
 #define GLFW_INCLUDE_VULKAN
 #include "glfw/glfw3.h"
@@ -47,6 +48,23 @@ std::string GetExecutablePath() {
     return result;
 }
 
+bool physicalDeviceFilter(VkPhysicalDeviceProperties& properties, VkPhysicalDeviceFeatures& features) {
+    return properties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU 
+        && features.drawIndirectFirstInstance
+        && features.logicOp
+        && features.shaderUniformBufferArrayDynamicIndexing
+        && features.shaderSampledImageArrayDynamicIndexing
+        && features.shaderStorageBufferArrayDynamicIndexing
+        && features.shaderStorageImageArrayDynamicIndexing
+        ;
+}
+
+std::vector<std::string> getLayers() {
+    std::vector<std::string> r;
+    r.push_back("VK_LAYER_KHRONOS_validation");
+    return r;
+}
+
 std::vector<std::string> getExtensions() {
     uint32_t glfwExtensionCount = 0;
     const char** glfwExtensions;
@@ -56,7 +74,9 @@ std::vector<std::string> getExtensions() {
         extensions.push_back(std::string(glfwExtensions[i]));
     }
     if (true) {
-        extensions.push_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
+        //without this ,debugMessenger cant be created sucessfully
+        extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+        //extensions.push_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME);//old version
     }
     return extensions;
 }
@@ -107,12 +127,15 @@ private:
     Pipeline pipeline;
 
     CommandPool pool;
-    CommandBuffer cmdBuffer;
+    std::vector<CommandBuffer> cmdBuffers;
 
     //drawFrame
-    Semaphore imageAvailableSemaphore;
-    Semaphore renderFinishedSemaphore;
-    Fence inFlightFence;
+    const int MAX_FRAMES_IN_FLIGHT = 2;
+    std::vector<Semaphore> imageAvailableSemaphores;
+    std::vector<Semaphore> renderFinishedSemaphores;
+    std::vector<Fence> inFlightFences;
+
+    uint32_t currentFrame = 0;
 
     void initWindow() {
         assert(glfwInit() == GLFW_TRUE);
@@ -129,10 +152,11 @@ private:
         debugCreateInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
         debugCreateInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
         debugCreateInfo.pfnUserCallback = debugCallback;
-        instance = InstanceBuilder().setExtensions(getExtensions()).
+        debugCreateInfo.pUserData = nullptr;
+        instance = InstanceBuilder().setExtensions(getExtensions()).setLayers(getLayers()).
             setDebugInfo(debugCreateInfo).build();
 
-        //debug related
+        //debug related, this is independent from the debugCreateInfo in VulkanInstance build
         DebugMessengerBuilder dbBuilder(instance);
         dbMessenger = dbBuilder.build();
 #if 0
@@ -151,7 +175,7 @@ private:
         phyDevice = instance.selectPhysicalDevice(
             QUEUE_GRAPHICS_BIT| QUEUE_PRESENT_BIT, 
             surface,
-            { VK_KHR_SWAPCHAIN_EXTENSION_NAME });
+            { VK_KHR_SWAPCHAIN_EXTENSION_NAME }, physicalDeviceFilter);
         device = phyDevice.createLogicalDevice(QUEUE_GRAPHICS_BIT |
             QUEUE_PRESENT_BIT, {}, { VK_KHR_SWAPCHAIN_EXTENSION_NAME });
 
@@ -167,7 +191,8 @@ private:
         builder.setCompositeAlpha(VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR);
         builder.setClipped(VK_TRUE);
         builder.setOldSwapChain(SwapChain());
-        builder.setImageSharingMode(VK_SHARING_MODE_CONCURRENT);
+        //if you use VK_SHARING_MODE_CONCURRENT only the present and graphics queue are different
+        builder.setImageSharingMode(VK_SHARING_MODE_EXCLUSIVE); 
 
         QueueFamilyIndices indices = phyDevice.findQueueFamilies(QUEUE_GRAPHICS_BIT | QUEUE_PRESENT_BIT, surface);
         std::vector<uint32_t> queueFamilyIndicesVec = indices.exportIndices();
@@ -317,24 +342,34 @@ private:
         poolBuilder.setQueueFamilyIndex(queueFamilyIndices.getIndex(QUEUE_GRAPHICS_BIT));
         pool = poolBuilder.build();
 
-        cmdBuffer = pool.allocBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY);
+        cmdBuffers.resize(MAX_FRAMES_IN_FLIGHT);
+        for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
+            cmdBuffers[i] = pool.allocBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY);
+        }
 
         //createSemaphores
+        imageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
+        renderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
+        inFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
+
         SemaphoreBuilder semaphoreBuilder(device);
-        imageAvailableSemaphore = semaphoreBuilder.build();
-        renderFinishedSemaphore = semaphoreBuilder.build();
-        inFlightFence = FenceBuilder(device)
-                        .setFenceCreateFlags(VK_FENCE_CREATE_SIGNALED_BIT)
-                        .build();
+        for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
+            imageAvailableSemaphores[i] = semaphoreBuilder.build();
+            renderFinishedSemaphores[i] = semaphoreBuilder.build();
+            inFlightFences[i] = FenceBuilder(device)
+                .setFenceCreateFlags(VK_FENCE_CREATE_SIGNALED_BIT)
+                .build();
+        }
+        
 
     }
 
     void recordCommandBuffer(uint32_t imageIndex) {
         VkCommandBufferBeginInfo beginInfo{};
         beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-        beginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT; // Optional
+        beginInfo.flags = 0 /*VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT*/; // Optional
         beginInfo.pInheritanceInfo = nullptr; // Optional
-        cmdBuffer.begin(beginInfo);
+        cmdBuffers[currentFrame].begin(beginInfo);
        
         VkRenderPassBeginInfo renderPassInfo{};
         renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -346,48 +381,49 @@ private:
         renderPassInfo.clearValueCount = 1;
         renderPassInfo.pClearValues = &clearColor;
 
-        cmdBuffer.beginRenderPass(renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+        cmdBuffers[currentFrame].beginRenderPass(renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
-        cmdBuffer.bindPipeline(pipeline, VK_PIPELINE_BIND_POINT_GRAPHICS);
+        cmdBuffers[currentFrame].bindPipeline(pipeline, VK_PIPELINE_BIND_POINT_GRAPHICS);
         
         VkExtent2D ext = swapChain.getExtent();
         VkViewport viewport{.x = 0.0f, .y = 0.0f ,.width = static_cast<float>(ext.width),
         .height = static_cast<float>(ext.height), .minDepth = 0.0f, .maxDepth = 1.0f};
-        cmdBuffer.setViewPort(viewport);
+        cmdBuffers[currentFrame].setViewPort(viewport);
        
         VkRect2D scissor{};
         scissor.offset = { 0, 0 };
         scissor.extent = ext;
-        cmdBuffer.setScissor(scissor);
+        cmdBuffers[currentFrame].setScissor(scissor);
 
-        cmdBuffer.draw(3, 1, 0, 0); //similar as glDrawBuffers
+        cmdBuffers[currentFrame].draw(3, 1, 0, 0); //similar as glDrawBuffers
 
-        cmdBuffer.endRenderPass();
-        cmdBuffer.end();
+        cmdBuffers[currentFrame].endRenderPass();
+        cmdBuffers[currentFrame].end();
     }
 
     void drawFrame() {
-        inFlightFence.wait(UINT64_MAX);
-        inFlightFence.reset();
-        uint32_t imageIndex = swapChain.acquireNextImageKHR(UINT64_MAX, imageAvailableSemaphore, Fence());
-        cmdBuffer.reset();
+        inFlightFences[currentFrame].wait(UINT64_MAX);
+        inFlightFences[currentFrame].reset();
+        Fence fence;
+        uint32_t imageIndex = swapChain.acquireNextImageKHR(UINT64_MAX, imageAvailableSemaphores[currentFrame], fence);
+        cmdBuffers[currentFrame].reset();
         recordCommandBuffer(imageIndex);
 
         DeviceQueue queue = device.getDeviceQueue(QUEUE_GRAPHICS_BIT, 0);
         VkSubmitInfo submitInfo{};
         submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-        VkSemaphore waitSemaphores[] = { imageAvailableSemaphore.value()};
+        VkSemaphore waitSemaphores[] = { imageAvailableSemaphores[currentFrame].value()};
         VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
         submitInfo.waitSemaphoreCount = 1;
         submitInfo.pWaitSemaphores = waitSemaphores;
         submitInfo.pWaitDstStageMask = waitStages;
         submitInfo.commandBufferCount = 1;
-        submitInfo.pCommandBuffers = &cmdBuffer.value();
+        submitInfo.pCommandBuffers = &cmdBuffers[currentFrame].value();
 
-        VkSemaphore signalSemaphores[] = { renderFinishedSemaphore.value()};
+        VkSemaphore signalSemaphores[] = { renderFinishedSemaphores[currentFrame].value()};
         submitInfo.signalSemaphoreCount = 1;
         submitInfo.pSignalSemaphores = signalSemaphores;
-        queue.submit(submitInfo, inFlightFence);
+        queue.submit(submitInfo, inFlightFences[currentFrame]);
 
         VkPresentInfoKHR presentInfo{};
         presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
@@ -402,6 +438,7 @@ private:
         DeviceQueue presentQueue = device.getDeviceQueue(QUEUE_PRESENT_BIT);
         presentQueue.presentKHR(presentInfo);
 
+        currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
     }
 
     void mainLoop() {
@@ -412,9 +449,12 @@ private:
     }
 
     void cleanup() {
-        imageAvailableSemaphore.cleanUp();
-        renderFinishedSemaphore.cleanUp();
-        inFlightFence.cleanUp();
+        for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
+            imageAvailableSemaphores[i].cleanUp();
+            renderFinishedSemaphores[i].cleanUp();
+            inFlightFences[i].cleanUp();
+        }
+        
 
         pool.cleanUp();
 

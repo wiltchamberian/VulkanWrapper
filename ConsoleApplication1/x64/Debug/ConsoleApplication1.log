@@ -1,0 +1,155 @@
+﻿D:\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(524,5): warning MSB8004: Output 目录未以斜杠结尾。  此生成实例将添加斜杠，因为必须有这个斜杠才能正确计算 Output 目录。
+  Console.cpp
+G:\MyVulkan\VulkanWrapper\src\Common.h(41,39): warning C4251: “QueueFamilyIndices::indexMap”:“std::vector<std::optional<uint32_t>,std::allocator<std::optional<uint32_t>>>”需要有 dll 接口以供“QueueFamilyIndices”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<std::optional<uint32_t>,std::allocator<std::optional<uint32_t>>>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\InstanceBuilder.h(23,14): warning C4251: “InstanceBuilder::appName”:“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口以供“InstanceBuilder”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xstring(541,7):
+      参见“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\InstanceBuilder.h(25,14): warning C4251: “InstanceBuilder::engineName”:“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口以供“InstanceBuilder”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xstring(541,7):
+      参见“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\InstanceBuilder.h(26,27): warning C4251: “InstanceBuilder::extensions”:“std::vector<std::string,std::allocator<std::string>>”需要有 dll 接口以供“InstanceBuilder”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<std::string,std::allocator<std::string>>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\InstanceBuilder.h(27,27): warning C4251: “InstanceBuilder::layers”:“std::vector<std::string,std::allocator<std::string>>”需要有 dll 接口以供“InstanceBuilder”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<std::string,std::allocator<std::string>>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\SwapChainBuilder.h(45,38): warning C4251: “SwapChainBuilder::minImageCount”:“std::optional<uint32_t>”需要有 dll 接口以供“SwapChainBuilder”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\optional(227,7):
+      参见“std::optional<uint32_t>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\SwapChainBuilder.h(46,38): warning C4251: “SwapChainBuilder::surfaceFormat”:“std::optional<VkSurfaceFormatKHR>”需要有 dll 接口以供“SwapChainBuilder”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\optional(227,7):
+      参见“std::optional<VkSurfaceFormatKHR>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\SwapChainBuilder.h(51,38): warning C4251: “SwapChainBuilder::queueFamilyIndices”:“std::vector<uint32_t,std::allocator<uint32_t>>”需要有 dll 接口以供“SwapChainBuilder”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<uint32_t,std::allocator<uint32_t>>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\SwapChainBuilder.h(54,38): warning C4251: “SwapChainBuilder::presentMode”:“std::optional<VkPresentModeKHR>”需要有 dll 接口以供“SwapChainBuilder”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\optional(227,7):
+      参见“std::optional<VkPresentModeKHR>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\Shader.h(18,14): warning C4251: “Shader::funcName”:“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口以供“Shader”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xstring(541,7):
+      参见“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\Shader.h(19,14): warning C4251: “Shader::name”:“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口以供“Shader”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xstring(541,7):
+      参见“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\Shader.h(22,40): warning C4251: “Shader::mapEntries”:“std::vector<VkSpecializationMapEntry,std::allocator<VkSpecializationMapEntry>>”需要有 dll 接口以供“Shader”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<VkSpecializationMapEntry,std::allocator<VkSpecializationMapEntry>>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\Shader.h(23,23): warning C4251: “Shader::data”:“std::vector<uint8_t,std::allocator<uint8_t>>”需要有 dll 接口以供“Shader”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<uint8_t,std::allocator<uint8_t>>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\PipelineBuilder.h(87,22): warning C4251: “PipelineBuilder::shaders”:“std::vector<Shader,std::allocator<Shader>>”需要有 dll 接口以供“PipelineBuilder”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<Shader,std::allocator<Shader>>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\PipelineBuilder.h(90,47): warning C4251: “PipelineBuilder::vertexInputBindingDescriptions”:“std::vector<VkVertexInputBindingDescription,std::allocator<VkVertexInputBindingDescription>>”需要有 dll 接口以供“PipelineBuilder”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<VkVertexInputBindingDescription,std::allocator<VkVertexInputBindingDescription>>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\PipelineBuilder.h(91,49): warning C4251: “PipelineBuilder::vertexInputAttributeDescriptions”:“std::vector<VkVertexInputAttributeDescription,std::allocator<VkVertexInputAttributeDescription>>”需要有 dll 接口以供“PipelineBuilder”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<VkVertexInputAttributeDescription,std::allocator<VkVertexInputAttributeDescription>>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\PipelineBuilder.h(100,31): warning C4251: “PipelineBuilder::viewports”:“std::vector<VkViewport,std::allocator<VkViewport>>”需要有 dll 接口以供“PipelineBuilder”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<VkViewport,std::allocator<VkViewport>>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\PipelineBuilder.h(101,29): warning C4251: “PipelineBuilder::scissors”:“std::vector<VkRect2D,std::allocator<VkRect2D>>”需要有 dll 接口以供“PipelineBuilder”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<VkRect2D,std::allocator<VkRect2D>>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\PipelineBuilder.h(126,54): warning C4251: “PipelineBuilder::colorBlendAttachmentStates”:“std::vector<VkPipelineColorBlendAttachmentState,std::allocator<VkPipelineColorBlendAttachmentState>>”需要有 dll 接口以供“PipelineBuilder”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<VkPipelineColorBlendAttachmentState,std::allocator<VkPipelineColorBlendAttachmentState>>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\PipelineBuilder.h(134,36): warning C4251: “PipelineBuilder::dynamicStates”:“std::vector<VkDynamicState,std::allocator<VkDynamicState>>”需要有 dll 接口以供“PipelineBuilder”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<VkDynamicState,std::allocator<VkDynamicState>>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\PipelineLayoutBuilder.h(18,41): warning C4251: “PipelineLayoutBuilder::layouts”:“std::vector<DescriptorSetLayout,std::allocator<DescriptorSetLayout>>”需要有 dll 接口以供“PipelineLayoutBuilder”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<DescriptorSetLayout,std::allocator<DescriptorSetLayout>>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\PipelineLayoutBuilder.h(19,41): warning C4251: “PipelineLayoutBuilder::pushConstantRanges”:“std::vector<VkPushConstantRange,std::allocator<VkPushConstantRange>>”需要有 dll 接口以供“PipelineLayoutBuilder”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<VkPushConstantRange,std::allocator<VkPushConstantRange>>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\RenderPassBuilder.h(17,39): warning C4251: “RenderPassBuilder::attachmentDescriptions”:“std::vector<VkAttachmentDescription,std::allocator<VkAttachmentDescription>>”需要有 dll 接口以供“RenderPassBuilder”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<VkAttachmentDescription,std::allocator<VkAttachmentDescription>>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\RenderPassBuilder.h(18,36): warning C4251: “RenderPassBuilder::subpassDescriptions”:“std::vector<VkSubpassDescription,std::allocator<VkSubpassDescription>>”需要有 dll 接口以供“RenderPassBuilder”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<VkSubpassDescription,std::allocator<VkSubpassDescription>>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\RenderPassBuilder.h(19,35): warning C4251: “RenderPassBuilder::subpassDependencies”:“std::vector<VkSubpassDependency,std::allocator<VkSubpassDependency>>”需要有 dll 接口以供“RenderPassBuilder”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<VkSubpassDependency,std::allocator<VkSubpassDependency>>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\ShaderStageBuilder.h(22,14): warning C4251: “ShaderStageBuilder::name”:“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口以供“ShaderStageBuilder”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xstring(541,7):
+      参见“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\ShaderStageBuilder.h(23,14): warning C4251: “ShaderStageBuilder::funcName”:“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”需要有 dll 接口以供“ShaderStageBuilder”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xstring(541,7):
+      参见“std::basic_string<char,std::char_traits<char>,std::allocator<char>>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\ShaderStageBuilder.h(24,20): warning C4251: “ShaderStageBuilder::code”:“std::vector<char,std::allocator<char>>”需要有 dll 接口以供“ShaderStageBuilder”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<char,std::allocator<char>>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\FrameBufferBuilder.h(23,28): warning C4251: “FrameBufferBuilder::attachments”:“std::vector<ImageView,std::allocator<ImageView>>”需要有 dll 接口以供“FrameBufferBuilder”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<ImageView,std::allocator<ImageView>>”的声明
+  
+G:\MyVulkan\VulkanWrapper\src\Fence.h(34,23): warning C4251: “FenceGroup::fences”:“std::vector<VkFence,std::allocator<VkFence>>”需要有 dll 接口以供“FenceGroup”的客户端使用
+  (编译源文件“../Console/Console.cpp”)
+      D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
+      参见“std::vector<VkFence,std::allocator<VkFence>>”的声明
+  
+G:\MyVulkan\VulkanWrapper\Console\Console.cpp(73,23): warning C4018: “<”: 有符号/无符号不匹配
+G:\MyVulkan\VulkanWrapper\Console\Console.cpp(206,25): warning C4267: “初始化”: 从“size_t”转换到“int32_t”，可能丢失数据
+  ConsoleApplication1.vcxproj -> G:\MyVulkan\VulkanWrapper\package\exe\ConsoleApplication1.exe

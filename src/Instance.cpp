@@ -30,7 +30,7 @@ PhysicalDevice VulkanInstance::selectPhysicalDevice(VkQueueFlags flags, Surface 
         if (filter != nullptr && !filter(deviceProperties, deviceFeatures)) {
             bingo = false;
         }
-        if (!dev.isDeviceSuitable(flags, surface)) {
+        if (!dev.isDeviceSuitable(flags, surface, extensions)) {
             bingo = false;
         }
         if (bingo) {

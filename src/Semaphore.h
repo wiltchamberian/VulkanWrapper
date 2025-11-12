@@ -13,7 +13,7 @@ public:
 	void cleanUp();
 private:
 	LogicalDevice dev;
-	VkSemaphore semaphore;
+	VkSemaphore semaphore = VK_NULL_HANDLE;
 };
 
 

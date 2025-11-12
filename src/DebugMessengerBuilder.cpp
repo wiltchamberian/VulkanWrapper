@@ -5,7 +5,7 @@ DebugMessenger DebugMessengerBuilder::build() {
 
     auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance.value(), "vkCreateDebugUtilsMessengerEXT");
     if (func != nullptr) {
-        VkDebugUtilsMessengerCreateInfoEXT ci;
+        VkDebugUtilsMessengerCreateInfoEXT ci{};
         ci.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
         ci.messageSeverity = messageSeverity;
         ci.messageType = messageType;
@@ -15,9 +15,13 @@ DebugMessenger DebugMessengerBuilder::build() {
             dm.instance = instance;
             return dm;
         }
-        else {
+        else { 
             dm.value() = VK_NULL_HANDLE;
+            throw std::runtime_error("failed to set up debug messenger!");
         }
+    }
+    else {
+        throw std::runtime_error("failed to set up debug messenger!");
     }
     return dm;
 

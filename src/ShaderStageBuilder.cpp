@@ -3,7 +3,7 @@
 
 ShaderStageBuilder::ShaderStageBuilder(LogicalDevice d)
     :dev(d)
-    ,pipelineStageCreateFlags(VK_PIPELINE_SHADER_STAGE_CREATE_ALLOW_VARYING_SUBGROUP_SIZE_BIT)
+    ,pipelineStageCreateFlags(VK_PIPELINE_SHADER_STAGE_CREATE_ALLOW_VARYING_SUBGROUP_SIZE_BIT_EXT)
     ,stageFlags(VK_SHADER_STAGE_VERTEX_BIT)
 {
 }

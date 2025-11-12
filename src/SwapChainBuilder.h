@@ -40,19 +40,19 @@ private:
     void queryPhysicalDeviceSurfaceFormats();
     void queryPhysicalDeviceSurfacePresentModes();
     LogicalDevice                    logicalDev;
-    VkSwapchainCreateFlagsKHR        createflags;
+    VkSwapchainCreateFlagsKHR        createflags{};
 	Surface                          surface;
     std::optional<uint32_t>          minImageCount;
     std::optional<VkSurfaceFormatKHR>surfaceFormat;
-    VkExtent2D                       imageExtent;
+    VkExtent2D                       imageExtent{};
     uint32_t                         imageArrayLayers = 0;
-    VkImageUsageFlags                imageUsage;
-    VkSharingMode                    imageSharingMode;
+    VkImageUsageFlags                imageUsage{};
+    VkSharingMode                    imageSharingMode{};
     std::vector<uint32_t>            queueFamilyIndices;
-    VkSurfaceTransformFlagBitsKHR    preTransform;
-    VkCompositeAlphaFlagBitsKHR      compositeAlpha;
+    VkSurfaceTransformFlagBitsKHR    preTransform{};
+    VkCompositeAlphaFlagBitsKHR      compositeAlpha = {};
     std::optional<VkPresentModeKHR>  presentMode;
-    VkBool32                         clipped;
+    VkBool32                         clipped = false;
     SwapChain                        oldSwapchain;
 
     SwapChainSupportDetails          details;

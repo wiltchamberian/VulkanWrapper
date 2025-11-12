@@ -8,8 +8,8 @@
 
 class VULKAN_WRAPPER_API QueueFamilyIndices {
 public:
+	static const int queueFlagsBitsNum = 8;
 	bool isComplete(VkQueueFlags flags) {
-		const int queueFlagsBitsNum = 8;
 		for (int i = 0; i < queueFlagsBitsNum; ++i) {
 			if ((1 << i) & flags) {
 				if (indexMap.size() < i + 1 || !indexMap[i].has_value()) {
@@ -20,7 +20,6 @@ public:
 		return true;
 	}
 	uint32_t getIndex(VkQueueFlags flags) {
-		const int queueFlagsBitsNum = 8;
 		for (int i = 0; i < queueFlagsBitsNum; ++i) {
 			if ((1 << i) & flags) {
 				if (indexMap.size() >= i + 1 && indexMap[i].has_value()) {
@@ -40,6 +39,7 @@ public:
 		return vec;
 	}
 	std::vector<std::optional<uint32_t>> indexMap;
+	
 };
 
 //expand VkQueueFlagBits

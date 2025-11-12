@@ -16,6 +16,8 @@ public:
 	InstanceBuilder& setExtensions(const std::vector<std::string>& extensions);
 	InstanceBuilder& setLayers(const std::vector<std::string>& layers);
 	InstanceBuilder& setDebugInfo(const VkDebugUtilsMessengerCreateInfoEXT& debugCreateInfo);
+
+	static bool checkValidationSupport(const std::vector<std::string>& layers);
 private:
 	uint32_t appVersion = VK_MAKE_VERSION(1,0,0);
 	std::string appName = "application";

@@ -25,6 +25,10 @@ VulkanInstance InstanceBuilder::build() {
         createInfo.ppEnabledExtensionNames = ext;
     }
     
+    if (!checkValidationSupport(layers)) {
+        throw std::runtime_error("validationlayersrequested,butnotavailable!");
+    }
+
     createInfo.enabledLayerCount = layers.size();
     if (createInfo.enabledLayerCount > 0) {
         char** ppLayers = new char* [createInfo.enabledLayerCount];
@@ -37,7 +41,7 @@ VulkanInstance InstanceBuilder::build() {
     if (debugInfo.sType == VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT) {
         createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*)(&debugInfo);
     }
-    
+
     VkResult suc = vkCreateInstance(&createInfo, nullptr, &(vk.value()));
     delete[] createInfo.ppEnabledExtensionNames;
     delete[] createInfo.ppEnabledLayerNames;
@@ -81,4 +85,26 @@ InstanceBuilder& InstanceBuilder::setLayers(const std::vector<std::string>& laye
 InstanceBuilder& InstanceBuilder::setDebugInfo(const VkDebugUtilsMessengerCreateInfoEXT& debugCreateInfo) {
     this->debugInfo = debugCreateInfo;
     return *this;
+}
+
+bool InstanceBuilder::checkValidationSupport(const std::vector<std::string>& layers) {
+    uint32_t layerCount;
+    vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
+  
+    std::vector<VkLayerProperties>availableLayers(layerCount);
+    vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
+
+    for (int i = 0; i < layers.size(); ++i) {
+        bool layerFound = false;
+        for (int j = 0; j < availableLayers.size(); ++j) {
+            if (layers[i] == availableLayers[j].layerName) {
+                layerFound = true;
+                break;
+            }
+        }
+        if (!layerFound) {
+            return false;
+        }
+    }
+    return true;
 }

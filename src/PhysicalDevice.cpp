@@ -13,6 +13,7 @@ bool PhysicalDevice::isDeviceSuitable(VkQueueFlags flags, Surface surface, const
     bool swapChainSupported = false;
     if (extensionsSupported) {
         SwapChainSupportDetails details = querySwapChainSupport(surface);
+        //these may be user-define
         swapChainSupported = !details.formats.empty() && !details.presentModes.empty();
     }
 
@@ -55,12 +56,11 @@ QueueFamilyIndices PhysicalDevice::findQueueFamilies(VkQueueFlags flags, Surface
     vkGetPhysicalDeviceQueueFamilyProperties(dev, &queueFamilyCount, queueFamilies.data());
 
     int j = 0;
-    const int queueFlagsBitsNum = 8;
-    indices.indexMap.resize(queueFlagsBitsNum);
+    indices.indexMap.resize(indices.queueFlagsBitsNum);
     for (const auto& queueFamily : queueFamilies) {
         VkQueueFlags ans = (queueFamily.queueFlags & flags);
         VkQueueFlags ds = 1;
-        for (int i = 0; i < queueFlagsBitsNum; ++i) {
+        for (int i = 0; i < indices.queueFlagsBitsNum; ++i) {
             ds = 1 << i;
             if ((ans & ds) != 0) {
                 if (!indices.indexMap[i].has_value()) {
@@ -163,7 +163,7 @@ std::vector<VkPresentModeKHR> PhysicalDevice::queryPhysicalDeviceSurfacePresentM
 LogicalDevice PhysicalDevice::createLogicalDevice(VkQueueFlags flags, VkPhysicalDeviceFeatures deviceFeatures, const std::vector<std::string>& extensions) {
     std::vector<VkDeviceQueueCreateInfo> vec;
     std::set<uint32_t> uniqueQueueFamilies;
-    const int queueFlagsBitsNum = 8;
+    const int queueFlagsBitsNum = QueueFamilyIndices::queueFlagsBitsNum;
     for (int i = 0; i < queueFlagsBitsNum; ++i) {
         VkQueueFlags bit = 1 << i;
         if (flags & bit) {
@@ -192,15 +192,20 @@ LogicalDevice PhysicalDevice::createLogicalDevice(VkQueueFlags flags, VkPhysical
 
     createInfo.pEnabledFeatures = &deviceFeatures;
 
-    createInfo.enabledExtensionCount = 0;
-    createInfo.enabledLayerCount = 0;
-
     createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
-    std::vector<const char*> deviceExtensions(extensions.size());
-    for (int i = 0; i < deviceExtensions.size(); ++i) {
-        deviceExtensions[i] = extensions[i].c_str();
+    std::vector<const char*> deviceExtensions;
+    if (createInfo.enabledExtensionCount > 0) {
+        deviceExtensions.resize(extensions.size());
+        for (int i = 0; i < deviceExtensions.size(); ++i) {
+            deviceExtensions[i] = extensions[i].c_str();
+        }
+        createInfo.ppEnabledExtensionNames = deviceExtensions.data();
     }
-    createInfo.ppEnabledExtensionNames = deviceExtensions.data();
+    else {
+        createInfo.ppEnabledExtensionNames = nullptr;
+    }
+    
+    createInfo.enabledLayerCount = 0;
 #if 0
     if (enableValidationLayers) {
         createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
