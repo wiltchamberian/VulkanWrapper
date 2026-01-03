@@ -8,8 +8,6 @@ void DeviceQueue::submit(const VkSubmitInfo& submitInfo, const Fence& fence) {
 	}
 }
 
-void DeviceQueue::presentKHR(const VkPresentInfoKHR& presentInfo) {
-	if (vkQueuePresentKHR(que, &presentInfo) != VK_SUCCESS) {
-		throw std::runtime_error("failed to presentKHR!");
-	}
+VkResult DeviceQueue::presentKHR(const VkPresentInfoKHR& presentInfo) {
+	return vkQueuePresentKHR(que, &presentInfo);
 }

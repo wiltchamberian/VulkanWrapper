@@ -12,6 +12,10 @@ std::vector<VkImage> SwapChain::getImages(){
 	return imgs;
 }
 
+void SwapChain::cleanUp() {
+	vkDestroySwapchainKHR(dev.value(), chain, nullptr);
+}
+
 const VkExtent2D& SwapChain::getExtent() {
 	return extent;
 }
@@ -20,10 +24,7 @@ const VkSurfaceFormatKHR& SwapChain::getSurfaceFormat() {
 	return surfaceFormat;
 }
 
-uint32_t SwapChain::acquireNextImageKHR(uint64_t timeout, const Semaphore& semaphore, const Fence& fence) {
-	uint32_t index = 0;
-	if (VK_SUCCESS != vkAcquireNextImageKHR(dev.value(), chain, timeout, semaphore.value(), fence.value(), &index)) {
-		throw std::runtime_error("fail to acuqire next image!");
-	}
-	return index;
+VkResult SwapChain::acquireNextImageKHR(uint64_t timeout, const Semaphore& semaphore, const Fence& fence, uint32_t& index) {
+	VkResult result = vkAcquireNextImageKHR(dev.value(), chain, timeout, semaphore.value(), fence.value(), &index);
+	return result;
 }

@@ -17,9 +17,10 @@ public:
 	bool isValid() const {
 		return chain != VK_NULL_HANDLE;
 	}
+	void cleanUp();
 	const VkExtent2D& getExtent();
 	const VkSurfaceFormatKHR& getSurfaceFormat();
-	uint32_t acquireNextImageKHR(uint64_t timeout, const Semaphore& semaphore, const Fence& fence);
+	VkResult acquireNextImageKHR(uint64_t timeout, const Semaphore& semaphore, const Fence& fence, uint32_t& result);
 private:
 	LogicalDevice dev;
 	VkSurfaceFormatKHR surfaceFormat;

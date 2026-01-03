@@ -9,8 +9,10 @@ class ImageView;
 
 class VULKAN_WRAPPER_API ImageViewBuilder {
 public:
+	ImageViewBuilder();
 	ImageViewBuilder(LogicalDevice device);
 	ImageView build();
+	ImageViewBuilder& setDevice(LogicalDevice device);
 	ImageViewBuilder& setImageViewCreateFlags(VkImageViewCreateFlags flags);
 	ImageViewBuilder& setImage(VkImage image);
 	ImageViewBuilder& setFormat(VkFormat format);

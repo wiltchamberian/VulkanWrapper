@@ -10,6 +10,7 @@ public:
 		return pipelineLayout;
 	}
 	void cleanUp();
+	void Test();
 private:
 	LogicalDevice dev;
 	VkPipelineLayout pipelineLayout;

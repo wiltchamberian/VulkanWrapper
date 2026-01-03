@@ -10,7 +10,7 @@ class VULKAN_WRAPPER_API DeviceQueue {
 public:
 	friend class LogicalDevice;
 	void submit(const VkSubmitInfo& submitInfo, const Fence& fence);
-	void presentKHR(const VkPresentInfoKHR& presentInfo);
+	VkResult presentKHR(const VkPresentInfoKHR& presentInfo);
 private:
 	VkQueue que = VK_NULL_HANDLE;
 };

@@ -30,6 +30,12 @@ CommandBuffer& CommandBuffer::bindPipeline(Pipeline& pipeline, VkPipelineBindPoi
 	return *this;
 }
 
+CommandBuffer& CommandBuffer::bindVertexBuffer(Buffer buffer, int deviceOffset) {
+	VkDeviceSize offsets[] = { deviceOffset };
+	vkCmdBindVertexBuffers(buf, 0, 1, &buffer.value(), offsets);
+	return *this;
+}
+
 CommandBuffer& CommandBuffer::setViewPort(uint32_t firstViewport, uint32_t viewportCount, const VkViewport* pViewports){
 	vkCmdSetViewport(buf, firstViewport, viewportCount, pViewports);
 	return *this;

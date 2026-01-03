@@ -10,6 +10,7 @@
 
 class VULKAN_WRAPPER_API SwapChainBuilder {
 public:
+    SwapChainBuilder();
     SwapChainBuilder(LogicalDevice& dev, Surface& surface);
 
     SwapChain build();

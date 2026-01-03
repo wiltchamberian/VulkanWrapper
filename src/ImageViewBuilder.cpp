@@ -2,6 +2,10 @@
 #include "ImageView.h"
 #include <stdexcept>
 
+ImageViewBuilder::ImageViewBuilder()
+{
+
+}
 
 ImageViewBuilder::ImageViewBuilder(LogicalDevice device)
 :dev(device)
@@ -21,6 +25,11 @@ ImageView ImageViewBuilder::build() {
 		imageview.dev = dev;
 	}
 	return imageview;
+}
+
+ImageViewBuilder& ImageViewBuilder::setDevice(LogicalDevice device) {
+	dev = device;
+	return *this;
 }
 
 ImageViewBuilder& ImageViewBuilder::setImageViewCreateFlags(VkImageViewCreateFlags flags) {

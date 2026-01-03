@@ -2,7 +2,11 @@
 
 void Pipeline::cleanUp() {
 	if (dev.isValid()) {
-		vkDestroyPipeline(dev.dev, pipeline, nullptr);
+		vkDestroyPipeline(dev.value(), pipeline, nullptr);
 	}
+}
+
+void Pipeline::Test() {
+
 }
 

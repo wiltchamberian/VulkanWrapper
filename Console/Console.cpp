@@ -3,6 +3,7 @@
 
 #include "Wrapper.h"
 #include "vulkan/vulkan.h"
+#include "Vertex.h"
 
 #define GLFW_INCLUDE_VULKAN
 #include "glfw/glfw3.h"
@@ -20,6 +21,12 @@
 #include <algorithm>
 
 #include <Windows.h>
+
+const std::vector<Vertex> vertices = {
+    {{0.0f, -0.5f}, {1.0f, 1.0f, 1.0f}},
+    {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
+    {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
+};
 
 std::string GetExecutablePath() {
     WCHAR buffer[MAX_PATH];
@@ -101,8 +108,13 @@ VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT message
     return VK_FALSE;
 }
 
+
+
 class HelloTriangleApplication {
 public:
+    HelloTriangleApplication() {
+
+    }
     void run() {
         initWindow();
         initVulkan();
@@ -110,6 +122,8 @@ public:
         cleanup();
     }
 
+    
+    bool framebufferResized = false;
 private:
     const uint32_t WIDTH = 800;
     const uint32_t HEIGHT = 600;
@@ -121,19 +135,29 @@ private:
     DebugMessenger dbMessenger;
     PhysicalDevice phyDevice;
     LogicalDevice  device;
+    Surface surface;
     SwapChain swapChain;
     std::vector<FrameBuffer> swapChainFramebuffers;
+    std::vector<ImageView> swapChainImageViews;
     RenderPass renderPass;
     Pipeline pipeline;
+    PipelineLayout layout;
 
     CommandPool pool;
     std::vector<CommandBuffer> cmdBuffers;
+
+    Buffer vertexBuffer;
+    DeviceMemory vertexBufferMemory;
+
+    SwapChainBuilder swapChainBuilder;
+    ImageViewBuilder imgViewBuilder;
 
     //drawFrame
     const int MAX_FRAMES_IN_FLIGHT = 2;
     std::vector<Semaphore> imageAvailableSemaphores;
     std::vector<Semaphore> renderFinishedSemaphores;
     std::vector<Fence> inFlightFences;
+    
 
     uint32_t currentFrame = 0;
 
@@ -144,6 +168,130 @@ private:
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
         window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
+        glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int height) {
+            auto app = reinterpret_cast<HelloTriangleApplication*>(glfwGetWindowUserPointer(window));
+            if (app != nullptr) {
+                app->framebufferResized = true;
+            }
+            
+            }
+        );
+    }
+
+    void CreateSwapChain() {
+        swapChainBuilder.setLogicalDevice(device);
+        swapChainBuilder.setSurface(surface);
+        SwapChainSupportDetails details = swapChainBuilder.querySwapChainSupport();
+        swapChainBuilder.setSurfaceFormat({ VK_FORMAT_B8G8R8A8_SRGB ,VK_COLOR_SPACE_SRGB_NONLINEAR_KHR }, details.formats[0]);
+        swapChainBuilder.setPresentMode(VK_PRESENT_MODE_MAILBOX_KHR, VK_PRESENT_MODE_FIFO_KHR);
+        swapChainBuilder.setImageExtent(details.capabilities.value().currentExtent, getExtent(window, details.capabilities.value()));
+        swapChainBuilder.setMinImageCount(std::min<uint32_t>(details.capabilities.value().minImageCount + 1, details.capabilities.value().maxImageCount));
+        swapChainBuilder.setImageArrayLayers(1);
+        swapChainBuilder.setImageUsageFlags(VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT);
+        swapChainBuilder.setPreTransform(details.capabilities.value().currentTransform);
+        swapChainBuilder.setCompositeAlpha(VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR);
+        swapChainBuilder.setClipped(VK_TRUE);
+        swapChainBuilder.setOldSwapChain(SwapChain());
+        //if you use VK_SHARING_MODE_CONCURRENT only the present and graphics queue are different
+        swapChainBuilder.setImageSharingMode(VK_SHARING_MODE_EXCLUSIVE);
+
+        QueueFamilyIndices indices = phyDevice.findQueueFamilies(QUEUE_GRAPHICS_BIT | QUEUE_PRESENT_BIT, surface);
+        std::vector<uint32_t> queueFamilyIndicesVec = indices.exportIndices();
+        swapChainBuilder.setQueueFamilyIndices(queueFamilyIndicesVec);
+
+        swapChain = swapChainBuilder.build();
+    }
+
+    void CreateImageView() {
+        imgViewBuilder.setDevice(device);
+        std::vector<VkImage> imgs = swapChain.getImages();
+        swapChainImageViews.resize(imgs.size());
+        int32_t imgSize = imgs.size();
+        VkImageSubresourceRange range{};
+        range.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        range.baseMipLevel = 0;
+        range.levelCount = 1;
+        range.baseArrayLayer = 0;
+        range.layerCount = 1;
+        for (size_t i = 0; i < imgSize; i++) {
+            swapChainImageViews[i] = imgViewBuilder.setImage(imgs[i])
+                .setImageViewType(VK_IMAGE_VIEW_TYPE_2D)
+                .setFormat(swapChain.getSurfaceFormat().format)
+                .setComponentMapping(VkComponentMapping(VK_COMPONENT_SWIZZLE_IDENTITY,
+                    VK_COMPONENT_SWIZZLE_IDENTITY,
+                    VK_COMPONENT_SWIZZLE_IDENTITY,
+                    VK_COMPONENT_SWIZZLE_IDENTITY))
+                .setImageSubresourceRange(range)
+                .build();
+        }
+    }
+
+    void CreateFrameBuffers() {
+        //create framebuffers
+        FrameBufferBuilder fbBuilder(device);
+        for (size_t i = 0; i < swapChain.getImages().size(); i++) {
+            fbBuilder.setRenderPass(renderPass)
+                .setWidth(swapChain.getExtent().width)
+                .setHeight(swapChain.getExtent().height)
+                .setLayers(1)
+                .setAttachments({ swapChainImageViews[i] });
+            swapChainFramebuffers.push_back(fbBuilder.build());
+        }
+    }
+
+    uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags flags) {
+        VkPhysicalDeviceMemoryProperties memProperties = phyDevice.queryPhysicalDeviceMemoryProperties();
+        for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++) {
+            if ((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & flags) == flags) {
+                return i;
+            }
+        }
+
+        throw std::runtime_error("failed to find suitable memory type!");
+    }
+
+    void CreateVertexBuffer() {
+        BufferBuilder bufferBuilder(device);
+        bufferBuilder.SetSize(sizeof(vertices[0]) * vertices.size())
+            .SetUsage(VK_BUFFER_USAGE_VERTEX_BUFFER_BIT)
+            .SetSharingMode(VK_SHARING_MODE_EXCLUSIVE);
+        vertexBuffer = bufferBuilder.build();
+
+        VkMemoryRequirements memRequirements = vertexBuffer.getMemoryRequirements();
+        
+        MemoryAllocator allocator(device);
+        allocator.SetAllocationSize(memRequirements.size)
+            .SetMemoryTypeIndex(findMemoryType(memRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT));
+    
+        vertexBufferMemory = allocator.allocateMemory();
+        vertexBuffer.bindMemory(vertexBufferMemory, 0);
+        
+        vertexBufferMemory.copyMemory(vertices.data(), 0, sizeof(vertices[0]) * vertices.size(), 0);
+    }
+
+    void recreateSwapChain() {
+        int width = 0, height = 0;
+        glfwGetFramebufferSize(window, &width, &height);
+        while (width == 0 || height == 0) {
+            glfwGetFramebufferSize(window, &width, &height);
+            glfwWaitEvents();
+        }
+        device.waitIdle();
+        cleanUpSwapChain();
+        CreateSwapChain();
+        CreateImageView();
+        CreateFrameBuffers();
+    }
+
+    void cleanUpSwapChain() {
+        for (auto framebuffer : swapChainFramebuffers) {
+            framebuffer.cleanUp();
+        }
+        for (auto imageView : swapChainImageViews) {
+            imageView.cleanUp();
+        }
+
+        swapChain.cleanUp();
     }
 
     void initVulkan() { 
@@ -170,7 +318,7 @@ private:
         //windows
         hInstance = GetModuleHandle(nullptr);
         hwnd = glfwGetWin32Window(window);
-        Surface surface = SurfaceBuilder(instance,hInstance, hwnd).build();
+        surface = SurfaceBuilder(instance,hInstance, hwnd).build();
 
         phyDevice = instance.selectPhysicalDevice(
             QUEUE_GRAPHICS_BIT| QUEUE_PRESENT_BIT, 
@@ -179,48 +327,9 @@ private:
         device = phyDevice.createLogicalDevice(QUEUE_GRAPHICS_BIT |
             QUEUE_PRESENT_BIT, {}, { VK_KHR_SWAPCHAIN_EXTENSION_NAME });
 
-        SwapChainBuilder builder(device, surface);
-        SwapChainSupportDetails details = builder.querySwapChainSupport();
-        builder.setSurfaceFormat({ VK_FORMAT_B8G8R8A8_SRGB ,VK_COLOR_SPACE_SRGB_NONLINEAR_KHR }, details.formats[0]);
-        builder.setPresentMode(VK_PRESENT_MODE_MAILBOX_KHR, VK_PRESENT_MODE_FIFO_KHR);
-        builder.setImageExtent(details.capabilities.value().currentExtent, getExtent(window, details.capabilities.value()));
-        builder.setMinImageCount(std::min<uint32_t>(details.capabilities.value().minImageCount + 1, details.capabilities.value().maxImageCount));
-        builder.setImageArrayLayers(1);
-        builder.setImageUsageFlags(VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT);
-        builder.setPreTransform(details.capabilities.value().currentTransform);
-        builder.setCompositeAlpha(VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR);
-        builder.setClipped(VK_TRUE);
-        builder.setOldSwapChain(SwapChain());
-        //if you use VK_SHARING_MODE_CONCURRENT only the present and graphics queue are different
-        builder.setImageSharingMode(VK_SHARING_MODE_EXCLUSIVE); 
-
-        QueueFamilyIndices indices = phyDevice.findQueueFamilies(QUEUE_GRAPHICS_BIT | QUEUE_PRESENT_BIT, surface);
-        std::vector<uint32_t> queueFamilyIndicesVec = indices.exportIndices();
-        builder.setQueueFamilyIndices(queueFamilyIndicesVec);
-
-        swapChain = builder.build();
-
-        ImageViewBuilder imgViewBuilder(device);
-        std::vector<VkImage> imgs = swapChain.getImages();
-        std::vector<ImageView> imgViews(imgs.size());
-        int32_t imgSize = imgs.size();
-        VkImageSubresourceRange range{};
-        range.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-        range.baseMipLevel = 0;
-        range.levelCount = 1;
-        range.baseArrayLayer = 0;
-        range.layerCount = 1;
-        for (size_t i = 0; i <imgSize; i++) {
-            imgViews[i] = imgViewBuilder.setImage(imgs[i])
-                .setImageViewType(VK_IMAGE_VIEW_TYPE_2D)
-                .setFormat(swapChain.getSurfaceFormat().format)
-                .setComponentMapping(VkComponentMapping(VK_COMPONENT_SWIZZLE_IDENTITY,
-                    VK_COMPONENT_SWIZZLE_IDENTITY,
-                    VK_COMPONENT_SWIZZLE_IDENTITY,
-                    VK_COMPONENT_SWIZZLE_IDENTITY))
-                .setImageSubresourceRange(range)
-                .build();
-        }
+        CreateSwapChain();
+        CreateImageView();
+        
 
         //create shaders
         std::string exePath = GetExecutablePath();
@@ -283,7 +392,7 @@ private:
         scissor.offset = { 0, 0 };
         scissor.extent = swapChain.getExtent();
 
-        PipelineLayout layout = PipelineLayoutBuilder(device).build();
+        layout = PipelineLayoutBuilder(device).build();
 
         VkPipelineColorBlendAttachmentState colorBlendAttachment{};
         colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -322,18 +431,13 @@ private:
             .setPipelineLayout(layout)
             //renderpass
             .setRenderPass(renderPass)
+            //vertex
+            .setVertexInputBindingDescriptions(Vertex::getBindingDescriptions() )
+            .setVertexInputAttributeDescriptions(Vertex::getAttributeDescriptions())
             .build();
 
         //create framebuffers
-        FrameBufferBuilder fbBuilder(device);
-        for (size_t i = 0; i < swapChain.getImages().size(); i++) {
-            fbBuilder.setRenderPass(renderPass)
-                .setWidth(swapChain.getExtent().width)
-                .setHeight(swapChain.getExtent().height)
-                .setLayers(1)
-                .setAttachments({ imgViews[i] });
-            swapChainFramebuffers.push_back(fbBuilder.build());
-        }
+        CreateFrameBuffers();
 
         //create command buffers
         QueueFamilyIndices queueFamilyIndices = phyDevice.findQueueFamilies(QUEUE_GRAPHICS_BIT | QUEUE_PRESENT_BIT, surface);
@@ -346,6 +450,8 @@ private:
         for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
             cmdBuffers[i] = pool.allocBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY);
         }
+
+        CreateVertexBuffer();
 
         //createSemaphores
         imageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
@@ -385,6 +491,9 @@ private:
 
         cmdBuffers[currentFrame].bindPipeline(pipeline, VK_PIPELINE_BIND_POINT_GRAPHICS);
         
+        //bind vertex buffer
+        cmdBuffers[currentFrame].bindVertexBuffer(vertexBuffer, 0);
+
         VkExtent2D ext = swapChain.getExtent();
         VkViewport viewport{.x = 0.0f, .y = 0.0f ,.width = static_cast<float>(ext.width),
         .height = static_cast<float>(ext.height), .minDepth = 0.0f, .maxDepth = 1.0f};
@@ -403,9 +512,21 @@ private:
 
     void drawFrame() {
         inFlightFences[currentFrame].wait(UINT64_MAX);
-        inFlightFences[currentFrame].reset();
+        
         Fence fence;
-        uint32_t imageIndex = swapChain.acquireNextImageKHR(UINT64_MAX, imageAvailableSemaphores[currentFrame], fence);
+        uint32_t imageIndex;
+        
+        VkResult result =  swapChain.acquireNextImageKHR(UINT64_MAX, imageAvailableSemaphores[currentFrame], fence, imageIndex);
+        if (result == VK_ERROR_OUT_OF_DATE_KHR) {
+            recreateSwapChain();
+            return;
+        }
+        else if(result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR){
+            throw std::runtime_error("failed to acquire swap chain!");
+        }
+        //only reset the fence if we are submitting work
+        inFlightFences[currentFrame].reset();
+
         cmdBuffers[currentFrame].reset();
         recordCommandBuffer(imageIndex);
 
@@ -436,7 +557,16 @@ private:
         presentInfo.pResults = nullptr; // Optional
 
         DeviceQueue presentQueue = device.getDeviceQueue(QUEUE_PRESENT_BIT);
-        presentQueue.presentKHR(presentInfo);
+        result = presentQueue.presentKHR(presentInfo);
+        if (result == VK_ERROR_OUT_OF_DATE_KHR 
+            || result == VK_SUBOPTIMAL_KHR
+            || framebufferResized) {
+            framebufferResized = false;
+            recreateSwapChain();
+        }
+        else if (result != VK_SUCCESS) {
+            throw std::runtime_error("failed to present swap chain image!");
+        }
 
         currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
     }
@@ -449,19 +579,29 @@ private:
     }
 
     void cleanup() {
+
+        //clearUpSwapChain();
+        vertexBuffer.cleanUp();
+        vertexBufferMemory.free();
+        //pipeline.cleanUp();
+        layout.cleanUp();
         for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
             imageAvailableSemaphores[i].cleanUp();
             renderFinishedSemaphores[i].cleanUp();
             inFlightFences[i].cleanUp();
         }
         
-
         pool.cleanUp();
 
         glfwDestroyWindow(window);
         glfwTerminate();
     }
 };
+
+static void framebufferResizeCallback(GLFWwindow* window, int width, int height) {
+    auto app = reinterpret_cast<HelloTriangleApplication*>(glfwGetWindowUserPointer(window));
+    app->framebufferResized = true;
+}
 
 int main() {
     HelloTriangleApplication app;

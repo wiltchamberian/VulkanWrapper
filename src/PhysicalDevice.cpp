@@ -125,6 +125,12 @@ bool PhysicalDevice::checkSwapChainSupport(const SwapChainSupportDetails & detai
     return formats.empty() && presentModes.empty()/* && capabilities.empty()*/;
 }
 
+VkPhysicalDeviceMemoryProperties PhysicalDevice::queryPhysicalDeviceMemoryProperties() {
+    VkPhysicalDeviceMemoryProperties memProperties;
+    vkGetPhysicalDeviceMemoryProperties(dev, &memProperties);
+    return memProperties;
+}
+
 VkSurfaceCapabilitiesKHR PhysicalDevice::queryPhysicalDeviceSurfaceCapabilities(Surface surface) {
     VkSurfaceCapabilitiesKHR cap{};
     if (surface.isValid()) {

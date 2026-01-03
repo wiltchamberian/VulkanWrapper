@@ -8,6 +8,7 @@
 #include "PhysicalDevice.h"
 #include "LogicalDevice.h"
 #include "SwapChainBuilder.h"
+#include "Pipeline.h"
 #include "PipelineBuilder.h"
 #include "PipelineLayoutBuilder.h"
 #include "RenderPassBuilder.h"
@@ -23,6 +24,8 @@
 #include "CommandPoolBuilder.h"
 #include "CommandPool.h"
 #include "CommandBuffer.h"
+#include "BufferBuilder.h"
+#include "MemoryAllocator.h"
 #include "DebugMessengerBuilder.h"
 
 

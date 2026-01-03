@@ -25,22 +25,22 @@ G:\MyVulkan\VulkanWrapper\src\InstanceBuilder.h(27,27): warning C4251: “Instan
       D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
       参见“std::vector<std::string,std::allocator<std::string>>”的声明
   
-G:\MyVulkan\VulkanWrapper\src\SwapChainBuilder.h(45,38): warning C4251: “SwapChainBuilder::minImageCount”:“std::optional<uint32_t>”需要有 dll 接口以供“SwapChainBuilder”的客户端使用
+G:\MyVulkan\VulkanWrapper\src\SwapChainBuilder.h(46,38): warning C4251: “SwapChainBuilder::minImageCount”:“std::optional<uint32_t>”需要有 dll 接口以供“SwapChainBuilder”的客户端使用
   (编译源文件“../Console/Console.cpp”)
       D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\optional(227,7):
       参见“std::optional<uint32_t>”的声明
   
-G:\MyVulkan\VulkanWrapper\src\SwapChainBuilder.h(46,38): warning C4251: “SwapChainBuilder::surfaceFormat”:“std::optional<VkSurfaceFormatKHR>”需要有 dll 接口以供“SwapChainBuilder”的客户端使用
+G:\MyVulkan\VulkanWrapper\src\SwapChainBuilder.h(47,38): warning C4251: “SwapChainBuilder::surfaceFormat”:“std::optional<VkSurfaceFormatKHR>”需要有 dll 接口以供“SwapChainBuilder”的客户端使用
   (编译源文件“../Console/Console.cpp”)
       D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\optional(227,7):
       参见“std::optional<VkSurfaceFormatKHR>”的声明
   
-G:\MyVulkan\VulkanWrapper\src\SwapChainBuilder.h(51,38): warning C4251: “SwapChainBuilder::queueFamilyIndices”:“std::vector<uint32_t,std::allocator<uint32_t>>”需要有 dll 接口以供“SwapChainBuilder”的客户端使用
+G:\MyVulkan\VulkanWrapper\src\SwapChainBuilder.h(52,38): warning C4251: “SwapChainBuilder::queueFamilyIndices”:“std::vector<uint32_t,std::allocator<uint32_t>>”需要有 dll 接口以供“SwapChainBuilder”的客户端使用
   (编译源文件“../Console/Console.cpp”)
       D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
       参见“std::vector<uint32_t,std::allocator<uint32_t>>”的声明
   
-G:\MyVulkan\VulkanWrapper\src\SwapChainBuilder.h(54,38): warning C4251: “SwapChainBuilder::presentMode”:“std::optional<VkPresentModeKHR>”需要有 dll 接口以供“SwapChainBuilder”的客户端使用
+G:\MyVulkan\VulkanWrapper\src\SwapChainBuilder.h(55,38): warning C4251: “SwapChainBuilder::presentMode”:“std::optional<VkPresentModeKHR>”需要有 dll 接口以供“SwapChainBuilder”的客户端使用
   (编译源文件“../Console/Console.cpp”)
       D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\optional(227,7):
       参见“std::optional<VkPresentModeKHR>”的声明
@@ -150,6 +150,8 @@ G:\MyVulkan\VulkanWrapper\src\Fence.h(34,23): warning C4251: “FenceGroup::fenc
       D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
       参见“std::vector<VkFence,std::allocator<VkFence>>”的声明
   
-G:\MyVulkan\VulkanWrapper\Console\Console.cpp(73,23): warning C4018: “<”: 有符号/无符号不匹配
-G:\MyVulkan\VulkanWrapper\Console\Console.cpp(206,25): warning C4267: “初始化”: 从“size_t”转换到“int32_t”，可能丢失数据
+G:\MyVulkan\VulkanWrapper\Console\Console.cpp(80,23): warning C4018: “<”: 有符号/无符号不匹配
+G:\MyVulkan\VulkanWrapper\Console\Console.cpp(209,25): warning C4267: “初始化”: 从“size_t”转换到“int32_t”，可能丢失数据
+G:\MyVulkan\VulkanWrapper\Console\Console.cpp(255,51): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+G:\MyVulkan\VulkanWrapper\Console\Console.cpp(269,79): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
   ConsoleApplication1.vcxproj -> G:\MyVulkan\VulkanWrapper\package\exe\ConsoleApplication1.exe

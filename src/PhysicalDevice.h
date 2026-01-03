@@ -16,6 +16,7 @@ public:
 	bool isValid() {
 		return (dev != VK_NULL_HANDLE);
 	}
+	VkPhysicalDeviceMemoryProperties queryPhysicalDeviceMemoryProperties();
 	VkSurfaceCapabilitiesKHR queryPhysicalDeviceSurfaceCapabilities(Surface surface);
 	std::vector<VkSurfaceFormatKHR> queryPhysicalDeviceSurfaceFormats(Surface surface);
 	std::vector<VkPresentModeKHR> queryPhysicalDeviceSurfacePresentModes(Surface surface);

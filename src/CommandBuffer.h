@@ -4,6 +4,7 @@
 #include "export.h"
 #include "vulkan/vulkan.h"
 #include "Pipeline.h"
+#include "Buffer.h"
 
 class VULKAN_WRAPPER_API CommandBuffer {
 public:
@@ -15,6 +16,7 @@ public:
 	CommandBuffer& begin(VkCommandBufferUsageFlags flags, const VkCommandBufferInheritanceInfo* pInheritanceInfo = nullptr);
 	CommandBuffer& beginRenderPass(const VkRenderPassBeginInfo& info, VkSubpassContents content);
 	CommandBuffer& bindPipeline(Pipeline& pipeline, VkPipelineBindPoint bindPoint);
+	CommandBuffer& bindVertexBuffer(Buffer buffer, int deviceOffset);
 	CommandBuffer& setViewPort(uint32_t firstViewport,uint32_t viewportCount,const VkViewport* pViewports);
 	CommandBuffer& setViewPort(VkViewport& pViewport);
 	CommandBuffer& setScissor(uint32_t firstScissor,uint32_t scissorCount,const VkRect2D* pScissors);

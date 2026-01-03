@@ -1,6 +1,10 @@
 #include "SwapChainBuilder.h"
 #include <stdexcept>
 
+SwapChainBuilder::SwapChainBuilder() {
+
+}
+
 SwapChainBuilder::SwapChainBuilder(LogicalDevice& dev, Surface& surf)
 	:logicalDev(dev)
 	, surface(surf)

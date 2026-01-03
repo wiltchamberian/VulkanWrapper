@@ -162,10 +162,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\Buffer.h" />
+    <ClInclude Include="..\src\BufferBuilder.h" />
     <ClInclude Include="..\src\CommandBuffer.h" />
     <ClInclude Include="..\src\CommandPool.h" />
     <ClInclude Include="..\src\CommandPoolBuilder.h" />
     <ClInclude Include="..\src\DebugMessengerBuilder.h" />
+    <ClInclude Include="..\src\DeviceMemory.h" />
     <ClInclude Include="..\src\DeviceQueue.h" />
     <ClInclude Include="..\src\Fence.h" />
     <ClInclude Include="..\src\FenceBuilder.h" />
@@ -173,6 +176,7 @@
     <ClInclude Include="..\src\FrameBufferBuilder.h" />
     <ClInclude Include="..\src\ImageView.h" />
     <ClInclude Include="..\src\ImageViewBuilder.h" />
+    <ClInclude Include="..\src\MemoryAllocator.h" />
     <ClInclude Include="..\src\PipelineBuilder.h" />
     <ClInclude Include="..\src\Common.h" />
     <ClInclude Include="..\src\DescriptorSetLayout.h" />
@@ -201,10 +205,13 @@
     <ClInclude Include="framework.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\Buffer.cpp" />
+    <ClCompile Include="..\src\BufferBuilder.cpp" />
     <ClCompile Include="..\src\CommandBuffer.cpp" />
     <ClCompile Include="..\src\CommandPool.cpp" />
     <ClCompile Include="..\src\CommandPoolBuilder.cpp" />
     <ClCompile Include="..\src\DebugMessengerBuilder.cpp" />
+    <ClCompile Include="..\src\DeviceMemory.cpp" />
     <ClCompile Include="..\src\DeviceQueue.cpp" />
     <ClCompile Include="..\src\Fence.cpp" />
     <ClCompile Include="..\src\FenceBuilder.cpp" />
@@ -212,6 +219,7 @@
     <ClCompile Include="..\src\FrameBufferBuilder.cpp" />
     <ClCompile Include="..\src\ImageView.cpp" />
     <ClCompile Include="..\src\ImageViewBuilder.cpp" />
+    <ClCompile Include="..\src\MemoryAllocator.cpp" />
     <ClCompile Include="..\src\PipelineBuilder.cpp" />
     <ClCompile Include="..\src\DescriptorSetLayout.cpp" />
     <ClCompile Include="..\src\DescriptorSetLayoutBuilder.cpp" />
