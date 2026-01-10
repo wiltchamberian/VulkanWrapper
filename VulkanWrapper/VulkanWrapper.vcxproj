@@ -177,6 +177,7 @@
     <ClInclude Include="..\src\ImageView.h" />
     <ClInclude Include="..\src\ImageViewBuilder.h" />
     <ClInclude Include="..\src\MemoryAllocator.h" />
+    <ClInclude Include="..\src\Pipeline.h" />
     <ClInclude Include="..\src\PipelineBuilder.h" />
     <ClInclude Include="..\src\Common.h" />
     <ClInclude Include="..\src\DescriptorSetLayout.h" />
@@ -222,6 +223,7 @@
     <ClCompile Include="..\src\ImageView.cpp" />
     <ClCompile Include="..\src\ImageViewBuilder.cpp" />
     <ClCompile Include="..\src\MemoryAllocator.cpp" />
+    <ClCompile Include="..\src\Pipeline.cpp" />
     <ClCompile Include="..\src\PipelineBuilder.cpp" />
     <ClCompile Include="..\src\DescriptorSetLayout.cpp" />
     <ClCompile Include="..\src\DescriptorSetLayoutBuilder.cpp" />
@@ -250,8 +252,6 @@
   <ItemGroup>
     <Text Include="..\src\DebugMessenger.cpp" />
     <Text Include="..\src\DebugMessenger.h" />
-    <Text Include="..\src\Pipeline.cpp" />
-    <Text Include="..\src\Pipeline.h" />
     <Text Include="..\src\RenderPass.cpp" />
     <Text Include="..\src\RenderPass.h" />
   </ItemGroup>

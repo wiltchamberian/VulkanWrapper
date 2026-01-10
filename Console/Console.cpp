@@ -657,7 +657,7 @@ private:
             vertexBuffer.cleanUp();
         }
         vertexBufferMemory.free();
-        //pipeline.cleanUp();
+        pipeline.cleanUp();
         layout.cleanUp();
         for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
             imageAvailableSemaphores[i].cleanUp();
