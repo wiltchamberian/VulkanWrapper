@@ -4,6 +4,7 @@
 #include "export.h"
 #include "vulkan/vulkan.h"
 #include "Common.h"
+#include "Instance.h"
 #include <optional>
 #include <vector>
 #include <string>
@@ -26,9 +27,13 @@ public:
 	VkPhysicalDevice& value() {
 		return dev;
 	}
+	VulkanInstance& Instance() {
+		return instance;
+	}
 
 	QueueFamilyIndices findQueueFamilies(VkQueueFlags flags, Surface surface);
 private:
+	VulkanInstance instance;
 	VkPhysicalDevice dev = VK_NULL_HANDLE;
 	QueueFamilyIndices indices;
 	bool checkDeviceExtensionSupport(const std::vector<std::string>& extensions);

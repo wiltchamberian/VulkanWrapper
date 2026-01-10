@@ -6,7 +6,4 @@ void Pipeline::cleanUp() {
 	}
 }
 
-void Pipeline::Test() {
-
-}
 

@@ -128,13 +128,15 @@ private:
     const uint32_t WIDTH = 800;
     const uint32_t HEIGHT = 600;
     GLFWwindow* window = nullptr;
-    HINSTANCE hInstance;
-    HWND hwnd;
+    HINSTANCE hInstance = nullptr;
+    HWND hwnd = nullptr;
 
     VulkanInstance instance;
     DebugMessenger dbMessenger;
     PhysicalDevice phyDevice;
     LogicalDevice  device;
+    DeviceQueue graphicsQueue;
+    DeviceQueue presentQueue;
     Surface surface;
     SwapChain swapChain;
     std::vector<FrameBuffer> swapChainFramebuffers;
@@ -142,6 +144,7 @@ private:
     RenderPass renderPass;
     Pipeline pipeline;
     PipelineLayout layout;
+    std::unique_ptr<Vma> vma;
 
     CommandPool pool;
     std::vector<CommandBuffer> cmdBuffers;
@@ -250,6 +253,67 @@ private:
         throw std::runtime_error("failed to find suitable memory type!");
     }
 
+    Buffer createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VmaMemoryUsage vmaUsage) {
+        if (vma == nullptr) {
+            vma = std::make_unique<Vma>(device);
+        }
+        Buffer buffer;
+        vma->SetUsage(VmaMemoryUsage::VMA_MEMORY_USAGE_CPU_TO_GPU);
+        VkBufferCreateInfo ci{};
+        ci.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+        ci.usage = usage;
+        ci.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+        ci.size = size;
+        buffer = vma->CreateBuffer(ci);
+        return buffer;
+    }
+
+    void CreateVertexBufferByVma() {
+        //VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
+        //createBuffer(bufferSize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VmaMemoryUsage::VMA_MEMORY_USAGE_CPU_TO_GPU);
+
+        //vma->MapData(vertexBuffer, vertices.data(), bufferSize);
+
+        VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
+
+        Buffer stagingBuffer = createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VmaMemoryUsage::VMA_MEMORY_USAGE_CPU_TO_GPU);
+        vma->MapData(stagingBuffer, vertices.data(), bufferSize);
+
+        vertexBuffer = createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VmaMemoryUsage::VMA_MEMORY_USAGE_GPU_ONLY);
+    
+        copyBuffer(stagingBuffer, vertexBuffer, bufferSize);
+
+        vma->ReleaseBuffer(stagingBuffer);
+    }
+
+    void copyBuffer(Buffer srcBuffer, Buffer dstBuffer, VkDeviceSize size) {
+        CommandBuffer commandBuffer = pool.allocBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY);
+
+        
+        VkCommandBufferBeginInfo beginInfo{};
+        beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+        beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+        commandBuffer.begin(beginInfo);
+
+        VkBufferCopy copyRegion{};
+        copyRegion.srcOffset = 0; // Optional
+        copyRegion.dstOffset = 0; // Optional
+        copyRegion.size = size;
+        commandBuffer.copyBuffer(copyRegion, srcBuffer, dstBuffer);
+
+        commandBuffer.end();
+
+        VkSubmitInfo submitInfo{};
+        submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+        submitInfo.commandBufferCount = 1;
+        submitInfo.pCommandBuffers = &commandBuffer.value();
+        Fence fence;
+        graphicsQueue.submit(submitInfo, fence);
+        graphicsQueue.waitIdle();
+
+        pool.freeBuffer(commandBuffer);
+    }
+
     void CreateVertexBuffer() {
         BufferBuilder bufferBuilder(device);
         bufferBuilder.SetSize(sizeof(vertices[0]) * vertices.size())
@@ -267,6 +331,8 @@ private:
         vertexBuffer.bindMemory(vertexBufferMemory, 0);
         
         vertexBufferMemory.copyMemory(vertices.data(), 0, sizeof(vertices[0]) * vertices.size(), 0);
+    
+        
     }
 
     void recreateSwapChain() {
@@ -326,6 +392,9 @@ private:
             { VK_KHR_SWAPCHAIN_EXTENSION_NAME }, physicalDeviceFilter);
         device = phyDevice.createLogicalDevice(QUEUE_GRAPHICS_BIT |
             QUEUE_PRESENT_BIT, {}, { VK_KHR_SWAPCHAIN_EXTENSION_NAME });
+
+        graphicsQueue = device.getDeviceQueue(QUEUE_GRAPHICS_BIT, 0);
+        presentQueue = device.getDeviceQueue(QUEUE_PRESENT_BIT);
 
         CreateSwapChain();
         CreateImageView();
@@ -451,7 +520,7 @@ private:
             cmdBuffers[i] = pool.allocBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY);
         }
 
-        CreateVertexBuffer();
+        CreateVertexBufferByVma();
 
         //createSemaphores
         imageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
@@ -581,7 +650,12 @@ private:
     void cleanup() {
 
         //clearUpSwapChain();
-        vertexBuffer.cleanUp();
+        if (vertexBuffer.isAllocatedByVma()) {
+            vma->ReleaseBuffer(vertexBuffer);
+        }
+        else {
+            vertexBuffer.cleanUp();
+        }
         vertexBufferMemory.free();
         //pipeline.cleanUp();
         layout.cleanUp();

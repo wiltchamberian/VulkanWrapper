@@ -14,7 +14,7 @@ public:
 	void cleanUp();
 	CommandBuffer allocBuffer(VkCommandBufferLevel level);
 	std::vector<CommandBuffer> allocBuffers(VkCommandBufferLevel level,uint32_t count);
-	void destroyBuffer(const CommandBuffer& buf);
+	void freeBuffer(CommandBuffer& buf);
 private:
 	LogicalDevice dev;
 	VkCommandPool pool;

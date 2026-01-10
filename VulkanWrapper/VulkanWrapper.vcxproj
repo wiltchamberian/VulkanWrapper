@@ -200,6 +200,8 @@
     <ClInclude Include="..\src\SwapChainBuilder.h" />
     <ClInclude Include="..\src\Tools.h" />
     <ClInclude Include="..\src\SamplerBuilder.h" />
+    <ClInclude Include="..\src\vk_mem_alloc.h" />
+    <ClInclude Include="..\src\Vma.h" />
     <ClInclude Include="..\src\VulkanImage.h" />
     <ClInclude Include="..\src\Wrapper.h" />
     <ClInclude Include="framework.h" />
@@ -241,6 +243,7 @@
     <ClCompile Include="..\src\SwapChain.cpp" />
     <ClCompile Include="..\src\SwapChainBuilder.cpp" />
     <ClCompile Include="..\src\Tools.cpp" />
+    <ClCompile Include="..\src\Vma.cpp" />
     <ClCompile Include="..\src\VulkanImage.cpp" />
     <ClCompile Include="..\src\Wrapper.cpp" />
   </ItemGroup>

@@ -44,6 +44,6 @@ std::vector<CommandBuffer> CommandPool::allocBuffers(VkCommandBufferLevel level,
 	return buffers;
 }
 
-void CommandPool::destroyBuffer(const CommandBuffer& buf) {
-
+void CommandPool::freeBuffer(CommandBuffer& buf) {
+	vkFreeCommandBuffers(dev.value(), pool, 1, &buf.value());
 }

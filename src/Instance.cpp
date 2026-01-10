@@ -22,6 +22,7 @@ PhysicalDevice VulkanInstance::selectPhysicalDevice(VkQueueFlags flags, Surface 
     bool bingo = false;
     for (const auto& device : devices) {
         dev.value() = device;
+        dev.Instance() = *this;
         VkPhysicalDeviceProperties deviceProperties;
         VkPhysicalDeviceFeatures deviceFeatures;
         vkGetPhysicalDeviceProperties(device, &deviceProperties);
@@ -40,6 +41,7 @@ PhysicalDevice VulkanInstance::selectPhysicalDevice(VkQueueFlags flags, Surface 
 
     if (bingo == false) {
         dev.value() = VK_NULL_HANDLE;
+        dev.Instance() = VulkanInstance();
         throw std::runtime_error("failed to find a suitable GPU!");
     }
 

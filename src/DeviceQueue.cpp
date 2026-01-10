@@ -11,3 +11,10 @@ void DeviceQueue::submit(const VkSubmitInfo& submitInfo, const Fence& fence) {
 VkResult DeviceQueue::presentKHR(const VkPresentInfoKHR& presentInfo) {
 	return vkQueuePresentKHR(que, &presentInfo);
 }
+
+void DeviceQueue::waitIdle() {
+	VkResult result  = vkQueueWaitIdle(que);
+	if (result != VK_SUCCESS) {
+		throw std::runtime_error("device queue failed to wait idle!");
+	}
+}

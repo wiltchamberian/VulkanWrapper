@@ -81,3 +81,8 @@ CommandBuffer& CommandBuffer::reset(VkCommandBufferResetFlags flags) {
 CommandBuffer& CommandBuffer::record() {
 	return *this;
 }
+
+CommandBuffer& CommandBuffer::copyBuffer(VkBufferCopy region, Buffer srcBuffer, Buffer dstBuffer) {
+	vkCmdCopyBuffer(buf, srcBuffer.value(), dstBuffer.value(), 1, &region);
+	return *this;
+}

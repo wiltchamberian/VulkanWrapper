@@ -6,6 +6,8 @@
 #include "LogicalDevice.h"
 #include "vulkan/vulkan.h"
 
+
+
 class VULKAN_WRAPPER_API MemoryAllocator {
 public:
     MemoryAllocator(LogicalDevice dev);
@@ -13,6 +15,7 @@ public:
     MemoryAllocator& SetAllocationSize(uint64_t siz);
     MemoryAllocator& SetMemoryTypeIndex(uint32_t index);
 private:
+    
     LogicalDevice dev;
     VkMemoryAllocateInfo ai = {};
 };

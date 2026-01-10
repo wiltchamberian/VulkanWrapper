@@ -8,7 +8,6 @@ public:
 	friend class PipelineBuilder;
 	VkPipeline& value() { return pipeline; }
 	void cleanUp();
-	void Test();
 private:
 	LogicalDevice dev;
 	VkPipeline pipeline = VK_NULL_HANDLE;

@@ -10,7 +10,9 @@ DeviceMemory::DeviceMemory(LogicalDevice d)
 }
 
 void DeviceMemory::free() {
-    vkFreeMemory(dev.value(), memory, nullptr);
+    if (memory != VK_NULL_HANDLE) {
+        vkFreeMemory(dev.value(), memory, nullptr);
+    }
 }
 
 void DeviceMemory::copyMemory(const void* vertexData, int deviceOffset, int deviceSize, VkMemoryMapFlags flags) {

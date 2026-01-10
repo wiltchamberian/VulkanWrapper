@@ -1,8 +1,9 @@
 #include "MemoryAllocator.h"
 
+
 MemoryAllocator::MemoryAllocator(LogicalDevice logicalDev)
 :dev(logicalDev){
-
+    
 }
 
 DeviceMemory MemoryAllocator::allocateMemory() {

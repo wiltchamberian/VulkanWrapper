@@ -26,6 +26,7 @@ public:
 	CommandBuffer& end();
 	CommandBuffer& reset(VkCommandBufferResetFlags flags = 0);
 	CommandBuffer& record();
+	CommandBuffer& copyBuffer(VkBufferCopy region, Buffer srcBuffer, Buffer dstBuffer);
 private:
 	VkCommandBuffer buf = VK_NULL_HANDLE;
 };

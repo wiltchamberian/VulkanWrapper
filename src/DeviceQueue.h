@@ -11,6 +11,7 @@ public:
 	friend class LogicalDevice;
 	void submit(const VkSubmitInfo& submitInfo, const Fence& fence);
 	VkResult presentKHR(const VkPresentInfoKHR& presentInfo);
+	void waitIdle();
 private:
 	VkQueue que = VK_NULL_HANDLE;
 };
