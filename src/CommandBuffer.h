@@ -17,11 +17,13 @@ public:
 	CommandBuffer& beginRenderPass(const VkRenderPassBeginInfo& info, VkSubpassContents content);
 	CommandBuffer& bindPipeline(Pipeline& pipeline, VkPipelineBindPoint bindPoint);
 	CommandBuffer& bindVertexBuffer(Buffer buffer, int deviceOffset);
+	CommandBuffer& bindIndexBuffer(Buffer buffer, int deviceOffset, VkIndexType indexType);
 	CommandBuffer& setViewPort(uint32_t firstViewport,uint32_t viewportCount,const VkViewport* pViewports);
 	CommandBuffer& setViewPort(VkViewport& pViewport);
 	CommandBuffer& setScissor(uint32_t firstScissor,uint32_t scissorCount,const VkRect2D* pScissors);
 	CommandBuffer& setScissor(VkRect2D& pScissor);
 	CommandBuffer& draw(uint32_t vertexCount,uint32_t instanceCount,uint32_t firstVertex,uint32_t firstInstance);
+	CommandBuffer& drawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t firstIndex, uint32_t vertexOffset, uint32_t firstInstance);
 	CommandBuffer& endRenderPass();
 	CommandBuffer& end();
 	CommandBuffer& reset(VkCommandBufferResetFlags flags = 0);

@@ -150,9 +150,10 @@ G:\MyVulkan\VulkanWrapper\src\Fence.h(34,23): warning C4251: “FenceGroup::fenc
       D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vector(442,7):
       参见“std::vector<VkFence,std::allocator<VkFence>>”的声明
   
-G:\MyVulkan\VulkanWrapper\Console\Console.cpp(80,23): warning C4018: “<”: 有符号/无符号不匹配
-G:\MyVulkan\VulkanWrapper\Console\Console.cpp(212,25): warning C4267: “初始化”: 从“size_t”转换到“int32_t”，可能丢失数据
-G:\MyVulkan\VulkanWrapper\Console\Console.cpp(280,54): warning C4244: “参数”: 从“VkDeviceSize”转换到“int”，可能丢失数据
-G:\MyVulkan\VulkanWrapper\Console\Console.cpp(319,51): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
-G:\MyVulkan\VulkanWrapper\Console\Console.cpp(333,79): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+G:\MyVulkan\VulkanWrapper\Console\Console.cpp(91,23): warning C4018: “<”: 有符号/无符号不匹配
+G:\MyVulkan\VulkanWrapper\Console\Console.cpp(225,25): warning C4267: “初始化”: 从“size_t”转换到“int32_t”，可能丢失数据
+G:\MyVulkan\VulkanWrapper\Console\Console.cpp(299,54): warning C4244: “参数”: 从“VkDeviceSize”转换到“int”，可能丢失数据
+G:\MyVulkan\VulkanWrapper\Console\Console.cpp(304,52): warning C4244: “参数”: 从“VkDeviceSize”转换到“int”，可能丢失数据
+G:\MyVulkan\VulkanWrapper\Console\Console.cpp(336,51): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+G:\MyVulkan\VulkanWrapper\Console\Console.cpp(350,79): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
   ConsoleApplication1.vcxproj -> G:\MyVulkan\VulkanWrapper\package\exe\ConsoleApplication1.exe

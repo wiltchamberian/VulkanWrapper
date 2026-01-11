@@ -22,10 +22,21 @@
 
 #include <Windows.h>
 
+//const std::vector<Vertex> vertices = {
+//    {{0.0f, -0.5f}, {1.0f, 1.0f, 1.0f}},
+//    {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
+//    {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
+//};
+
 const std::vector<Vertex> vertices = {
-    {{0.0f, -0.5f}, {1.0f, 1.0f, 1.0f}},
-    {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
-    {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
+    {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+    {{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
+    {{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
+    {{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
+};
+
+const std::vector<uint16_t> indices = {
+    0, 1, 2, 2, 3, 0
 };
 
 std::string GetExecutablePath() {
@@ -151,6 +162,8 @@ private:
 
     Buffer vertexBuffer;
     DeviceMemory vertexBufferMemory;
+    Buffer indexBuffer;
+    DeviceMemory indexBufferMemory;
 
     SwapChainBuilder swapChainBuilder;
     ImageViewBuilder imgViewBuilder;
@@ -258,7 +271,7 @@ private:
             vma = std::make_unique<Vma>(device);
         }
         Buffer buffer;
-        vma->SetUsage(VmaMemoryUsage::VMA_MEMORY_USAGE_CPU_TO_GPU);
+        vma->SetUsage(vmaUsage);
         VkBufferCreateInfo ci{};
         ci.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
         ci.usage = usage;
@@ -268,28 +281,32 @@ private:
         return buffer;
     }
 
-    void CreateVertexBufferByVma() {
-        //VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
-        //createBuffer(bufferSize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VmaMemoryUsage::VMA_MEMORY_USAGE_CPU_TO_GPU);
+    Buffer CreateBuffer(const void* data, int siz, VkBufferUsageFlagBits flags) {
+        
+        Buffer stagingBuffer = createBuffer(siz, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VmaMemoryUsage::VMA_MEMORY_USAGE_CPU_TO_GPU);
+        vma->MapData(stagingBuffer, data, siz);
 
-        //vma->MapData(vertexBuffer, vertices.data(), bufferSize);
+        Buffer buffer = createBuffer(siz, VK_BUFFER_USAGE_TRANSFER_DST_BIT | flags, VmaMemoryUsage::VMA_MEMORY_USAGE_GPU_ONLY);
 
-        VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
-
-        Buffer stagingBuffer = createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VmaMemoryUsage::VMA_MEMORY_USAGE_CPU_TO_GPU);
-        vma->MapData(stagingBuffer, vertices.data(), bufferSize);
-
-        vertexBuffer = createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VmaMemoryUsage::VMA_MEMORY_USAGE_GPU_ONLY);
-    
-        copyBuffer(stagingBuffer, vertexBuffer, bufferSize);
+        copyBuffer(stagingBuffer, buffer, siz);
 
         vma->ReleaseBuffer(stagingBuffer);
+        return buffer;
+    }
+
+    void CreateVertexBufferByVma() {
+        VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
+        vertexBuffer = CreateBuffer(vertices.data(), bufferSize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT);
+    }
+
+    void CreateIndexBufferByVma() {
+        VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
+        indexBuffer = CreateBuffer(indices.data(), bufferSize, VK_BUFFER_USAGE_INDEX_BUFFER_BIT);
     }
 
     void copyBuffer(Buffer srcBuffer, Buffer dstBuffer, VkDeviceSize size) {
         CommandBuffer commandBuffer = pool.allocBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY);
 
-        
         VkCommandBufferBeginInfo beginInfo{};
         beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
         beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
@@ -521,6 +538,7 @@ private:
         }
 
         CreateVertexBufferByVma();
+        CreateIndexBufferByVma();
 
         //createSemaphores
         imageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
@@ -559,9 +577,10 @@ private:
         cmdBuffers[currentFrame].beginRenderPass(renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
         cmdBuffers[currentFrame].bindPipeline(pipeline, VK_PIPELINE_BIND_POINT_GRAPHICS);
-        
+       
         //bind vertex buffer
         cmdBuffers[currentFrame].bindVertexBuffer(vertexBuffer, 0);
+        cmdBuffers[currentFrame].bindIndexBuffer(indexBuffer, 0, VK_INDEX_TYPE_UINT16);
 
         VkExtent2D ext = swapChain.getExtent();
         VkViewport viewport{.x = 0.0f, .y = 0.0f ,.width = static_cast<float>(ext.width),
@@ -573,7 +592,8 @@ private:
         scissor.extent = ext;
         cmdBuffers[currentFrame].setScissor(scissor);
 
-        cmdBuffers[currentFrame].draw(3, 1, 0, 0); //similar as glDrawBuffers
+        //cmdBuffers[currentFrame].draw(3, 1, 0, 0); //similar as glDrawBuffers
+        cmdBuffers[currentFrame].drawIndexed(static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
 
         cmdBuffers[currentFrame].endRenderPass();
         cmdBuffers[currentFrame].end();
@@ -648,15 +668,9 @@ private:
     }
 
     void cleanup() {
-
+        device.waitIdle();
         //clearUpSwapChain();
-        if (vertexBuffer.isAllocatedByVma()) {
-            vma->ReleaseBuffer(vertexBuffer);
-        }
-        else {
-            vertexBuffer.cleanUp();
-        }
-        vertexBufferMemory.free();
+        
         pipeline.cleanUp();
         layout.cleanUp();
         for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
@@ -666,6 +680,21 @@ private:
         }
         
         pool.cleanUp();
+
+        if (vertexBuffer.isAllocatedByVma()) {
+            vma->ReleaseBuffer(vertexBuffer);
+        }
+        else {
+            vertexBuffer.cleanUp();
+        }
+        vertexBufferMemory.free();
+        if (indexBuffer.isAllocatedByVma()) {
+            vma->ReleaseBuffer(vertexBuffer);
+        }
+        else {
+            indexBuffer.cleanUp();
+        }
+        indexBufferMemory.free();
 
         glfwDestroyWindow(window);
         glfwTerminate();

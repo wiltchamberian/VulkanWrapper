@@ -36,6 +36,11 @@ CommandBuffer& CommandBuffer::bindVertexBuffer(Buffer buffer, int deviceOffset) 
 	return *this;
 }
 
+CommandBuffer& CommandBuffer::bindIndexBuffer(Buffer buffer, int deviceOffset, VkIndexType indexType) {
+	vkCmdBindIndexBuffer(buf, buffer.value(), deviceOffset, indexType);
+	return *this;
+}
+
 CommandBuffer& CommandBuffer::setViewPort(uint32_t firstViewport, uint32_t viewportCount, const VkViewport* pViewports){
 	vkCmdSetViewport(buf, firstViewport, viewportCount, pViewports);
 	return *this;
@@ -58,6 +63,11 @@ CommandBuffer& CommandBuffer::setScissor(VkRect2D& pScissor) {
 
 CommandBuffer& CommandBuffer::draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex, uint32_t firstInstance) {
 	vkCmdDraw(buf, vertexCount, instanceCount, firstVertex, firstInstance);
+	return *this;
+}
+
+CommandBuffer& CommandBuffer::drawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t firstIndex, uint32_t vertexOffset, uint32_t firstInstance) {
+	vkCmdDrawIndexed(buf, indexCount, instanceCount, firstIndex, vertexOffset, firstInstance);
 	return *this;
 }
 
